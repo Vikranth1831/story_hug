@@ -23,188 +23,204 @@ class _RemindersPageState extends State<RemindersPage> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/bgimage.png"),
             fit: BoxFit.cover,
           ),
         ),
-
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(height: h * 0.07),
 
-              // ⭐ StoryHug Logo
               Image.asset(
-                "assets/images/favoritesimage.png", // replace with your asset
+                "assets/images/favoritesimage.png",
                 height: h * 0.10,
               ),
 
               SizedBox(height: h * 0.02),
 
-              // ⭐ Title
               Text(
                 "Bedtime Reminder",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 26,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
               SizedBox(height: h * 0.04),
 
-              // ⭐ MAIN GLOWING CARD
+              // ⭐ MAIN GLOW CARD
               Container(
                 width: w * 0.90,
-                padding: EdgeInsets.all(18),
+                padding: EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.07),
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.45),
-                    width: 1.3,
-                  ),
+                  color: Colors.white.withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(26),
+
+                  // 🔥 Outer Glow
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blueAccent.withOpacity(0.3),
-                      blurRadius: 25,
-                      spreadRadius: 2,
-                    )
+                      color: Colors.blueAccent.withOpacity(0.10),
+                      blurRadius: 50,
+                      spreadRadius: 5,
+                      offset: Offset(0, 0),
+                    ),
                   ],
+
+                  // 🔹 Outline Border
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.50),
+                    width: 1.5,
+
+                  ),
                 ),
 
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ⭐ DAILY REMINDER + SWITCH
+                    // ⭐ HEADER ROW WITH SWITCH
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.alarm, color: Colors.amber),
+                            Icon(Icons.alarm, color: Colors.amber, size: 22),
                             SizedBox(width: 8),
                             Text(
                               "Daily Story Reminder",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ),
+                            )
                           ],
                         ),
 
                         Switch(
                           value: reminderOn,
+                          activeColor: Colors.amber,
                           onChanged: (val) {
-                            setState(() {
-                              reminderOn = val;
-                            });
-
+                            setState(() => reminderOn = val);
                           },
                         ),
                       ],
                     ),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 25),
 
-                    Text(
-                      "Set Time",
-                      style: TextStyle(color: Colors.white, fontSize: 14),
-                    ),
+                    Text("Set Time",
+                        style: TextStyle(color: Colors.white, fontSize: 15)),
 
-                    SizedBox(height: 5),
+                    SizedBox(height: 8),
 
-                    // ⭐ TIME TEXT
+                    // ⭐ TIME DISPLAY
                     Center(
                       child: Text(
                         "${selectedTimeHour.toString().padLeft(2, '0')}:${selectedTimeMinute.toString().padLeft(2, '0')} ${isPM ? 'PM' : 'AM'}",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 38,
+                          fontSize: 42,
+                          letterSpacing: 1.2,
                           fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                              color: Colors.blueAccent.withOpacity(0.5),
+                              blurRadius: 15,
+                            )
+                          ],
                         ),
                       ),
                     ),
 
-                    SizedBox(height: 15),
+                    SizedBox(height: 22),
 
-                    Text(
-                      "Repeat",
-                      style: TextStyle(color: Colors.white, fontSize: 14),
-                    ),
+                    Text("Repeat",
+                        style: TextStyle(color: Colors.white, fontSize: 15)),
 
-                    SizedBox(height: 12),
+                    SizedBox(height: 14),
 
-                    // ⭐ WEEKDAY CIRCLES
+                    // ⭐ DAYS SELECTOR
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: days.map((day) {
-                        return _buildDayBubble(day);
-                      }).toList(),
-                    ),
-
-                    SizedBox(height: 20),
-
-                    // ⭐ Sweet Dreams Box
-                    Container(
-                      padding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.20),
-                        borderRadius: BorderRadius.circular(18),
-                        border:
-                        Border.all(color: Colors.white.withOpacity(0.3)),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.nights_stay,
-                              color: Colors.amber, size: 24),
-                          SizedBox(width: 10),
-                          Text(
-                            "Sweet Dreams\nEvery Night",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              height: 1.2,
-                            ),
-                          )
-                        ],
-                      ),
+                      children: days
+                          .map(
+                            (day) => _buildDayBubble(day),
+                      )
+                          .toList(),
                     ),
 
                     SizedBox(height: 25),
 
+                    // ⭐ CENTER SWEET DREAMS CARD
+                    Center(
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.18),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.35), width: 1),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.nights_stay,
+                                color: Colors.amber, size: 26),
+                            SizedBox(width: 12),
+                            Text(
+                              "Sweet Dreams\nEvery Night",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.5,
+                                height: 1.25,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 30),
+
                     // ⭐ SAVE BUTTON
                     Center(
                       child: Container(
-                        width: w * 0.80,
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        width: w * 0.75,
+                        padding: EdgeInsets.symmetric(vertical: 15),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          gradient: const LinearGradient(
+                          borderRadius: BorderRadius.circular(30),
+                          gradient: LinearGradient(
                             colors: [
-                              Color(0xFFFFD66E),
-                              Color(0xFFFFC84F),
+                              Color(0xffffda72),
+                              Color(0xffffc94d),
                             ],
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.amber.withOpacity(0.4),
+                              blurRadius: 18,
+                              spreadRadius: 1,
+                            )
+                          ],
                         ),
                         child: Center(
                           child: Text(
                             "Save Changes",
                             style: TextStyle(
-                              fontFamily: "Arial Rounded MT Bold",
-                              fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              fontSize: 17,
                               color: Color(0xFF24305B),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -217,7 +233,7 @@ class _RemindersPageState extends State<RemindersPage> {
     );
   }
 
-  // ⭐ Day Circle Widget
+  // ⭐ DAY CIRCLE
   Widget _buildDayBubble(String day) {
     return Container(
       width: 42,
@@ -225,15 +241,25 @@ class _RemindersPageState extends State<RemindersPage> {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.amber.withOpacity(0.12),
+        color: Colors.amber.withOpacity(0.15),
         border: Border.all(
-          color: Colors.amber.withOpacity(0.35),
-          width: 1.2,
+          color: Colors.amber.withOpacity(0.4),
+          width: 1.4,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.amber.withOpacity(0.25),
+            blurRadius: 10,
+          )
+        ],
       ),
       child: Text(
         day,
-        style: TextStyle(color: Colors.amber, fontSize: 14),
+        style: TextStyle(
+          color: Colors.amber,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

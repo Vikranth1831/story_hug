@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
 import 'package:story_hug/pages/Reminder/reminders.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
@@ -46,8 +47,8 @@ final GoRouter appRouter = GoRouter(
   routes: [
 
     GoRoute(
-      path: '/iuib',
-      path: '/',
+
+      path: '/homepage',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(HomePage(), state);
       },
@@ -56,13 +57,6 @@ final GoRouter appRouter = GoRouter(
       path: '/select',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(SelectedCardView(), state);
-      },
-    ),
-    GoRoute(
-      path: '/view_card',
-      path: '/',
-      pageBuilder: (context, state) {
-        return buildSlideTransitionPage(StartRecordingVoice(), state);
       },
     ),
     GoRoute(
@@ -127,9 +121,15 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: '/',
+      path: '/reminders',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(RemindersPage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(Passwordchange(), state);
       },
     ),
 ],
