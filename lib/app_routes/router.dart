@@ -11,6 +11,9 @@ import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
 import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
+import 'package:story_hug/pages/Section1/card-parts.dart';
+import 'package:story_hug/pages/Section1/card-view.dart';
+import 'package:story_hug/pages/Section1/menu.dart';
 // import 'package:studio_app/presentation/bankscreen.dart';
 // import 'package:studio_app/presentation/client_details_screen.dart';
 // import 'package:studio_app/presentation/clients_screen.dart';
@@ -38,6 +41,18 @@ final GoRouter appRouter = GoRouter(
   // overridePlatformDefaultLocation: false,
   routes: [
 
+    GoRoute(
+      path: '/',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(HomePage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/select',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(SelectedCardView(), state);
+      },
+    ),
     GoRoute(
       path: '/',
       pageBuilder: (context, state) {
@@ -78,6 +93,13 @@ final GoRouter appRouter = GoRouter(
       path: '/save_voice',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(SaveVoice(), state);
+
+      },
+    ),
+    GoRoute(
+      path: '/view_cards',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(ViewCardParts(), state);
       },
     ),
 ],
