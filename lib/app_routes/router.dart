@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/Section1/card-parts.dart';
+import 'package:story_hug/pages/Section1/card-view.dart';
 import 'package:story_hug/pages/Section1/menu.dart';
 // import 'package:studio_app/presentation/bankscreen.dart';
 // import 'package:studio_app/presentation/client_details_screen.dart';
@@ -34,9 +36,21 @@ final GoRouter appRouter = GoRouter(
   routes: [
 
     GoRoute(
+      path: '/jj',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(HomePage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/select',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(SelectedCardView(), state);
+      },
+    ),
+    GoRoute(
       path: '/',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(Menu(), state);
+        return buildSlideTransitionPage(ViewCardParts(), state);
       },
     ),
 ],

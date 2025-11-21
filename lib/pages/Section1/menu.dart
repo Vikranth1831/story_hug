@@ -1,173 +1,166 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/utils/media_query_helper.dart';
 
-// Define card data based on your image.
-class CardData {
-  final String title;
-  final String subtitle;
-  final Color color;
-  final String imageUrl;
-  final String routeName;
-
-  CardData({
-    required this.title,
-    required this.subtitle,
-    required this.color,
-    required this.imageUrl,
-    required this.routeName,
-  });
-}
-
-class Menu extends StatefulWidget {
-  const Menu({super.key});
-
-  @override
-  State<Menu> createState() => _MenuState();
-}
-
-class _MenuState extends State<Menu> {
-  static const String fontFamily = 'Arial Rounded MT Bold';
-
-  final List<CardData> cards = [
-    CardData(
-      title: 'Indian Mythology & Divine Stories',
-      subtitle: '',
-      color: Color(0xFFF39AAF), // Pink shade in your image
-      imageUrl: 'https://i.ibb.co/4m6M1Wg/indian-mythology.png',
-      routeName: '/mythology',
-    ),
-    CardData(
-      title: 'Indian Kings & Warriors Stories',
-      subtitle: '',
-      color: Color(0xFFFFE151), // Yellow shade from image
-      imageUrl: 'https://i.ibb.co/WpxHjMj/indian-kings.png',
-      routeName: '/kings',
-    ),
-    CardData(
-      title: 'Motivational & Success Stories',
-      subtitle: '',
-      color: Color(0xFFF9F2E4), // Beige shade from image
-      imageUrl: 'https://i.ibb.co/6Hs4Wmj/motivational.png',
-      routeName: '/motivational',
-    ),
-    CardData(
-      title: 'Great Inventions & Inventors',
-      subtitle: '',
-      color: Color(0xFFCBD3F7), // Lavender shade from image
-      imageUrl: 'https://i.ibb.co/XYszbYF/inventions.png',
-      routeName: '/inventions',
-    ),
-  ];
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Responsive grid columns
-    int crossAxisCount = MediaQuery.of(context).size.width > 600 ? 4 : 2;
+    // Screen size
+    final double h = SizeConfig.screenHeight;
+    final double w = SizeConfig.screenWidth;
 
-    final bgColor = Color(0xFFF9F2E4); // Use the image bg color (light beige)
+    // Check tablet
+    bool isTablet = w > 600;
+
+    // Grid columns
+    int gridCount = isTablet ? 4 : 2;
+
+    // Card items
+    final List<Map<String, dynamic>> items = [
+      {
+        "title": "Indian Mythology & Divine Stories",
+        "image": "assets/images/mytholgy.png",
+        "color": const Color(0xFFF59399),
+      },
+      {
+        "title": "Indian Kings & Warriors Stories",
+        "image": "assets/images/mytholgy.png",
+        "color": const Color(0xFFFDD33B),
+      },
+      {
+        "title": "Motivational & Success Stories",
+        "image": "assets/images/mytholgy.png",
+        "color": const Color(0xFFFAF4EA),
+      },
+      {
+        "title": "Great Inventions & Inventors",
+        "image": "assets/images/mytholgy.png",
+        "color": const Color(0xFFD6D7FF),
+      },
+    ];
 
     return Scaffold(
-      backgroundColor: bgColor,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(110),
-        child: AppBar(
-          backgroundColor: bgColor,
-          elevation: 0,
-          titleSpacing: 0,
-          centerTitle: true,
-          title: Padding(
-            padding: const EdgeInsets.only(top: 24.0),
-            child: Column(
-              children: [
-                Text(
-                  'Hello',
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                ),
-                Text(
-                  'Vikrant',
-                  style: TextStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 44,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
+      backgroundColor: Color(0xFFACBCF1),
+
+      appBar: AppBar(
+        backgroundColor: Color(0xFFACBCF1),
+        centerTitle: true,
+        elevation: 0,
+        title: const Text(
+          "AppBar",
+          style: TextStyle(color: Colors.white, fontSize: 22),
         ),
       ),
+
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
-        child: GridView.builder(
-          itemCount: cards.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-            childAspectRatio: 0.97,
-          ),
-          itemBuilder: (context, index) {
-            final card = cards[index];
-            return InkWell(
-              borderRadius: BorderRadius.circular(24),
-              onTap: () {
-                context.push(card.routeName); // GoRouter navigation
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: card.color,
-                  borderRadius: BorderRadius.circular(22),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 8,
-                      offset: Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 8,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            card.imageUrl,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image, size: 80, color: Colors.grey.shade300),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
-                        child: Text(
-                          card.title,
-                          style: TextStyle(
-                            fontFamily: fontFamily,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                            color: Colors.black,
-                            height: 1.15,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ],
+        padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: h * 0.02),
+
+            // ------------------ HELLO TEXT ------------------
+            Center(
+              child: const Text(
+                "Hello",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontFamily: "Arial Rounded MT Bold",
                 ),
               ),
-            );
-          },
+            ),
+
+            SizedBox(height: h * 0.005),
+
+            Center(
+              child: const Text(
+                "Vikranth",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 38,
+                  fontFamily: "Arial Rounded MT Bold",
+                ),
+              ),
+            ),
+
+            SizedBox(height: h * 0.03),
+
+            // ------------------ GRID VIEW ------------------
+            Expanded(
+              child: GridView.builder(
+                itemCount: items.length,
+
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: gridCount,
+                  childAspectRatio: 0.75,
+                  crossAxisSpacing: w * 0.03,
+                  mainAxisSpacing: h * 0.02,
+                ),
+
+                itemBuilder: (context, index) {
+                  final item = items[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/select');
+                    },
+
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: item["color"],
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 0),
+                          ),
+                          BoxShadow(
+                            color: Color(0x99000000),
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(w * 0.03),
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // IMAGE
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.asset(
+                              item["image"],
+                              height: isTablet ? h * 0.2 : h * 0.16,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                          SizedBox(height: h * 0.015),
+
+                          // TITLE
+                          Text(
+                            item["title"],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontFamily: "Arial Rounded MT Bold",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
