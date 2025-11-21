@@ -116,10 +116,11 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Inter
+    - family: Arial
       fonts:
-        - asset: fonts/Inter_28pt-Regular.ttf
+        - asset: fonts/arialroundedmtbold.ttf
           style: normal
+
 
   #
   # For details regarding fonts from package dependencies,
