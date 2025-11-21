@@ -10,7 +10,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:story_hug/services/ApiClient.dart';
 import 'package:story_hug/services/SecureStorageService.dart';
 import 'package:story_hug/utils/color_constants.dart';
