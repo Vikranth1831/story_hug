@@ -6,6 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
+import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
+import 'package:story_hug/pages/recording_voice/recording_voice.dart';
+import 'package:story_hug/pages/recording_voice/save_voice.dart';
+import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
+import 'package:story_hug/pages/Section1/card-parts.dart';
+import 'package:story_hug/pages/Section1/card-view.dart';
+import 'package:story_hug/pages/Section1/menu.dart';
 // import 'package:studio_app/presentation/bankscreen.dart';
 // import 'package:studio_app/presentation/client_details_screen.dart';
 // import 'package:studio_app/presentation/clients_screen.dart';
@@ -21,6 +29,8 @@ import 'package:go_router/go_router.dart';
 // import 'package:studio_app/presentation/sign_in_screen.dart';
 // import 'package:studio_app/presentation/splash_screen.dart';
 // import '../presentation/sucess_
+import '../pages/creating_profile_for_kids/create_profile_forkids.dart';
+import '../pages/splash.dart';
 import '../services/AuthService.dart';
 import '../utils/CrashlyticsNavObserver.dart';
 
@@ -34,7 +44,62 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(Splash(), state);
+        return buildSlideTransitionPage(HomePage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/select',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(SelectedCardView(), state);
+      },
+    ),
+    GoRoute(
+      path: '/',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(StartRecordingVoice(), state);
+      },
+    ),
+    GoRoute(
+      path: '/profile_for_kids',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(CreateProfileForkids(), state);
+      },
+    ),
+    GoRoute(
+      path: '/entering_fields_for_kids',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(EnteringFieldsForKid(), state);
+      },
+    ),
+    GoRoute(
+      path: '/manage_kids',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(ManageKids(), state);
+      },
+    ),
+    GoRoute(
+      path: '/start_recording_voice',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(StartRecordingVoice(), state);
+      },
+    ),
+    GoRoute(
+      path: '/recording_voice',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(RecordingVoice(), state);
+      },
+    ),
+    GoRoute(
+      path: '/save_voice',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(SaveVoice(), state);
+
+      },
+    ),
+    GoRoute(
+      path: '/view_cards',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(ViewCardParts(), state);
       },
     ),
 ],
