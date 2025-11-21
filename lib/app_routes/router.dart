@@ -21,6 +21,7 @@ import 'package:go_router/go_router.dart';
 // import 'package:studio_app/presentation/sign_in_screen.dart';
 // import 'package:studio_app/presentation/splash_screen.dart';
 // import '../presentation/sucess_
+import '../pages/splash.dart';
 import '../services/AuthService.dart';
 import '../utils/CrashlyticsNavObserver.dart';
 
