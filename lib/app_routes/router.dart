@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/Section1/menu.dart';
 // import 'package:studio_app/presentation/bankscreen.dart';
 // import 'package:studio_app/presentation/client_details_screen.dart';
 // import 'package:studio_app/presentation/clients_screen.dart';
@@ -35,7 +36,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(Splash(), state);
+        return buildSlideTransitionPage(Menu(), state);
       },
     ),
 ],
