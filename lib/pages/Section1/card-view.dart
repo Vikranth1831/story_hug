@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 class SelectedCardView extends StatefulWidget {
@@ -10,7 +11,6 @@ class SelectedCardView extends StatefulWidget {
 }
 
 class _SelectedCardViewState extends State<SelectedCardView> {
-  // ------------------- Sample Story Data -------------------
   final List<Map<String, dynamic>> stories = [
     {
       "image": "assets/images/mahabharath.png",
@@ -40,7 +40,6 @@ class _SelectedCardViewState extends State<SelectedCardView> {
 
   @override
   Widget build(BuildContext context) {
-    // ------------------ SCREEN SIZE ------------------
     final double h = SizeConfig.screenHeight;
     final double w = SizeConfig.screenWidth;
 
@@ -49,108 +48,109 @@ class _SelectedCardViewState extends State<SelectedCardView> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFACBCF1),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFACBCF1),
-        centerTitle: true,
-        elevation: 0,
-        title: const Text(
-          "AppBar",
-          style: TextStyle(color: Colors.white, fontSize: 22),
-        ),
-      ),
 
-      // ---------------------- BODY ----------------------
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: h * 0.02),
+      // ------------------- FIXED APPBAR -------------------
+    appBar: CustomTopBar(),
 
-            // ------------------ BACK BUTTON ------------------
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    context.pop();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: h * 0.01, horizontal: w * 0.04),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+      // ------------------ EVERYTHING SCROLLS EXCEPT APPBAR ------------------
+      body: CustomScrollView(
+        slivers: [
+          // -----------------------------------------------
+          // FIXED BACK BUTTON + TITLE (Scrolls with body)
+          // -----------------------------------------------
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: h * 0.02),
 
-                      // ---------- GRADIENT COLORS ----------
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFFCDB69),
-                          Color(0xFFFCBF5D),
-                        ],
-                      ),
-
-                      // ---------- BOX SHADOW ----------
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x3F303000),
-                          blurRadius: 8,
-                          offset: Offset(0, 3),
+                  // ------------------ BACK BUTTON ------------------
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => context.pop(),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: h * 0.01,
+                            horizontal: w * 0.04,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xFFFCDB69),
+                                Color(0xFFFCBF5D),
+                              ],
+                            ),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x3F303000),
+                                blurRadius: 8,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const Text(
+                            "Back",
+                            style: TextStyle(
+                              fontFamily: "Arial Rounded MT Bold",
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF24305B),
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                    child: const Text(
-                      "Back",
+                      ),
+                    ],
+                  ),
+
+                  // ------------------ TITLE ------------------
+                  SizedBox(height: h * 0.015),
+
+                  const Center(
+                    child: Text(
+                      "Indian Mythology",
                       style: TextStyle(
                         fontFamily: "Arial Rounded MT Bold",
-                        fontSize: 16,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF24305B),
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
 
-            Center(
-              child: Column(
-                children: const [
-                  Text(
-                    "Indian Mythology",
-                    style: TextStyle(
-                      fontFamily: "Arial Rounded MT Bold",
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
+                  SizedBox(height: h * 0.015),
                 ],
               ),
             ),
+          ),
 
-            SizedBox(height: h * 0.02),
-
-            // ------------------ LIST OF STORY CARDS ------------------
-            Expanded(
-              child: GridView.builder(
-                itemCount: stories.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: gridCount,
-                  childAspectRatio: isTablet ? 1.1 : 0.95,
-                  crossAxisSpacing: w * 0.04,
-                  mainAxisSpacing: h * 0.02,
-                ),
-                itemBuilder: (context, index) {
+          // ------------------ GRIDVIEW INSIDE SLIVER ------------------
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: gridCount,
+                childAspectRatio: isTablet ? 1.1 : 0.95,
+                crossAxisSpacing: w * 0.04,
+                mainAxisSpacing: h * 0.02,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                childCount: stories.length,
+                    (context, index) {
                   final story = stories[index];
 
                   return GestureDetector(
                     onTap: () {
-                      context.push('/selectedStory');  // <--- 🔥 ADDED HERE
+                      context.push('/view_card');
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xffFFF3C5),
+                        color: const Color(0xffFFF3C5),
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: const [
                           BoxShadow(
@@ -208,9 +208,9 @@ class _SelectedCardViewState extends State<SelectedCardView> {
                   );
                 },
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
