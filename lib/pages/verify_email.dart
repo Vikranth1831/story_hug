@@ -144,26 +144,31 @@ class VerificationCard extends StatelessWidget {
                   SizedBox(height: h * 0.03),
 
                   // BUTTON
-                  Container(
-                    width: double.infinity,
-                    height: h * 0.06,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFFCDB69),
-                          Color(0xFFFCBF5D),
-                        ],
+                  GestureDetector(
+                    onTap:(){
+                      context.push('/otp-screen');
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: h * 0.06,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFFFCDB69),
+                            Color(0xFFFCBF5D),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Send OTP to Gmail",
-                        style: TextStyle(
-                          color: const Color(0xFF333333),
-                          fontSize: w * 0.042,
-                          fontWeight: FontWeight.bold,     // ★ bold added
-                          fontFamily: 'Arial Rounded MT Bold',
+                      child: Center(
+                        child: Text(
+                          "Send OTP to Gmail",
+                          style: TextStyle(
+                            color: const Color(0xFF333333),
+                            fontSize: w * 0.042,
+                            fontWeight: FontWeight.bold,     // ★ bold added
+                            fontFamily: 'Arial Rounded MT Bold',
+                          ),
                         ),
                       ),
                     ),

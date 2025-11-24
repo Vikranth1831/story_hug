@@ -12,6 +12,7 @@ import 'package:story_hug/pages/SuccesspageClass/successpage.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/lets-begin.dart';
+import 'package:story_hug/pages/otp-screen.dart';
 import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
@@ -157,9 +158,15 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: '/otp-screen',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(OtpScreen(), state);
+      },
+    ),
+    GoRoute(
       path: '/',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(Passwordchange(), state);
+        return buildSlideTransitionPage(OtpScreen(), state);
       },
     ),
     GoRoute(
