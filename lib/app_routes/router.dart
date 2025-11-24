@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
+import 'package:story_hug/pages/Reminder/reminders.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/profile.dart';
@@ -18,6 +20,9 @@ import 'package:story_hug/pages/Section1/menu.dart';
 import 'package:story_hug/pages/sign_up_screen.dart';
 import 'package:story_hug/pages/splash_screen.dart';
 import 'package:story_hug/pages/verify_email.dart';
+import 'package:story_hug/pages/Section1/playicard.dart';
+import 'package:story_hug/pages/Subscriptions%20page/subscriptions.dart';
+import 'package:story_hug/pages/favorites/favorites.dart';
 // import 'package:studio_app/presentation/bankscreen.dart';
 // import 'package:studio_app/presentation/client_details_screen.dart';
 // import 'package:studio_app/presentation/clients_screen.dart';
@@ -46,7 +51,8 @@ final GoRouter appRouter = GoRouter(
   routes: [
 
     GoRoute(
-      path: '/',
+
+      path: '/homepage',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(ProfileScreen(), state);
       },
@@ -122,6 +128,36 @@ final GoRouter appRouter = GoRouter(
       path: '/view_cards',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(ViewCardParts(), state);
+      },
+    ),
+    GoRoute(
+      path: '/play-story',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(PlayStory(), state);
+      },
+    ),
+    GoRoute(
+      path: '/favorites',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(Favorites(), state);
+      },
+    ),
+    GoRoute(
+      path: '/subscribe',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(Subscribepage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/reminders',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(RemindersPage(), state);
+      },
+    ),
+    GoRoute(
+      path: '/',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(Passwordchange(), state);
       },
     ),
 ],
