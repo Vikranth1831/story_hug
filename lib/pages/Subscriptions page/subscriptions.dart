@@ -48,8 +48,8 @@ class _SubscribepageState extends State<Subscribepage> {
                   color: Colors.white.withOpacity(0.12), // transparent effect
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.3),
-                    width: 1.2,
+                    color: const Color(0x7F73CCFE),  // your color
+                    width: 2,
                   ),
                 ),
 
@@ -137,15 +137,15 @@ class _SubscribepageState extends State<Subscribepage> {
     required Color textColor,
   }) {
     return Container(
-      width: 150,
+      width: 130,
       height: 180,
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.20),
+       // color: Colors.white.withOpacity(0.10),
+     //   color: Colors.white.withOpacity(0.10),
+        color: const Color(0xFF2F3C74),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.3),
-        ),
+
       ),
 
       child: Column(

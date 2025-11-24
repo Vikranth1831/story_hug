@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RemindersPage extends StatefulWidget {
   const RemindersPage({super.key});
@@ -13,6 +14,7 @@ class _RemindersPageState extends State<RemindersPage> {
   int selectedTimeHour = 8;
   int selectedTimeMinute = 0;
   bool isPM = true;
+  List<bool> selectedDays = List.generate(7, (index) => false);
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class _RemindersPageState extends State<RemindersPage> {
                   color: Colors.white,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Arial'
                 ),
               ),
 
@@ -95,6 +98,8 @@ class _RemindersPageState extends State<RemindersPage> {
                                 color: Colors.white,
                                 fontSize: 17,
                                 fontWeight: FontWeight.w500,
+                                  fontFamily: 'Arial'
+
                               ),
                             )
                           ],
@@ -113,7 +118,9 @@ class _RemindersPageState extends State<RemindersPage> {
                     SizedBox(height: 25),
 
                     Text("Set Time",
-                        style: TextStyle(color: Colors.white, fontSize: 15)),
+                        style: TextStyle(color: Colors.white, fontSize: 15,
+                            fontFamily: 'Arial'
+                        )),
 
                     SizedBox(height: 8),
 
@@ -139,18 +146,19 @@ class _RemindersPageState extends State<RemindersPage> {
                     SizedBox(height: 22),
 
                     Text("Repeat",
-                        style: TextStyle(color: Colors.white, fontSize: 15)),
+                        style: TextStyle(color: Colors.white, fontSize: 15,
+                            fontFamily: 'Arial'
+                        )),
 
                     SizedBox(height: 14),
 
                     // ⭐ DAYS SELECTOR
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: days
-                          .map(
-                            (day) => _buildDayBubble(day),
-                      )
-                          .toList(),
+                      children: List.generate(
+                        days.length,
+                            (i) => _buildDayBubble(i, days[i]),
+                      ),
                     ),
 
                     SizedBox(height: 25),
@@ -176,6 +184,7 @@ class _RemindersPageState extends State<RemindersPage> {
                               "Sweet Dreams\nEvery Night",
                               textAlign: TextAlign.left,
                               style: TextStyle(
+                                fontFamily: 'Arial',
                                 color: Colors.white,
                                 fontSize: 14.5,
                                 height: 1.25,
@@ -190,32 +199,40 @@ class _RemindersPageState extends State<RemindersPage> {
 
                     // ⭐ SAVE BUTTON
                     Center(
-                      child: Container(
-                        width: w * 0.75,
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xffffda72),
-                              Color(0xffffc94d),
+                      child: InkWell(
+                        onTap: ()
+                        {
+                          context.go('/home');
+                        },
+                        child: Container(
+                          width: w * 0.75,
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xffffda72),
+                                Color(0xffffc94d),
+                              ],
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.amber.withOpacity(0.4),
+                                blurRadius: 18,
+                                spreadRadius: 1,
+                              )
                             ],
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.amber.withOpacity(0.4),
-                              blurRadius: 18,
-                              spreadRadius: 1,
-                            )
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Save Changes",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              color: Color(0xFF24305B),
+                          child: Center(
+                            child: Text(
+                              "Save Changes",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: Color(0xFF24305B),
+                                  fontFamily: 'Arial'
+
+                              ),
                             ),
                           ),
                         ),
@@ -232,35 +249,60 @@ class _RemindersPageState extends State<RemindersPage> {
       ),
     );
   }
+  Widget _buildDayBubble(int index, String day) {
 
-  // ⭐ DAY CIRCLE
-  Widget _buildDayBubble(String day) {
-    return Container(
-      width: 42,
-      height: 42,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.amber.withOpacity(0.15),
-        border: Border.all(
-          color: Colors.amber.withOpacity(0.4),
-          width: 1.4,
+    bool isSelected = selectedDays[index];
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedDays[index] = !selectedDays[index];
+        });
+      },
+
+      child: Container(
+        width: 35,
+        height: 35,
+        alignment: Alignment.center,
+
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+
+          // ⭐ COLORS BASED ON SELECTED OR NOT
+          color: isSelected
+              ? Colors.amber.withOpacity(0.30)        // SELECTED BG
+              : Colors.amber.withOpacity(0.10),       // NORMAL BG (lighter)
+
+          border: Border.all(
+            color: isSelected
+                ? Colors.amber                         // SELECTED BORDER
+                : Colors.amber.withOpacity(0.30),       // NORMAL BORDER
+            width: 1.4,
+          ),
+
+          boxShadow: [
+            BoxShadow(
+              color: isSelected
+                  ? Colors.amber.withOpacity(0.50)      // SELECTED SHADOW
+                  : Colors.transparent,                 // NORMAL NO GLOW
+              blurRadius: 10,
+            )
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.amber.withOpacity(0.25),
-            blurRadius: 10,
-          )
-        ],
-      ),
-      child: Text(
-        day,
-        style: TextStyle(
-          color: Colors.amber,
-          fontSize: 15,
-          fontWeight: FontWeight.w600,
+
+        child: Text(
+          day,
+          style: TextStyle(
+            color: isSelected
+                ? Colors.amber                          // Selected text full amber
+                : Colors.amber.withOpacity(0.50),       // Normal dim text
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
   }
+
+
 }

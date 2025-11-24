@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           /// --------------------------------------------------------------
           Column(
             children: [
+              SizedBox(height: h * 0.03,),
 
               /// CUSTOM APP BAR
               CustomTopBar(
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(height: h * 0.02),
 
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.black,
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: "Arial Rounded MT Bold",
+                                fontFamily: "Arial",
                               ),
                             ),
 
@@ -95,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.black,
                                 fontSize: 38,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: "Arial Rounded MT Bold",
+                                fontFamily: "Arial",
                               ),
                             ),
 
@@ -114,6 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             final item = items[index];
 
                             return GestureDetector(
+                              onTap: ()
+                              {
+                                context.push('/select');
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: item["color"],
@@ -155,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontFamily:
-                                        "Arial Rounded MT Bold",
+                                        "Arial",
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -230,46 +235,73 @@ class MenuPanel extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _menuItem(Icons.person, "Profile"),
-          _menuItem(Icons.volume_up, "Voice"),
-          _menuItem(Icons.favorite, "My Favorites"),
-          _menuItem(Icons.workspace_premium, "Subscriptions"),
-          _menuItem(Icons.alarm, "Reminder"),
-          _menuItem(Icons.logout, "Logout"),
+          _menuItem(Icons.person, "Profile",context),
+          _menuItem(Icons.volume_up, "Voice",context),
+          _menuItem(Icons.favorite, "My Favorites",context),
+          _menuItem(Icons.workspace_premium, "Subscriptions",context),
+          _menuItem(Icons.alarm, "Reminder",context),
+          _menuItem(Icons.logout, "Logout",context),
         ],
       ),
     );
   }
 
-  Widget _menuItem(IconData icon, String title) {
+  Widget _menuItem(IconData icon, String title,BuildContext context) {
     final h = SizeConfig.screenHeight;
     final w = SizeConfig.screenWidth;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.01),
-      child: Container(
-        height: h * 0.065,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          gradient: const LinearGradient(
-            colors: [Color(0xFFFCDB69), Color(0xFFFCBF5D)],
-          ),
-        ),
+    return InkWell(
+      onTap: ()
+      {
+        if(title=='Profile')
+          {
+            context.push('/profile_screen');
+          }
+        else if(title=='Voice')
+          {
+            context.push('/recording_voice');
+          }
+        else if(title=='My Favorites')
+          {
+            context.push('/favorites');
+          }
+        else if(title=='Subscriptions')
+        {
+          context.push('/subscribe');
+        }
+        else if(title=='Reminder')
+        {
+          context.push('/reminders');
+        }
 
-        child: Row(
-          children: [
-            SizedBox(width: w * 0.05),
-            Icon(icon, color: const Color(0xFF24305B)),
-            SizedBox(width: w * 0.05),
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF24305B),
-                fontSize: 16,
-              ),
+
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.01),
+        child: Container(
+          height: h * 0.065,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            gradient: const LinearGradient(
+              colors: [Color(0xFFFCDB69), Color(0xFFFCBF5D)],
             ),
-          ],
+          ),
+
+          child: Row(
+            children: [
+              SizedBox(width: w * 0.05),
+              Icon(icon, color: const Color(0xFF24305B)),
+              SizedBox(width: w * 0.05),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF24305B),
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Wait for 1.5 seconds then navigate
     Future.delayed(const Duration(milliseconds: 1500), () {
      // context.go('/sign_up');
-      context.go('/start_recording_voice');
+      context.go('/login');
 
     });
   }

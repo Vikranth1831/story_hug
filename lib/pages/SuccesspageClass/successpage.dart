@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:story_hug/components/create_now_button.dart';
 
 class SuccessPage extends StatelessWidget {
   final String titleText;
@@ -72,6 +74,7 @@ class SuccessPage extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 22,
+                                fontFamily: 'Arial',
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -80,32 +83,48 @@ class SuccessPage extends StatelessWidget {
 
                           const SizedBox(height: 25),
 
-                          // BUTTON
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFFFCDB69),
-                                    Color(0xFFFCBF5D),
-                                  ],
-                                ),
-                              ),
-                              child: Text(
-                                buttonText,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Color(0xFF24305B),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ),
+                          InkWell(
+                            onTap: ()
+                              {
+                                if(titleText=='Password Changed Successfully')
+                                  {
+                                    context.go('/home');
+                                  }
+                                else
+                                context.push('/password-change');
+                              },
+                              child: CreateNowButton(text: 'Done')),
+
+                          // // BUTTON
+                          // GestureDetector(
+                          //   onTap: ()
+                          //   {
+                          //     context.push('/password-change');
+                          //   },
+                          //   child: Container(
+                          //     padding: const EdgeInsets.symmetric(
+                          //         vertical: 14, horizontal: 20),
+                          //     decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(30),
+                          //       gradient: const LinearGradient(
+                          //         colors: [
+                          //           Color(0xFFFCDB69),
+                          //           Color(0xFFFCBF5D),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //     child: Text(
+                          //       buttonText,
+                          //       textAlign: TextAlign.center,
+                          //       style: const TextStyle(
+                          //         color: Color(0xFF24305B),
+                          //         fontWeight: FontWeight.bold,
+                          //         fontSize: 15,
+                          //         fontFamily: 'Arial'
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:story_hug/components/text_field.dart';
 
 class Passwordchange extends StatefulWidget {
   const Passwordchange({super.key});
@@ -19,6 +21,7 @@ class _PasswordchangeState extends State<Passwordchange> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      backgroundColor: Color(0xFF192346),
 
       body: SafeArea(
         top: false,
@@ -26,9 +29,10 @@ class _PasswordchangeState extends State<Passwordchange> {
           reverse: true,              // prevents overflow on keyboard
           child: Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height,
+            //height: MediaQuery.of(context).size.height,
 
             decoration: const BoxDecoration(
+
               image: DecorationImage(
                 image: AssetImage("assets/images/bgimage.png"),
                 fit: BoxFit.cover,
@@ -54,25 +58,31 @@ class _PasswordchangeState extends State<Passwordchange> {
                 SizedBox(height: h * 0.20),
 
                 // ⭐ BACK BUTTON
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      height: 42,
-                      width: 42,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.08),
-                        border: Border.all(
-                          color: Color(0xFFFFC84F),
-                          width: 1.4,
+                InkWell(
+                  onTap: ()
+                  {
+                    context.pop();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        height: 42,
+                        width: 42,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.08),
+                          border: Border.all(
+                            color: Color(0xFFFFC84F),
+                            width: 1.4,
+                          ),
                         ),
-                      ),
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: Color(0xFFFFC84F),
-                        size: 22,
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Color(0xFFFFC84F),
+                          size: 22,
+                        ),
                       ),
                     ),
                   ),
@@ -106,7 +116,7 @@ class _PasswordchangeState extends State<Passwordchange> {
                       ),
                       SizedBox(height: 6),
 
-                      _textField(newPass),
+                     CustomInputField(controller: newPass, label1: 'password'),
 
                       SizedBox(height: 18),
 
@@ -120,30 +130,39 @@ class _PasswordchangeState extends State<Passwordchange> {
                       ),
                       SizedBox(height: 6),
 
-                      _textField(confirmPass),
+                      CustomInputField(controller: confirmPass, label1: 'password'),
 
                       SizedBox(height: 26),
 
                       Center(
-                        child: Container(
-                          width: w * 0.60,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFFFFD66E),
-                                Color(0xFFFFC84F),
-                              ],
+                        child: InkWell(
+                          onTap: ()
+                          {
+                            context.push('/success',extra: {
+                              'title': "Password Changed Successfully",
+                              'button': "Done",
+                            },);
+                          },
+                          child: Container(
+                            width: w * 0.60,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFFFFD66E),
+                                  Color(0xFFFFC84F),
+                                ],
+                              ),
                             ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Confirm",
-                              style: TextStyle(
-                                color: Color(0xFF24305B),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            child: const Center(
+                              child: Text(
+                                "Confirm",
+                                style: TextStyle(
+                                  color: Color(0xFF24305B),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),

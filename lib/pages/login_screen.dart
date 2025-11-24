@@ -176,6 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onPressed: () {
                                     if (formKey.currentState!.validate()) {
                                       // login logic
+                                      context.go('/lets-begin');
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -241,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         );
                                         return;
                                       }
-                                     context.go('/');
+                                     context.go('/lets-begin');
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(

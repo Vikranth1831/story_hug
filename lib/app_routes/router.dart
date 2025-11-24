@@ -8,9 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
 import 'package:story_hug/pages/Reminder/reminders.dart';
+import 'package:story_hug/pages/SuccesspageClass/successpage.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/login_screen.dart';
+import 'package:story_hug/pages/lets-begin.dart';
+import 'package:story_hug/pages/otp-screen.dart';
 import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
@@ -41,7 +44,6 @@ import 'package:story_hug/pages/favorites/favorites.dart';
 // import '../presentation/sucess_
 import '../pages/creating_profile_for_kids/create_profile_forkids.dart';
 
-import '../services/AuthService.dart';
 import '../utils/CrashlyticsNavObserver.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -167,11 +169,42 @@ final GoRouter appRouter = GoRouter(
         return buildSlideTransitionPage(RemindersPage(), state);
       },
     ),
+    GoRoute(
+      path: '/otp-screen',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(OtpScreen(), state);
+      },
+    ),
+
+    GoRoute(
+      path: '/password-change',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(Passwordchange(), state);
+      },
+    ),
 
     GoRoute(
       path: '/home',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(HomeScreen(), state);
+      },
+    ),
+    GoRoute(
+      path: '/success',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(
+          SuccessPage(
+            titleText: state.extra != null ? (state.extra as Map)['title'] : '',
+            buttonText: state.extra != null ? (state.extra as Map)['button'] : '',
+          ),
+          state,
+        );
+      },
+    ),
+    GoRoute(
+      path: '/lets-begin',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(LetsBegin(), state);
       },
     ),
 

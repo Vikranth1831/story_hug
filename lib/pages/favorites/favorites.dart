@@ -62,7 +62,7 @@ class _FavoritesState extends State<Favorites> {
                     color: Colors.white,
                     fontSize: isTablet ? 32 : 26,
                     fontWeight: FontWeight.bold,
-                    fontFamily: "Arial Rounded MT Bold",
+                    fontFamily: "Arial",
                   ),
                 ),
 
@@ -141,7 +141,7 @@ class _FavoritesState extends State<Favorites> {
                       },
                       child: Icon(
                         item["fav"] ? Icons.favorite : Icons.favorite_border,
-                        color: item["fav"] ? Colors.pink : Colors.white,
+                        color: item["fav"] ?Color(0xffF9E2A1) :Color(0xffF9E2A1),
                         size: isTablet ? 32 : 26,
                       ),
                     ),

@@ -23,8 +23,8 @@ class CustomTopBar extends StatelessWidget {
           /// LOGO
           Image.asset(
             "assets/images/appbarlogo.png",
-            height: h * 0.1,
-            width: w * 0.24,
+            height: h * 0.16,
+            width: w * 0.18,
           ),
 
           /// RIGHT SIDE

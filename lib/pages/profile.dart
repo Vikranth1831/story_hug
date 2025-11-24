@@ -51,7 +51,12 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: h * 0.04),
 
               /// CHANGE PASSWORD BUTTON
-              ChangePasswordButton(w, h,context),
+              InkWell(
+                onTap: ()
+                  {
+                    context.push('/verify-email');
+                  },
+                  child: ChangePasswordButton(w, h,context)),
 
               SizedBox(height: h * 0.05),
             ],
