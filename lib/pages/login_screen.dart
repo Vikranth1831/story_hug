@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:  EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       width: double.infinity,
-                      height: h * 0.45,
+                      height: h * 0.55,
                       
 
                       decoration:  BoxDecoration(
@@ -241,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         );
                                         return;
                                       }
-                                     // context.go('/home');
+                                     context.go('/');
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
