@@ -50,7 +50,7 @@ class _SelectedCardViewState extends State<SelectedCardView> {
       backgroundColor: const Color(0xFFACBCF1),
 
       // ------------------- FIXED APPBAR -------------------
-    appBar: CustomTopBar(),
+   // appBar: CustomTopBar(),
 
       // ------------------ EVERYTHING SCROLLS EXCEPT APPBAR ------------------
       body: CustomScrollView(

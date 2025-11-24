@@ -24,7 +24,7 @@ class _ViewCardPartsState extends State<ViewCardParts> {
     return Scaffold(
       extendBodyBehindAppBar: true,
 
-      appBar: CustomTopBar(),
+   //   appBar: CustomTopBar(onMenuTap: () {  },),
 
       body: Container(
         width: double.infinity,

@@ -10,6 +10,7 @@ import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
 import 'package:story_hug/pages/Reminder/reminders.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
+import 'package:story_hug/pages/login_screen.dart';
 import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
@@ -49,6 +50,18 @@ final GoRouter appRouter = GoRouter(
   // observers: [CrashlyticsNavObserver()],
   // overridePlatformDefaultLocation: false,
   routes: [
+    GoRoute(
+      path: '/',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(LoginScreen(), state);
+      },
+    ),
+    GoRoute(
+      path: '/login',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(LoginScreen(), state);
+      },
+    ),
 
     GoRoute(
 
@@ -154,12 +167,14 @@ final GoRouter appRouter = GoRouter(
         return buildSlideTransitionPage(RemindersPage(), state);
       },
     ),
+
     GoRoute(
-      path: '/',
+      path: '/home',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(Passwordchange(), state);
+        return buildSlideTransitionPage(HomeScreen(), state);
       },
     ),
+
 ],
   // errorBuilder: (context, state) {
   //   final err = state.error ?? 'Unknown router error';

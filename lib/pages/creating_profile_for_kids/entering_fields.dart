@@ -51,7 +51,7 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
               SizedBox(height: h * 0.02,),
             TextHeader("Age"),
               SizedBox(height: h * 0.013,),
-              CustomInputField(controller: nameController, label1: 'Enter age',),
+              CustomInputField(controller: ageController, label1: 'Enter age',),
               SizedBox(height: h * 0.02,),
               TextHeader("Gender"),
               SizedBox(height: h * 0.013,),

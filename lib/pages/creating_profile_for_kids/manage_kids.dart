@@ -66,7 +66,7 @@ class ManageKids extends StatelessWidget {
           InkWell(
               onTap: ()
               {
-                // context.push('/entering_fields_for_kids');
+                 context.push('/home');
               },
               child: CreateNowButton(text: 'Done',)
           )
