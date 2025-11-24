@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:story_hug/components/text_field.dart';
 
 class Passwordchange extends StatefulWidget {
   const Passwordchange({super.key});
@@ -12,6 +14,40 @@ class _PasswordchangeState extends State<Passwordchange> {
   final TextEditingController newPass = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
 
+  String? newPassError;
+  String? confirmPassError;
+
+  void validateFields() {
+    setState(() {
+      newPassError = null;
+      confirmPassError = null;
+
+      if (newPass.text.isEmpty) {
+        newPassError = "Please enter new password";
+      }
+
+      if (confirmPass.text.isEmpty) {
+        confirmPassError = "Please confirm your password";
+      }
+
+      if (newPass.text.isNotEmpty &&
+          confirmPass.text.isNotEmpty &&
+          newPass.text != confirmPass.text) {
+        confirmPassError = "Passwords do not match";
+      }
+    });
+
+    if (newPassError == null && confirmPassError == null) {
+      context.pushReplacement(
+        '/success',
+        extra: {
+          'title': "Password Changed Successfully!",
+          'button': "Login Now",
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
@@ -19,15 +55,13 @@ class _PasswordchangeState extends State<Passwordchange> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
-          reverse: true,              // prevents overflow on keyboard
+          reverse: true,
           child: Container(
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
-
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/bgimage.png"),
@@ -106,7 +140,19 @@ class _PasswordchangeState extends State<Passwordchange> {
                       ),
                       SizedBox(height: 6),
 
-                      _textField(newPass),
+                      CustomInputField(
+                        controller: newPass,
+                        label1: 'Password',
+                      ),
+
+                      if (newPassError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, left: 4),
+                          child: Text(
+                            newPassError!,
+                            style: const TextStyle(color: Colors.red, fontSize: 12),
+                          ),
+                        ),
 
                       SizedBox(height: 18),
 
@@ -120,30 +166,45 @@ class _PasswordchangeState extends State<Passwordchange> {
                       ),
                       SizedBox(height: 6),
 
-                      _textField(confirmPass),
+                      CustomInputField(
+                        controller: confirmPass,
+                        label1: 'New Password',
+                      ),
+
+                      if (confirmPassError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, left: 4),
+                          child: Text(
+                            confirmPassError!,
+                            style: const TextStyle(color: Colors.red, fontSize: 12),
+                          ),
+                        ),
 
                       SizedBox(height: 26),
 
                       Center(
-                        child: Container(
-                          width: w * 0.60,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFFFFD66E),
-                                Color(0xFFFFC84F),
-                              ],
+                        child: GestureDetector(
+                          onTap: validateFields,
+                          child: Container(
+                            width: w * 0.60,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFFFFD66E),
+                                  Color(0xFFFFC84F),
+                                ],
+                              ),
                             ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Confirm",
-                              style: TextStyle(
-                                color: Color(0xFF24305B),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            child: const Center(
+                              child: Text(
+                                "Confirm",
+                                style: TextStyle(
+                                  color: Color(0xFF24305B),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -155,48 +216,6 @@ class _PasswordchangeState extends State<Passwordchange> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  // ⭐ PERFECT WHITE TEXTFIELD
-  Widget _textField(TextEditingController controller) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        color: Colors.white, // FULL WHITE BG
-        borderRadius: BorderRadius.circular(26),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.20),
-            blurRadius: 10,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: true,
-        style: const TextStyle(
-          color: Colors.black,     // TEXT COLOR BLACK (correct)
-          fontSize: 14,
-        ),
-
-        decoration: InputDecoration(
-          filled: true,                 // VERY IMPORTANT
-          fillColor: Colors.white,      // PURE WHITE FILL
-          hintText: "Password",
-          hintStyle: TextStyle(
-            color: Colors.grey.shade600,
-            fontSize: 14,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(26),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding:
-          const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         ),
       ),
     );

@@ -8,8 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
 import 'package:story_hug/pages/Reminder/reminders.dart';
+import 'package:story_hug/pages/SuccesspageClass/successpage.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
+import 'package:story_hug/pages/lets-begin.dart';
 import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
@@ -64,7 +66,7 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: '/verify_email',
+      path: '/verify-email',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(VerifyEmail(), state);
       },
@@ -158,6 +160,31 @@ final GoRouter appRouter = GoRouter(
       path: '/',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(Passwordchange(), state);
+      },
+    ),
+    GoRoute(
+      path: '/password-change',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(Passwordchange(), state);
+      },
+    ),
+
+    GoRoute(
+      path: '/lets-begin',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(LetsBegin(), state);
+      },
+    ),
+    GoRoute(
+      path: '/success',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(
+          SuccessPage(
+            titleText: state.extra != null ? (state.extra as Map)['title'] : '',
+            buttonText: state.extra != null ? (state.extra as Map)['button'] : '',
+          ),
+          state,
+        );
       },
     ),
 ],
