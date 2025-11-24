@@ -14,9 +14,9 @@ class CreateProfileForkids extends StatelessWidget {
     var w=SizeConfig.screenWidth;
     var h=SizeConfig.screenHeight;
     return Scaffold(
-      backgroundColor: Color(0xFF192346), 
+      backgroundColor: Color(0xFF192346),
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: w * 0.026),
+        padding:  EdgeInsets.symmetric(horizontal: w * 0.035),
         child: Column(
 
           children: [

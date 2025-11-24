@@ -8,12 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
+import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
 import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
 import 'package:story_hug/pages/Section1/card-parts.dart';
 import 'package:story_hug/pages/Section1/card-view.dart';
 import 'package:story_hug/pages/Section1/menu.dart';
+import 'package:story_hug/pages/sign_up_screen.dart';
+import 'package:story_hug/pages/splash_screen.dart';
+import 'package:story_hug/pages/verify_email.dart';
 // import 'package:studio_app/presentation/bankscreen.dart';
 // import 'package:studio_app/presentation/client_details_screen.dart';
 // import 'package:studio_app/presentation/clients_screen.dart';
@@ -30,7 +34,7 @@ import 'package:story_hug/pages/Section1/menu.dart';
 // import 'package:studio_app/presentation/splash_screen.dart';
 // import '../presentation/sucess_
 import '../pages/creating_profile_for_kids/create_profile_forkids.dart';
-import '../pages/splash.dart';
+
 import '../services/AuthService.dart';
 import '../utils/CrashlyticsNavObserver.dart';
 
@@ -44,7 +48,25 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(HomePage(), state);
+        return buildSlideTransitionPage(ProfileScreen(), state);
+      },
+    ),
+    GoRoute(
+      path: '/profile_screen',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(ProfileScreen(), state);
+      },
+    ),
+    GoRoute(
+      path: '/verify_email',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(VerifyEmail(), state);
+      },
+    ),
+    GoRoute(
+      path: '/sign_up',
+      pageBuilder: (context, state) {
+        return buildSlideTransitionPage(SignUpScreen(), state);
       },
     ),
     GoRoute(
@@ -54,7 +76,7 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: '/',
+      path: '/start_recording_voice',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(StartRecordingVoice(), state);
       },

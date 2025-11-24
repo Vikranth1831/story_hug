@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/components/create_now_button.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 class StartRecordingVoice extends StatelessWidget {
   const StartRecordingVoice({super.key});
@@ -50,7 +51,15 @@ class StartRecordingVoice extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              QuickInfoRow()
+              SizedBox(height: h * 0.04,),
+              QuickInfoRow(),
+              SizedBox(height: h * 0.04,),
+              InkWell(
+                onTap: ()
+                  {
+                    context.push('/recording_voice');
+                  },
+                  child: CreateNowButton(text: "Start Recording My Voice"))
 
             ],
 
@@ -68,60 +77,55 @@ class StartRecordingVoice extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
 
-          // 5 Minutes
-          Column(
-            children: const [
-              Icon(Icons.timer, size: 40, color: Colors.white),
-              SizedBox(height: 6),
-              Text(
-                '5 Minutes',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontFamily: 'Arial Rounded MT Bold',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
+          InfoItem(
+            icon: Icons.timer,
+            label: "5 Minutes",
           ),
 
-          // Simple Steps
-          Column(
-            children: const [
-              Icon(Icons.format_list_numbered, size: 40, color: Colors.white),
-              SizedBox(height: 6),
-              Text(
-                'Simple Steps',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontFamily: 'Arial Rounded MT Bold',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
+          InfoItem(
+            icon: Icons.format_list_numbered,
+            label: "Simple Steps",
           ),
 
-          // Extra Special
-          Column(
-            children: const [
-              Icon(Icons.star, size: 40, color: Colors.white),
-              SizedBox(height: 6),
-              Text(
-                'Extra Special',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontFamily: 'Arial Rounded MT Bold',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
+          InfoItem(
+            icon: Icons.star,
+            label: "Extra Special",
           ),
 
         ],
       ),
     );
   }
+
+
+  Widget InfoItem({
+    required IconData icon,
+    required String label,
+    Color bgColor = const Color(0xFF4A90E2), // default blue-ish
+  }) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: bgColor.withOpacity(0.3),
+            shape: BoxShape.circle,
+          ),
+          child: Center(child: Icon(icon, size: 30, color: Colors.white)),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            fontFamily: 'Arial',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
 
 }
