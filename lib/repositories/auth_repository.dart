@@ -7,7 +7,7 @@ import '../models/login_model.dart';
 
 abstract class AuthRepository {
   Future<LoginModel?> login(Map<String, dynamic> data);
-  Future<LoginModel?> register(Map<String, dynamic> data);
+  Future<RegisterModel?> register(Map<String, dynamic> data);
 }
 
 class AuthRepositoryImpl implements AuthRepository{
@@ -20,6 +20,6 @@ class AuthRepositoryImpl implements AuthRepository{
   }
   @override
   Future<RegisterModel?> register(Map<String, dynamic> data) async {
-    return await remoteDataSource.login(data);
+    return await remoteDataSource.register(data);
   }
 }

@@ -29,7 +29,7 @@ class AuthController extends GetxController {
         // );
         // AppSnackbar.success("Login Successful");
         print("Login Sucessful");
-        Get.offAll(() => LetsBegin());
+        Get.offAll(() => HomeScreen());
       } else {
         // AppSnackbar.error(loginModel?.message ?? "Login failed");
       }
@@ -42,7 +42,7 @@ class AuthController extends GetxController {
   Future<void> register(Map<String, dynamic> data) async {
     try {
       isLoading.value = true;
-    registerModel  = await repository.login(data);
+    registerModel  = await repository.register(data);
       if (registerModel != null && registerModel?.success == true) {
         // await AuthService.saveTokens(
         //   loginModel?.data?.accessToken ?? "",

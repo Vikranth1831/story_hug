@@ -32,8 +32,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<RegisterModel?> register(Map<String, dynamic> data) async {
     try {
-      final res = await ApiClient.post("${APIEndpointUrls.login}", data: data);
-      AppLogger.log('login : ${res.data}');
+      final res = await ApiClient.post("${APIEndpointUrls.register}", data: data);
+      AppLogger.log('Register : ${res.data}');
       return RegisterModel.fromJson(res.data);
     } catch (e) {
       // AppLogger.error('login : $e');

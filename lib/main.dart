@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:story_hug/firebase_options.dart';
+import 'package:story_hug/pages/splash_screen.dart';
 import 'package:story_hug/services/ApiClient.dart';
 import 'package:story_hug/services/NotificationService.dart';
 
@@ -11,8 +14,9 @@ import 'app_routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   ApiClient.setupInterceptors();
-  await NotificationService().init();
+  // await NotificationService().init();
   runApp(MyApp());
 }
 
@@ -23,9 +27,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     return GetMaterialApp(
+      home: SplashScreen(),
       title: 'StoryHug',
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.splash,
+      // initialRoute: Routes.splash,
       theme: AppTheme.lightTheme(),
     );
   }

@@ -29,10 +29,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pass1Controller = TextEditingController();
   final TextEditingController pass2Controller = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController mobileController = TextEditingController();
+
+
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final AuthController loginController = Get.put(
+  final AuthController authController = Get.put(
     AuthController(
       repository: AuthRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
     ),
@@ -75,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:  EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       width: double.infinity,
-                      height: (isLogin) ? h * 0.4 :  h * 0.55,
+                      height: (isLogin) ? h * 0.4 :  h * 0.65,
                       
 
                       decoration:  BoxDecoration(
@@ -191,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 /// LOGIN BUTTON (YELLOW)
                                 Obx(() {
                                   return ElevatedButton(
-                                    onPressed: loginController.isLoading.value
+                                    onPressed: authController.isLoading.value
                                         ? null   // disable button while loading
                                         : () async {
                                       if (formKey.currentState!.validate()) {
@@ -205,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           "device_type": Platform.isIOS ? "ios" : "android",
                                         };
 
-                                        loginController.login(data);
+                                       authController.login(data);
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -213,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       minimumSize: Size(double.infinity, 48),
                                     ),
 
-                                    child: loginController.isLoading.value
+                                    child: authController.isLoading.value
                                         ? const SizedBox(
                                       height: 22,
                                       width: 22,
@@ -237,6 +242,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               /// 🔵 SIGNUP FIELDS
                               /// ----------------------------------------------------
                               if (!isLogin) ...[
+                                _textField(
+                                  controller: nameController,
+                                  hint: "name",
+                                  isPassword: false,
+                                  onEyeTap: null,
+                                ),
+
+                                const SizedBox(height: 15),
+
+                                _textField(
+                                  controller: mobileController,
+                                  hint: "Mobile",
+                                  isPassword: false,
+                                  onEyeTap: null,
+                                ),
+
+                                const SizedBox(height: 15),
+
                                 _textField(
                                   controller: emailController,
                                   hint: "Email",
@@ -276,7 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 /// SIGNUP BUTTON (YELLOW)
                                 ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (formKey.currentState!.validate()) {
                                       if (pass1Controller.text != pass2Controller.text) {
                                         ScaffoldMessenger.of(context).showSnackBar(
@@ -286,7 +309,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                         );
                                         return;
                                       }
-                                     context.go('/lets-begin');
+                                      String? fcmToken = await FirebaseMessaging.instance.getToken();
+                                      debugPrint("Login FCM Token: $fcmToken");
+
+                                      final data = {
+                                        "name":nameController.text.trim(),
+                                        "mobile":mobileController.text.trim(),
+                                        "email": emailController.text.trim(),
+                                        "password": pass1Controller.text.trim(),
+                                        "fcm_token": fcmToken,
+                                        "device_type": Platform.isIOS ? "ios" : "android",
+                                      };
+
+                                      authController.register(data);
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
