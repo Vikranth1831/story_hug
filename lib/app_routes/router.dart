@@ -69,7 +69,7 @@ final GoRouter appRouter = GoRouter(
 
       path: '/homepage',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(ProfileScreen(), state);
+        return buildSlideTransitionPage(HomeScreen(), state);
       },
     ),
     GoRoute(
