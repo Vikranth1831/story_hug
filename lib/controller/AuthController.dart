@@ -18,7 +18,7 @@ class AuthController extends GetxController {
   var isLoading = false.obs;
   LoginModel? loginModel;
   RegisterModel? registerModel;
-  CreateChildrenModel? createChildrenModel;
+
 
   Future<void> login(Map<String, dynamic> data) async {
     try {
@@ -60,21 +60,4 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> createChildren(Map<String, dynamic> data) async {
-    try {
-      isLoading.value = true;
-
-      createChildrenModel = await repository.createChildren(data);
-      if (createChildrenModel != null && createChildrenModel?.success == true) {
-        print("Created Children");
-        Get.offAll(() => ManageKids());
-      } else {
-        // AppSnackbar.error(loginModel?.message ?? "Login failed");
-      }
-    } catch (e) {
-      //  AppSnackbar.exception(e.toString());
-    } finally {
-      isLoading.value = false;
-    }
-  }
 }

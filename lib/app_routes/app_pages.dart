@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:story_hug/pages/profile.dart';
+import '../binding/subcategory_binding.dart';
 import '../pages/Authentication/otp-screen.dart';
 import '../pages/Authentication/sign_up_screen.dart';
 import '../pages/Passwordchange/passwordchange.dart';
 import '../pages/Reminder/reminders.dart';
 import '../pages/Section1/card-parts.dart';
-import '../pages/Section1/card-view.dart';
+import '../pages/Section1/SubCategory.dart';
 import '../pages/Section1/Home.dart';
 import '../pages/Section1/playicard.dart';
 import '../pages/Subscriptions page/subscriptions.dart';
@@ -30,7 +31,13 @@ class AppRoutes {
     GetPage(name: Routes.verifyEmail, page: () => VerifyEmail()),
     GetPage(name: Routes.StartRecordingVoice, page: () => StartRecordingVoice()),
     GetPage(name: Routes.HomeScreen, page: () => HomeScreen()),
-    GetPage(name: Routes.SelectedCardView, page: () => SelectedCardView()),
+    GetPage(name: Routes.SelectedCardView, page: () => SubCategory()),
+    GetPage(
+      name: Routes.SelectedCardView,
+      page: () => const SubCategory(),
+      binding: SubCategoryBinding(),
+      transition: Transition.rightToLeft,
+    ),
     GetPage(name: Routes.CreateProfileForkids, page: () => CreateProfileForkids()),
     GetPage(name: Routes.ManageKids, page: () => ManageKids()),
     GetPage(name: Routes.RecordingVoice, page: () => RecordingVoice()),

@@ -15,10 +15,8 @@ abstract class RemoteDataSource {
   Future<RegisterModel?> register(Map<String, dynamic> data);
   Future<CreateChildrenModel?> createChildren(Map<String, dynamic> data);
   Future<CategoryModel?> fetchCategory();
-  Future<SubCategoryModel?> fetchSubCategory(int catId);
-
+  Future<SubCategoryModel?> fetchSubCategory(String catId);
   Future<GetAllChildrenModel?> getAllChildren();
-
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -65,13 +63,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
   @override
   Future<GetAllChildrenModel?> getAllChildren() async {
     try {
-      final res = await ApiClient.get(
-        "${APIEndpointUrls.getAllChildren}",
-
-      );
+      final res = await ApiClient.get("${APIEndpointUrls.getAllChildren}");
       AppLogger.log('Register : ${res.data}');
       return GetAllChildrenModel.fromJson(res.data);
     } catch (e) {
@@ -91,10 +87,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
   @override
-  Future<SubCategoryModel?> fetchSubCategory(int catId) async {
+  Future<SubCategoryModel?> fetchSubCategory(String catId) async {
     try {
-      final res = await ApiClient.get("${APIEndpointUrls.fetchSubCategory}/${catId}");
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.fetchSubCategory}${catId}",
+      );
       AppLogger.log('fetch Sub Category : ${res.data}');
       return SubCategoryModel.fromJson(res.data);
     } catch (e) {

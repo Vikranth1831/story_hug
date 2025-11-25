@@ -13,7 +13,6 @@ class APIEndpointUrls {
   static const String fetchCategory='${story}fetchcategories';
   static const String fetchSubCategory='${story}fetchsubcategoriesbycategoryid/';
   static const String children='${ApiUrl}children';
-  static const String createChildren='${children}/createchild';
   static const String getAllChildren='${children}/getallchildrensofaparent';
 
 }

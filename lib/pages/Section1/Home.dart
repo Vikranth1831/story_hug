@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
@@ -10,6 +12,7 @@ import 'package:story_hug/controller/CategoryController.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
+import '../../app_routes/app_routes.dart';
 import '../../components/CommonLoader.dart';
 import '../../data/remote_data_source.dart';
 import '../../utils/spinkittsLoader.dart';
@@ -42,19 +45,24 @@ class _HomeScreenState extends State<HomeScreen> {
     final double w = SizeConfig.screenWidth;
 
     bool isTablet = w > 600;
-    int gridCount = isTablet ? 4 : 2;
+    int gridCount = isTablet
+        ? (w > 1000 ? 5 : 4)
+        : 2; // Better for large tablets & web
 
-    final double imageHeight = isTablet ? h * 0.20 : h * 0.16;
-    final double verticalPadding = w * 0.03;
-    final double textHeight = 32; // 2 lines approx
+    double getResponsiveAspectRatio() {
+      if (w < 600) {
+        // Mobile: slightly taller than square
+        return 0.80; // width / height → makes card taller (good for image + text)
+      } else if (w < 1000) {
+        // Tablet
+        return 0.85;
+      } else {
+        // Large tablet / desktop
+        return 0.90;
+      }
+    }
 
-    final double cardHeight =
-        imageHeight + (verticalPadding * 2) + 8 + textHeight;
-
-    final double cardWidth = w / gridCount;
-
-    final double aspectRatio = cardWidth / cardHeight;
-
+    final double childAspectRatio = getResponsiveAspectRatio();
 
     return Scaffold(
       backgroundColor: const Color(0xFFACBCF1),
@@ -135,7 +143,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             return GestureDetector(
                               onTap: () {
-                                context.push('/select');
+                                Get.toNamed(
+                                  Routes.SelectedCardView,
+                                  arguments: {'id': cat.id, 'name': cat.categoryName}
+                                );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -157,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(16),
@@ -213,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: gridCount,
-                                childAspectRatio: aspectRatio,
+                                childAspectRatio: childAspectRatio,
                                 crossAxisSpacing: w * 0.03,
                                 mainAxisSpacing: h * 0.02,
                               ),

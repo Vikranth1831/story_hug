@@ -15,7 +15,7 @@ class SubCategoryController extends GetxController {
 
   final RxnString errorMessage = RxnString();
 
-  Future<void> fetchSubCategory(int catId) async {
+  Future<void> fetchSubCategory(String catId) async {
     try {
       isLoading.value = true;
       final result = await subCategoryrepo.fetchSubCategory(catId);

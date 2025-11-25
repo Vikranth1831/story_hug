@@ -32,7 +32,9 @@ class MyApp extends StatelessWidget {
       title: 'StoryHug',
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.splash,
+      defaultTransition: Transition.fadeIn,
       getPages: AppRoutes.pages,
+      initialBinding: BindingsBuilder(() {}),
       theme: AppTheme.lightTheme(),
     );
   }
