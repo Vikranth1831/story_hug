@@ -10,6 +10,7 @@ import 'package:story_hug/utils/AppThemeData.dart';
 
 import 'package:story_hug/utils/media_query_helper.dart';
 
+import 'app_routes/app_pages.dart';
 import 'app_routes/app_routes.dart';
 
 void main() async {
@@ -27,10 +28,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     return GetMaterialApp(
-      home: SplashScreen(),
+      // home: SplashScreen(),
       title: 'StoryHug',
       debugShowCheckedModeBanner: false,
-      // initialRoute: Routes.splash,
+      initialRoute: Routes.splash,
+      getPages: AppRoutes.pages,
       theme: AppTheme.lightTheme(),
     );
   }
