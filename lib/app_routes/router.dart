@@ -21,7 +21,6 @@ import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
 import 'package:story_hug/pages/Section1/card-parts.dart';
 import 'package:story_hug/pages/Section1/card-view.dart';
 import 'package:story_hug/pages/Section1/menu.dart';
-import 'package:story_hug/pages/sign_up_screen.dart';
 import 'package:story_hug/pages/splash_screen.dart';
 import 'package:story_hug/pages/verify_email.dart';
 import 'package:story_hug/pages/Section1/playicard.dart';
@@ -84,12 +83,7 @@ final GoRouter appRouter = GoRouter(
         return buildSlideTransitionPage(VerifyEmail(), state);
       },
     ),
-    GoRoute(
-      path: '/sign_up',
-      pageBuilder: (context, state) {
-        return buildSlideTransitionPage(SignUpScreen(), state);
-      },
-    ),
+
     GoRoute(
       path: '/select',
       pageBuilder: (context, state) {

@@ -29,74 +29,102 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     "assets/images/girl_avator.png",
   ];
 
-
   @override
   Widget build(BuildContext context) {
-    var w=SizeConfig.screenWidth;
-    var h=SizeConfig.screenHeight;
-    return Scaffold(
-      backgroundColor: Color(0xFF192346),
-      body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: w * 0.034),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: h * 0.05,),
-              Center(child: Image.asset('assets/images/Group 146.png')),
-              TextHeader("Name"),
-              SizedBox(height: h * 0.013,),
-          
-              CustomInputField(controller: nameController, label1: 'Enter name',),
-              SizedBox(height: h * 0.02,),
-            TextHeader("Age"),
-              SizedBox(height: h * 0.013,),
-              CustomInputField(controller: ageController, label1: 'Enter age',),
-              SizedBox(height: h * 0.02,),
-              TextHeader("Gender"),
-              SizedBox(height: h * 0.013,),
-              GenderRow(
-                selectedGender: selectedGender,
-                onSelect: (value) {
-                  setState(() {
-                    selectedGender = value;
-                  });
-                },
-                height: h,
-                width: w
-              ),
-          
-              if (selectedGender.isNotEmpty) ...[
-                SizedBox(height: h * 0.02),
-                AvatarSelectionBox(
-                  selectedGender == "boy" ? boyAvatars : girlAvatars,h,w
-                ),
-                SizedBox(height: h * 0.03),
-              ],
+    var w = SizeConfig.screenWidth;
+    var h = SizeConfig.screenHeight;
 
-          
-            ],
-          
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/bgimage.png'),
+            fit: BoxFit.cover,
           ),
         ),
-      ),
-      bottomNavigationBar: SafeArea(
-          child:
-          InkWell(
-              onTap: ()
-              {
-                context.push('/manage_kids');
-              },
-              child: CreateNowButton(text: 'Create Now',)
-          )
+
+        /// 🔥 FIX — Correct structure to allow scroll + fixed bottom button
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.034),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: h * 0.05),
+                      Center(child: Image.asset('assets/images/Group 146.png')),
+
+                      TextHeader("Name"),
+                      SizedBox(height: h * 0.013),
+                      CustomInputField(
+                        controller: nameController,
+                        label1: 'Enter name',
+                      ),
+
+                      SizedBox(height: h * 0.02),
+                      TextHeader("Age"),
+                      SizedBox(height: h * 0.013),
+                      CustomInputField(
+                        controller: ageController,
+                        label1: 'Enter age',
+                      ),
+
+                      SizedBox(height: h * 0.02),
+                      TextHeader("Gender"),
+                      SizedBox(height: h * 0.013),
+
+                      GenderRow(
+                        selectedGender: selectedGender,
+                        onSelect: (value) {
+                          setState(() {
+                            selectedGender = value;
+                          });
+                        },
+                        height: h,
+                        width: w,
+                      ),
+
+                      if (selectedGender.isNotEmpty) ...[
+                        SizedBox(height: h * 0.02),
+                        AvatarSelectionBox(
+                          selectedGender == "boy"
+                              ? boyAvatars
+                              : girlAvatars,
+                          h,
+                          w,
+                        ),
+                        SizedBox(height: h * 0.03),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            /// 🔥 FIX — Button inside body but not breaking UI
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: InkWell(
+                onTap: () {
+                  context.push('/manage_kids');
+                },
+                child: CreateNowButton(text: 'Create Now'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget AvatarSelectionBox(List<String> avatarList,var height,var width) {
+  Widget AvatarSelectionBox(List<String> avatarList, var height, var width) {
     return Container(
       width: double.infinity,
-      padding:EdgeInsets.all(height * 0.02),
+      padding: EdgeInsets.all(height * 0.02),
       decoration: ShapeDecoration(
         color: Colors.white.withValues(alpha: 0.10),
         shape: RoundedRectangleBorder(
@@ -116,7 +144,6 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
             ),
           ),
           const SizedBox(height: 16),
-
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -144,11 +171,10 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     );
   }
 
-  Widget TextHeader(String text)
-  {
-    return  Text(
+  Widget TextHeader(String text) {
+    return Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
         fontSize: 16,
         fontFamily: 'Arial',
@@ -156,36 +182,35 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
       ),
     );
   }
+
   Widget GenderRow({
     required String selectedGender,
     required Function(String) onSelect,
     required var height,
-    required var width
+    required var width,
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20,),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // BOY box
           GenderBox(
             label: "Boy",
             imageUrl: "assets/images/boy_avator.png",
             isSelected: selectedGender == "boy",
             onTap: () => onSelect("boy"),
             width: width,
-            height: height
+            height: height,
           ),
 
-          // GIRL box
           GenderBox(
             label: "Girl",
             imageUrl: "assets/images/girl_avator.png",
             isSelected: selectedGender == "girl",
             onTap: () => onSelect("girl"),
-              width: width,
-              height: height
+            width: width,
+            height: height,
           ),
         ],
       ),
@@ -198,7 +223,7 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     required bool isSelected,
     required VoidCallback onTap,
     required var height,
-    required var width
+    required var width,
   }) {
     return InkWell(
       onTap: onTap,
@@ -207,8 +232,8 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
         padding: const EdgeInsets.all(12),
         decoration: ShapeDecoration(
           color: isSelected
-              ? const Color(0xFFFBD867)                // selected
-              : Colors.white.withValues(alpha: 0.10),  // unselected
+              ? const Color(0xFFFBD867)
+              : Colors.white.withValues(alpha: 0.10),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -227,7 +252,6 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
                 ),
               ),
             ),
-
             const SizedBox(height: 12),
             Text(
               label,
@@ -243,6 +267,4 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
       ),
     );
   }
-
-
 }
