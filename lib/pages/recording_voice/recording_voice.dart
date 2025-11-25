@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/recording_voice/save_voice.dart';
 import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
@@ -114,7 +116,8 @@ class _RecordingVoiceState extends State<RecordingVoice> {
                   if (!isRecording) {
                     setState(() => isRecording = true);
                   } else {
-                 context.push('/save_voice');
+               //  context.push('/save_voice');
+                 Get.to(()=>SaveVoice());
 
                   }
                 },

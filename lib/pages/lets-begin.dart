@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/components/create_now_button.dart';
+import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 
@@ -68,7 +70,8 @@ class _LetsBeginState extends State<LetsBegin> {
               /// ⭐ Create Now Button
               InkWell(
                 onTap: () {
-                  context.push('/start_recording_voice');
+                  Get.to(()=>StartRecordingVoice());
+                  //context.push('/start_recording_voice');
                 },
                 child: const CreateNowButton(
                   text: "Create Now",
