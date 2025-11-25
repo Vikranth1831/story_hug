@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:story_hug/app_routes/app_routes.dart';
 import 'package:story_hug/models/create_child_model.dart';
 import 'package:story_hug/models/register_model.dart';
 import 'package:story_hug/pages/Section1/menu.dart';
@@ -17,22 +18,22 @@ class AuthController extends GetxController {
   var isLoading = false.obs;
   LoginModel? loginModel;
   RegisterModel? registerModel;
-  CreateChildrenModel? createChildrenModel;
+
 
   Future<void> login(Map<String, dynamic> data) async {
     try {
       isLoading.value = true;
       loginModel = await repository.login(data);
       if (loginModel != null && loginModel?.success == true) {
-        // await AuthService.saveTokens(
-        //   loginModel?.data?.accessToken ?? "",
-        //   loginModel?.data?.refreshToken ?? "",
-        //   loginModel?.data?.accessTokenExpiry ?? 0,
-        //   loginModel?.data?.user?.email ?? '',
-        // );
+        await AuthService.saveTokens(
+          loginModel?.accessToken?? "",
+          loginModel?.refreshToken?? "",
+          //loginModel?.data?.accessTokenExpiry ?? 0,
+          //loginModel?.data?.user?.email ?? '',
+        );
         // AppSnackbar.success("Login Successful");
         print("Login Sucessful");
-        Get.offAll(() => HomeScreen());
+        Get.offAll(()=>LetsBegin());
       } else {
         // AppSnackbar.error(loginModel?.message ?? "Login failed");
       }
@@ -59,21 +60,5 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-  Future<void> createChildren(Map<String, dynamic> data) async {
-    try {
-      isLoading.value = true;
 
-     createChildrenModel= await repository.createChildren(data);
-      if (createChildrenModel != null && createChildrenModel?.success == true) {
-        print("Created Children");
-        Get.offAll(() => ManageKids());
-      } else {
-        // AppSnackbar.error(loginModel?.message ?? "Login failed");
-      }
-    } catch (e) {
-      //  AppSnackbar.exception(e.toString());
-    } finally {
-      isLoading.value = false;
-    }
-  }
 }

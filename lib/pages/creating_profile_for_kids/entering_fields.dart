@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/repositories/create_child_repository.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../components/create_now_button.dart';
 import '../../components/text_field.dart';
+import '../../controller/createChildrenController.dart';
+import '../../data/remote_data_source.dart';
 
 class EnteringFieldsForKid extends StatefulWidget {
   const EnteringFieldsForKid({super.key});
@@ -33,6 +38,11 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     "assets/images/girl_avator.png",
     "assets/images/girl_avator.png",
   ];
+  final CreatechildrenController controller = Get.put(
+    CreatechildrenController(
+      repository: CreateChildRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +160,15 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
             }
 
             if (valid) {
-              context.push('/manage_kids');
+
+              final data = {
+                "name": nameController.text.trim(),
+                "gender": selectedGender,
+                "age": ageController.text,
+                "image": "",
+              };
+
+              controller.createChildren(data);
             }
           },
           child: CreateNowButton(text: 'Create Now'),

@@ -2,7 +2,9 @@ import 'dart:developer' as AppLogger;
 
 import 'package:dio/dio.dart';
 import 'package:story_hug/models/create_child_model.dart';
+import 'package:story_hug/models/get_all_children_model.dart';
 import 'package:story_hug/models/register_model.dart';
+import 'package:story_hug/repositories/get_all_children_repository.dart';
 import '../core/endpoints.dart';
 import '../models/login_model.dart';
 import '../services/ApiClient.dart';
@@ -12,6 +14,7 @@ abstract class RemoteDataSource {
   Future<RegisterModel?> register(Map<String, dynamic> data);
   Future<CreateChildrenModel?> createChildren(Map<String, dynamic> data);
 
+  Future<GetAllChildrenModel?> getAllChildren();
 
 }
 
@@ -54,6 +57,20 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       );
       AppLogger.log('Register : ${res.data}');
       return CreateChildrenModel.fromJson(res.data);
+    } catch (e) {
+      // AppLogger.error('login : $e');
+      return null;
+    }
+  }
+  @override
+  Future<GetAllChildrenModel?> getAllChildren() async {
+    try {
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.getAllChildren}",
+
+      );
+      AppLogger.log('Register : ${res.data}');
+      return GetAllChildrenModel.fromJson(res.data);
     } catch (e) {
       // AppLogger.error('login : $e');
       return null;

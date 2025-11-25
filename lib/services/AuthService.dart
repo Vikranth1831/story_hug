@@ -92,19 +92,19 @@ class AuthService {
   static Future<void> saveTokens(
       String accessToken,
       String refreshToken,
-      int expiresInMs, // <-- duration in ms
-      String userName,
-      String email,
+    //  int expiresInMs, // <-- duration in ms
+      //String userName,
+      //String email,
       ) async {
     final expiryTimestamp =
-        DateTime.now().millisecondsSinceEpoch + expiresInMs;
+        //DateTime.now().millisecondsSinceEpoch + expiresInMs;
 
     await _storage.write(key: _accessTokenKey, value: accessToken);
     await _storage.write(key: _refreshTokenKey, value: refreshToken);
-    await _storage.write(
-        key: _tokenExpiryKey, value: expiryTimestamp.toString());
-    await _storage.write(key: _userName, value: userName);
-    await _storage.write(key: _email, value: email);
+    //await _storage.write(
+     //   key: _tokenExpiryKey, value: expiryTimestamp.toString());
+    //await _storage.write(key: _userName, value: userName);
+   // await _storage.write(key: _email, value: email);
   }
 
   /// Update tokens only (during refresh)
