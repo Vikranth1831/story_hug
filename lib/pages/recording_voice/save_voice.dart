@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/creating_profile_for_kids/create_profile_forkids.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 class SaveVoice extends StatelessWidget {
   const SaveVoice({super.key});
@@ -102,7 +104,8 @@ class SaveVoice extends StatelessWidget {
               InkWell(
                 onTap: ()
                 {
-                  context.push('/profile_for_kids');
+                 // context.push('/profile_for_kids');
+                  Get.to(()=>CreateProfileForkids());
                 },
                 child: Container(
                   width: w ,

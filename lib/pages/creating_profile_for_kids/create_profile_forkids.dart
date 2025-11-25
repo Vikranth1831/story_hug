@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../components/create_now_button.dart';
@@ -66,7 +68,7 @@ class CreateProfileForkids extends StatelessWidget {
                   InkWell(
                       onTap: ()
                       {
-                        context.push('/entering_fields_for_kids');
+                        Get.to(EnteringFieldsForKid());
                       },
                       child: CreateNowButton(text: 'Create Now',)
                   )

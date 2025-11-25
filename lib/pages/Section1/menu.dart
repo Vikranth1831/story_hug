@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
+import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -255,7 +257,8 @@ class MenuPanel extends StatelessWidget {
       {
         if(title=='Profile')
           {
-            context.push('/profile_screen');
+            //context.push('/profile_screen');
+            Get.to(()=>ProfileScreen());
           }
         else if(title=='Voice')
           {

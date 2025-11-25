@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/app_routes/app_routes.dart';
+import 'package:story_hug/pages/Section1/menu.dart';
+import 'package:story_hug/pages/login_screen.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,8 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Wait for 1.5 seconds then navigate
     Future.delayed(const Duration(milliseconds: 1500), () {
-     // context.go('/sign_up');
-      context.go('/login');
+     Get.offAll(()=>LoginScreen());
 
     });
   }

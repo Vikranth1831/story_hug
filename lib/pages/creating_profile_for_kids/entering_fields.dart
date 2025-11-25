@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/repositories/create_child_repository.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../components/create_now_button.dart';
 import '../../components/text_field.dart';
+import '../../controller/createChildrenController.dart';
+import '../../data/remote_data_source.dart';
 
 class EnteringFieldsForKid extends StatefulWidget {
   const EnteringFieldsForKid({super.key});
@@ -17,6 +22,11 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
   final ageController = TextEditingController();
   String selectedGender = "";
 
+  // ❗ NEW ERROR VARIABLES
+  String nameError = "";
+  String ageError = "";
+  String genderError = "";
+
   final boyAvatars = [
     "assets/images/boy_avator.png",
     "assets/images/boy_avator.png",
@@ -28,6 +38,11 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     "assets/images/girl_avator.png",
     "assets/images/girl_avator.png",
   ];
+  final CreatechildrenController controller = Get.put(
+    CreatechildrenController(
+      repository: CreateChildRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -35,96 +50,137 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     var h = SizeConfig.screenHeight;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bgimage.png'),
-            fit: BoxFit.cover,
+      backgroundColor: Color(0xFF192346),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: w * 0.034),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: h * 0.05),
+
+              Center(child: Image.asset('assets/images/Group 146.png')),
+
+              TextHeader("Name"),
+              SizedBox(height: h * 0.013),
+
+              CustomInputField(
+                controller: nameController,
+                label1: 'Enter name',
+              ),
+
+              if (nameError.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(nameError,
+                      style: TextStyle(color: Colors.red, fontSize: 12)),
+                ),
+
+              SizedBox(height: h * 0.02),
+
+              TextHeader("Age"),
+              SizedBox(height: h * 0.013),
+
+              CustomInputField(
+                controller: ageController,
+                label1: 'Enter age',
+              ),
+
+              if (ageError.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(ageError,
+                      style: TextStyle(color: Colors.red, fontSize: 12)),
+                ),
+
+              SizedBox(height: h * 0.02),
+
+              TextHeader("Gender"),
+              SizedBox(height: h * 0.013),
+
+              GenderRow(
+                selectedGender: selectedGender,
+                onSelect: (value) {
+                  setState(() {
+                    selectedGender = value;
+                    genderError = "";
+                  });
+                },
+                height: h,
+                width: w,
+              ),
+
+              if (genderError.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(genderError,
+                      style: TextStyle(color: Colors.red, fontSize: 12)),
+                ),
+
+              if (selectedGender.isNotEmpty) ...[
+                SizedBox(height: h * 0.02),
+                AvatarSelectionBox(
+                    selectedGender == "boy" ? boyAvatars : girlAvatars, h, w),
+                SizedBox(height: h * 0.03),
+              ],
+            ],
           ),
         ),
+      ),
 
-        /// 🔥 FIX — Correct structure to allow scroll + fixed bottom button
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: w * 0.034),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: h * 0.05),
-                      Center(child: Image.asset('assets/images/Group 146.png')),
+      bottomNavigationBar: SafeArea(
+        child: InkWell(
+          onTap: () {
+            // RESET ALL ERRORS
+            setState(() {
+              nameError = "";
+              ageError = "";
+              genderError = "";
+            });
 
-                      TextHeader("Name"),
-                      SizedBox(height: h * 0.013),
-                      CustomInputField(
-                        controller: nameController,
-                        label1: 'Enter name',
-                      ),
+            bool valid = true;
 
-                      SizedBox(height: h * 0.02),
-                      TextHeader("Age"),
-                      SizedBox(height: h * 0.013),
-                      CustomInputField(
-                        controller: ageController,
-                        label1: 'Enter age',
-                      ),
+            // VALIDATION --- FIELD WISE
+            if (nameController.text.trim().isEmpty) {
+              setState(() => nameError = "Please enter child's name");
+              valid = false;
+            }
 
-                      SizedBox(height: h * 0.02),
-                      TextHeader("Gender"),
-                      SizedBox(height: h * 0.013),
+            if (ageController.text.trim().isEmpty) {
+              setState(() => ageError = "Please enter age");
+              valid = false;
+            } else if (int.tryParse(ageController.text.trim()) == null) {
+              setState(() => ageError = "Age must be a valid number");
+              valid = false;
+            }
 
-                      GenderRow(
-                        selectedGender: selectedGender,
-                        onSelect: (value) {
-                          setState(() {
-                            selectedGender = value;
-                          });
-                        },
-                        height: h,
-                        width: w,
-                      ),
+            if (selectedGender.isEmpty) {
+              setState(() => genderError = "Please select gender");
+              valid = false;
+            }
 
-                      if (selectedGender.isNotEmpty) ...[
-                        SizedBox(height: h * 0.02),
-                        AvatarSelectionBox(
-                          selectedGender == "boy"
-                              ? boyAvatars
-                              : girlAvatars,
-                          h,
-                          w,
-                        ),
-                        SizedBox(height: h * 0.03),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            if (valid) {
 
-            /// 🔥 FIX — Button inside body but not breaking UI
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: InkWell(
-                onTap: () {
-                  context.push('/manage_kids');
-                },
-                child: CreateNowButton(text: 'Create Now'),
-              ),
-            ),
-          ],
+              final data = {
+                "name": nameController.text.trim(),
+                "gender": selectedGender,
+                "age": ageController.text,
+                "image": "",
+              };
+
+              controller.createChildren(data);
+            }
+          },
+          child: CreateNowButton(text: 'Create Now'),
         ),
       ),
     );
   }
 
-  Widget AvatarSelectionBox(List<String> avatarList, var height, var width) {
+  Widget AvatarSelectionBox(List<String> avatarList,var height,var width) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(height * 0.02),
+      padding:EdgeInsets.all(height * 0.02),
       decoration: ShapeDecoration(
         color: Colors.white.withValues(alpha: 0.10),
         shape: RoundedRectangleBorder(
@@ -144,10 +200,10 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
             ),
           ),
           const SizedBox(height: 16),
+
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: List.generate(
                 avatarList.length,
                     (index) => Padding(
@@ -171,10 +227,11 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     );
   }
 
-  Widget TextHeader(String text) {
-    return Text(
+  Widget TextHeader(String text)
+  {
+    return  Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         color: Colors.white,
         fontSize: 16,
         fontFamily: 'Arial',
@@ -182,7 +239,6 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
       ),
     );
   }
-
   Widget GenderRow({
     required String selectedGender,
     required Function(String) onSelect,
@@ -191,7 +247,7 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20,),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -203,7 +259,6 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
             width: width,
             height: height,
           ),
-
           GenderBox(
             label: "Girl",
             imageUrl: "assets/images/girl_avator.png",
@@ -232,8 +287,8 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
         padding: const EdgeInsets.all(12),
         decoration: ShapeDecoration(
           color: isSelected
-              ? const Color(0xFFFBD867)
-              : Colors.white.withValues(alpha: 0.10),
+              ? const Color(0xFFFBD867)                // selected
+              : Colors.white.withValues(alpha: 0.10),  // unselected
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -252,6 +307,7 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
                 ),
               ),
             ),
+
             const SizedBox(height: 12),
             Text(
               label,
@@ -267,4 +323,6 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
       ),
     );
   }
+
+
 }

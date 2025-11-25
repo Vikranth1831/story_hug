@@ -1,9 +1,19 @@
+import 'dart:io';
 import 'dart:ui';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
+
+import '../controller/AuthController.dart';
+import '../data/remote_data_source.dart';
+import '../repositories/auth_repository.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -20,8 +30,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pass1Controller = TextEditingController();
   final TextEditingController pass2Controller = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController mobileController = TextEditingController();
+
+
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final AuthController authController = Get.put(
+    AuthController(
+      repository: AuthRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
 
   // 🔥 BLINKING OPACITY FOR stars.png
   double starOpacity = 1.0;
@@ -91,28 +112,40 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   SizedBox(height: h * 0.05),
 
+                  /// -----------------------------------------------------------------
+                  /// MAIN LOGIN/SIGNUP BOX
+                  /// -----------------------------------------------------------------
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                    padding:  EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       width: double.infinity,
-                      height: h * 0.55,
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
+                      height: (isLogin) ? h * 0.4 :  h * 0.75,
+                      
+
+                      decoration:  BoxDecoration(
+                        image: DecorationImage(
                           image: AssetImage("assets/images/background_for_box.png"),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.circular(17),
                       ),
+
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Form(
                           key: formKey,
+
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+
+                              /// ----------------------------------------------------
+                              /// 🔵 LOGIN / SIGNUP TOGGLE BUTTONS
+                              /// ----------------------------------------------------
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  // LOGIN BUTTON
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -124,8 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           horizontal: 20, vertical: 8),
                                       decoration: BoxDecoration(
                                         color: isLogin
-                                            ? const Color(0xFFFFD54F)
-                                            : Colors.white24,
+                                            ? const Color(0xFFFFD54F) // SELECTED = YELLOW
+                                            : Colors.white24, // UNSELECTED
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
@@ -137,7 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ),
                                   ),
+
                                   const SizedBox(width: 20),
+
+                                  // SIGNUP BUTTON
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -167,6 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               const SizedBox(height: 20),
 
+                              /// ----------------------------------------------------
+                              /// 🔵 LOGIN FIELDS
+                              /// ----------------------------------------------------
                               if (isLogin) ...[
                                 _textField(
                                   controller: emailController,
@@ -174,7 +213,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isPassword: false,
                                   onEyeTap: null,
                                 ),
+
                                 const SizedBox(height: 15),
+
                                 _textField(
                                   controller: pass1Controller,
                                   hint: "Password",
@@ -187,30 +228,85 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isVisible: passwordVisible1,
                                 ),
                                 const SizedBox(height: 20),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      context.go('/lets-begin');
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFFFD54F),
-                                  ),
-                                  child: const Text(
-                                    "Login",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
+
+
+
+                                /// LOGIN BUTTON (YELLOW)
+                                Obx(() {
+                                  return ElevatedButton(
+                                    onPressed: authController.isLoading.value
+                                        ? null   // disable button while loading
+                                        : () async {
+                                      if (formKey.currentState!.validate()) {
+                                        String? fcmToken = await FirebaseMessaging.instance.getToken();
+                                        debugPrint("Login FCM Token: $fcmToken");
+
+                                        final data = {
+                                          "email": emailController.text.trim(),
+                                          "password": pass1Controller.text.trim(),
+                                          "fcm_token": fcmToken,
+                                          "device_type": Platform.isIOS ? "ios" : "android",
+                                        };
+
+                                       authController.login(data);
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFFFD54F),
+                                      minimumSize: Size(double.infinity, 48),
+                                    ),
+
+                                    child: authController.isLoading.value
+                                        ? const SizedBox(
+                                      height: 22,
+                                      width: 22,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                        : const Text(
+                                      "Login",
+                                      style: TextStyle(color: Colors.black, fontSize: 16),
+                                    ),
+                                  );
+                                })
+
+
                               ],
 
+
+                              /// ----------------------------------------------------
+                              /// 🔵 SIGNUP FIELDS
+                              /// ----------------------------------------------------
                               if (!isLogin) ...[
+                                _textField(
+                                  controller: nameController,
+                                  hint: "name",
+                                  isPassword: false,
+                                  onEyeTap: null,
+                                ),
+
+                                const SizedBox(height: 15),
+
+                                _textField(
+                                  controller: mobileController,
+                                  hint: "Mobile",
+                                  isPassword: false,
+                                  onEyeTap: null,
+                                ),
+
+                                const SizedBox(height: 15),
+
                                 _textField(
                                   controller: emailController,
                                   hint: "Email",
                                   isPassword: false,
                                   onEyeTap: null,
                                 ),
+
                                 const SizedBox(height: 15),
+
                                 _textField(
                                   controller: pass1Controller,
                                   hint: "Password",
@@ -222,7 +318,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   isVisible: passwordVisible1,
                                 ),
+
                                 const SizedBox(height: 15),
+
                                 _textField(
                                   controller: pass2Controller,
                                   hint: "Re-enter Password",
@@ -234,29 +332,60 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   isVisible: passwordVisible2,
                                 ),
+
                                 const SizedBox(height: 20),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      if (pass1Controller.text != pass2Controller.text) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text("Passwords do not match"),
-                                          ),
-                                        );
-                                        return;
+
+                                /// SIGNUP BUTTON (YELLOW)
+                                Obx(
+                                      () => ElevatedButton(
+                                    onPressed: authController.isLoading.value
+                                        ? null
+                                        : () async {
+                                      if (formKey.currentState!.validate()) {
+                                        if (pass1Controller.text != pass2Controller.text) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text("Passwords do not match"),
+                                            ),
+                                          );
+                                          return;
+                                        }
+
+                                        String? fcmToken = await FirebaseMessaging.instance.getToken();
+
+                                        final data = {
+                                          "name": nameController.text.trim(),
+                                          "email": emailController.text.trim(),
+                                          "password": pass1Controller.text.trim(),
+                                          "confirm_password": pass2Controller.text.trim(),
+                                          "phone_number": mobileController.text.trim(),
+                                          "fcm_token": fcmToken,
+                                          "device_type": Platform.isIOS ? "ios" : "android",
+                                        };
+
+                                        authController.register(data);
                                       }
-                                      context.go('/lets-begin');
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFFFD54F),
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFFFD54F),
+                                      minimumSize: const Size(double.infinity, 48),
+                                    ),
+                                    child: authController.isLoading.value
+                                        ? const SizedBox(
+                                      height: 22,
+                                      width: 22,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                        : const Text(
+                                      "Sign Up Now",
+                                      style: TextStyle(color: Colors.black, fontSize: 16),
+                                    ),
                                   ),
-                                  child: const Text(
-                                    "Sign Up Now",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
+                                )
+
                               ],
                             ],
                           ),
@@ -269,11 +398,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
+
         ],
       ),
     );
   }
 
+  /// ------------------------------------------------------------
+  /// CUSTOM TEXT FIELD FUNCTION WITH VALIDATION
+  /// ------------------------------------------------------------
   Widget _textField({
     required TextEditingController controller,
     required String hint,
@@ -284,6 +417,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextFormField(
       controller: controller,
       obscureText: isPassword ? !isVisible : false,
+
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "$hint cannot be empty";
@@ -293,12 +427,16 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         return null;
       },
+
       style: const TextStyle(color: Colors.black),
+
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Colors.white, // WHITE BACKGROUND ✔
+
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.black54),
+
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black26),
           borderRadius: BorderRadius.circular(12),
@@ -307,6 +445,7 @@ class _LoginScreenState extends State<LoginScreen> {
           borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(12),
         ),
+
         suffixIcon: isPassword
             ? IconButton(
           icon: Icon(
@@ -320,3 +459,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+

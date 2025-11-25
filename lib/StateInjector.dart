@@ -15,6 +15,5 @@ class StateInjector {
 
   static final blocProviders = <BlocProvider>[
     BlocProvider<InternetStatusBloc>(create: (context) => InternetStatusBloc()),
-
   ];
 }

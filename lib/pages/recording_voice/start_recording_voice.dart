@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/components/create_now_button.dart';
+import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 class StartRecordingVoice extends StatelessWidget {
   const StartRecordingVoice({super.key});
@@ -51,7 +54,8 @@ class StartRecordingVoice extends StatelessWidget {
               InkWell(
                 onTap: ()
                   {
-                    context.push('/recording_voice');
+                 //   context.push('/recording_voice');
+                    Get.to(()=>RecordingVoice());
                   },
                   child: CreateNowButton(text: "Start Recording My Voice"))
 

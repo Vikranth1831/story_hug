@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
-class ProfileScreen extends StatelessWidget {
+
+import '../controller/getAllChildrenController.dart';
+import '../data/remote_data_source.dart';
+import '../models/get_all_children_model.dart';
+import '../repositories/get_all_children_repository.dart';
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final Getallchildrencontroller controller = Get.put(
+    Getallchildrencontroller(
+      repository: GetAllChildrenRepositoryImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
+    ),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getAllChildren();   // 🔥 Fetch children from API
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
 
               SizedBox(height: h * 0.08),
 
-              /// TOP PROFILE BUBBLE
+              /// DO NOT CHANGE — SAME
               Center(
                 child: KidProfileBubble(
                   w: w,
@@ -32,7 +59,6 @@ class ProfileScreen extends StatelessWidget {
 
               SizedBox(height: h * 0.04),
 
-              /// TITLE
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -45,18 +71,36 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
 
-              /// GRID OF KIDS
-              KidsGrid(w, h),
+              /// 🔥 Replace static grid → Add API children
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: CircularProgressIndicator(color: Colors.white),
+                  );
+                }
+
+                if (controller.childrenList.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: Text(
+                      "No Kids Added Yet",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+
+                return KidsGrid(w, h, controller.childrenList);
+              }),
 
               SizedBox(height: h * 0.04),
 
-              /// CHANGE PASSWORD BUTTON
               InkWell(
-                onTap: ()
-                  {
-                    context.push('/verify-email');
-                  },
-                  child: ChangePasswordButton(w, h,context)),
+                onTap: () {
+                  context.push('/verify_email');
+                },
+                child: ChangePasswordButton(w, h, context),
+              ),
 
               SizedBox(height: h * 0.05),
             ],
@@ -67,7 +111,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   // -----------------------------------------------------
-  // KID PROFILE BUBBLE (already correct)
+  // YOUR ORIGINAL BUBBLE — UNCHANGED
   // -----------------------------------------------------
   Widget KidProfileBubble({
     required double w,
@@ -139,22 +183,13 @@ class ProfileScreen extends StatelessWidget {
   }
 
   // -----------------------------------------------------
-  // GRID OF KIDS
+  // 🔥 API Children Grid — SAME UI AS BEFORE
   // -----------------------------------------------------
-  Widget KidsGrid(double w, double h) {
-    List<Map<String, String>> kids = [
-      {"name": "Shiva"},
-      {"name": "Rani"},
-      {"name": "Raju"},
-      {"name": "Kumari"},
-      {"name": "Karthik"},
-      {"name": "Nisa"},
-    ];
-
+  Widget KidsGrid(double w, double h, List<Children> kidsList) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: kids.length,
+      itemCount: kidsList.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 24,
@@ -162,17 +197,22 @@ class ProfileScreen extends StatelessWidget {
         childAspectRatio: 1.3,
       ),
       itemBuilder: (context, index) {
-        return KidCard(w, h, kids[index]["name"]!);
+        final child = kidsList[index];
+
+        String avatar = child.gender == "boy"
+            ? "assets/images/boy_avator.png"
+            : "assets/images/girl_avator.png";
+
+        return KidCard(w, h, child.name ?? "", avatar);
       },
     );
   }
 
   // -----------------------------------------------------
-  // KID CARD (same design as your Figma)
+  // YOUR ORIGINAL CARD — EXACT SAME UI
   // -----------------------------------------------------
-  Widget KidCard(double w, double h, String name) {
+  Widget KidCard(double w, double h, String name, String avatar) {
     return Container(
-      //padding: EdgeInsets.all(w * 0.03),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
@@ -183,7 +223,7 @@ class ProfileScreen extends StatelessWidget {
           Container(
             width: w * 0.1,
             height: w * 0.15,
-            child: Image.asset('assets/images/girl_avator.png'),
+            child: Image.asset(avatar),
           ),
           SizedBox(height: h * 0.015),
           Text(
@@ -191,7 +231,6 @@ class ProfileScreen extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
-              fontFamily: '',
             ),
           ),
         ],
@@ -200,36 +239,32 @@ class ProfileScreen extends StatelessWidget {
   }
 
   // -----------------------------------------------------
-  // CHANGE PASSWORD BUTTON
+  // ORIGINAL BUTTON — UNCHANGED
   // -----------------------------------------------------
-  Widget ChangePasswordButton(double w, double h,BuildContext context) {
-    return InkWell(
-      onTap: ()
-      {
-        context.push('/verify_email');
-      },
-      child: Container(
-        width: double.infinity,
-        height: h * 0.07,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(116),
-          border: Border.all(
-            color: const Color(0xFFFCD667),
-            width: 1,
-          ),
+  Widget ChangePasswordButton(double w, double h, BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: h * 0.07,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(116),
+        border: Border.all(
+          color: const Color(0xFFFCD667),
+          width: 1,
         ),
-        child: Center(
-          child: Text(
-            "Change Password",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: w * 0.05,
-              fontFamily: 'Arial',
-            ),
+      ),
+      child: Center(
+        child: Text(
+          "Change Password",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: w * 0.05,
+            fontFamily: 'Arial',
           ),
         ),
       ),
     );
   }
 }
+
+
 
