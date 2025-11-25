@@ -10,6 +10,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+
+import 'package:story_hug/pages/login_screen.dart';
 import 'package:story_hug/services/ApiClient.dart';
 import 'package:story_hug/services/SecureStorageService.dart';
 import 'package:story_hug/utils/color_constants.dart';
@@ -42,6 +47,7 @@ import 'app_routes/router.dart';
 // //   // optionally log/route background payloads
 // // }
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   // Optional in dev: make zone mistakes fatal
   // BindingBase.debugZoneErrorsAreFatal = true;
   // runZonedGuarded(
@@ -156,6 +162,7 @@ void main() {
   //       // Handle launches from tray taps
   //     });
 
+
   runApp(const MyApp()); // ✅ same zone as everything above
   //   },
   //   (error, stack) async {
@@ -197,98 +204,98 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    return MultiProvider(
-      providers: StateInjector.blocProviders,
-      child: MaterialApp.router(
-        title: 'StoryHug',
-        routerConfig: appRouter,
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          textSelectionTheme: TextSelectionThemeData(
-            cursorColor: primarycolor,
-            selectionColor: primarycolor.withOpacity(0.3),
-            selectionHandleColor: primarycolor,
-          ),
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          scaffoldBackgroundColor: Colors.white,
-          dialogBackgroundColor: Colors.white,
-          cardColor: Colors.white,
-          searchBarTheme: const SearchBarThemeData(),
-          tabBarTheme: const TabBarThemeData(),
-          inputDecorationTheme: InputDecorationTheme(
-            hintStyle: TextStyle(
-              color: hintColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Inter",
-            ),
-            labelStyle: TextStyle(
-              color: labeltextColor,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Inter",
-            ),
-            filled: true,
-            fillColor: Colors.black,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
-            ),
-            errorStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-          ),
-          dialogTheme: const DialogThemeData(
-            shadowColor: Colors.white,
-            surfaceTintColor: Colors.white,
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            ),
-          ),
-          buttonTheme: const ButtonThemeData(),
-          popupMenuTheme: const PopupMenuThemeData(
-            color: Colors.white,
-            shadowColor: Colors.white,
-          ),
-          appBarTheme: AppBarTheme(surfaceTintColor: Colors.white),
-          cardTheme: CardThemeData(
-            shadowColor: Colors.white,
-            surfaceTintColor: Colors.white,
-            color: Colors.white,
-          ),
-          textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
-          elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyle()),
-          outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle()),
-          bottomSheetTheme: const BottomSheetThemeData(
-            surfaceTintColor: Colors.white,
-            backgroundColor: Colors.white,
-          ),
-          colorScheme: const ColorScheme.light(
-            background: Colors.white,
-          ).copyWith(background: Colors.white),
-          fontFamily: 'segeo',
+    return GetMaterialApp(
+      title: 'StoryHug',
+    home: LoginScreen(),
+    //  routeInformationParser: appRouter.routeInformationParser,
+      //routeInformationProvider: appRouter.routeInformationProvider,
+      //routerDelegate: appRouter.routerDelegate,
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: primarycolor,
+          selectionColor: primarycolor.withOpacity(0.3),
+          selectionHandleColor: primarycolor,
         ),
-        debugShowCheckedModeBanner: false,
-        // routerConfig: appRouter,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        scaffoldBackgroundColor: Colors.white,
+        dialogBackgroundColor: Colors.white,
+        cardColor: Colors.white,
+        searchBarTheme: const SearchBarThemeData(),
+        tabBarTheme: const TabBarThemeData(),
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: TextStyle(
+            color: hintColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            fontFamily: "Inter",
+          ),
+          labelStyle: TextStyle(
+            color: labeltextColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Inter",
+          ),
+          filled: true,
+          fillColor: Colors.black,
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          ),
+          errorStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+        ),
+        dialogTheme: const DialogThemeData(
+          shadowColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          ),
+        ),
+        buttonTheme: const ButtonThemeData(),
+        popupMenuTheme: const PopupMenuThemeData(
+          color: Colors.white,
+          shadowColor: Colors.white,
+        ),
+        appBarTheme: AppBarTheme(surfaceTintColor: Colors.white),
+        cardTheme: CardThemeData(
+          shadowColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          color: Colors.white,
+        ),
+        textButtonTheme: TextButtonThemeData(style: ButtonStyle()),
+        elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyle()),
+        outlinedButtonTheme: OutlinedButtonThemeData(style: ButtonStyle()),
+        bottomSheetTheme: const BottomSheetThemeData(
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+        ),
+        colorScheme: const ColorScheme.light(
+          background: Colors.white,
+        ).copyWith(background: Colors.white),
+        fontFamily: 'segeo',
       ),
+      debugShowCheckedModeBanner: false,
+      // routerConfig: appRouter,
     );
   }
 }

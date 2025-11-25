@@ -1,9 +1,18 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
+
+import '../controller/AuthController.dart';
+import '../data/remote_data_source.dart';
+import '../repositories/auth_repository.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -22,6 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController pass2Controller = TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final AuthController loginController = Get.put(
+    AuthController(
+      repository: AuthRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding:  EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       width: double.infinity,
-                      height: h * 0.55,
+                      height: (isLogin) ? h * 0.4 :  h * 0.55,
                       
 
                       decoration:  BoxDecoration(
@@ -171,23 +186,40 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 const SizedBox(height: 20),
 
+
                                 /// LOGIN BUTTON (YELLOW)
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      // login logic
-                                      context.go('/lets-begin');
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFFFD54F),
+                                 ElevatedButton(
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+
+                                        String? fcmToken = await FirebaseMessaging.instance
+                                            .getToken();
+                                        debugPrint("Login FCM Token: $fcmToken");
+
+                                        final data = {
+                                          "phone": emailController.text.trim(),
+                                          "password": pass1Controller.text.trim(),
+                                          "fcm_token": fcmToken,
+                                          "device_type": Platform.isIOS ? "ios" : "android",
+                                        };
+                                        loginController.login(data);
+                                      }
+                                      // if (formKey.currentState!.validate()) {
+                                      //   // login logic
+                                      //   context.go('/lets-begin');
+                                      // }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFFFD54F),
+                                    ),
+                                    child: const Text(
+                                      "Login",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
                                   ),
-                                  child: const Text(
-                                    "Login",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
+
                               ],
+
 
                               /// ----------------------------------------------------
                               /// 🔵 SIGNUP FIELDS

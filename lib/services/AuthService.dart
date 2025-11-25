@@ -106,7 +106,7 @@ class AuthService {
     String refreshToken,
     int expiresIn,
     String role,
-    int userid,
+   /// int userid,
     String userName,
     String email,
     int mobile,
@@ -116,7 +116,7 @@ class AuthService {
     await _storage.write(key: _role, value: role);
     await _storage.write(key: _tokenExpiryKey, value: expiresIn.toString());
     await _storage.write(key: _userName, value: userName.toString());
-    await _storage.write(key: _userId, value: userid.toString());
+   // await _storage.write(key: _userId, value: userid.toString());
     await _storage.write(key: _email, value: email.toString());
     await _storage.write(key: _mobile, value: mobile.toString());
   }
