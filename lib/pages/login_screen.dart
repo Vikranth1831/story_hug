@@ -187,36 +187,48 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const SizedBox(height: 20),
 
 
-                                /// LOGIN BUTTON (YELLOW)
-                                 ElevatedButton(
-                                    onPressed: () async {
-                                      if (formKey.currentState!.validate()) {
 
-                                        String? fcmToken = await FirebaseMessaging.instance
-                                            .getToken();
+                                /// LOGIN BUTTON (YELLOW)
+                                Obx(() {
+                                  return ElevatedButton(
+                                    onPressed: loginController.isLoading.value
+                                        ? null   // disable button while loading
+                                        : () async {
+                                      if (formKey.currentState!.validate()) {
+                                        String? fcmToken = await FirebaseMessaging.instance.getToken();
                                         debugPrint("Login FCM Token: $fcmToken");
 
                                         final data = {
-                                          "phone": emailController.text.trim(),
+                                          "email": emailController.text.trim(),
                                           "password": pass1Controller.text.trim(),
                                           "fcm_token": fcmToken,
                                           "device_type": Platform.isIOS ? "ios" : "android",
                                         };
+
                                         loginController.login(data);
                                       }
-                                      // if (formKey.currentState!.validate()) {
-                                      //   // login logic
-                                      //   context.go('/lets-begin');
-                                      // }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFFFFD54F),
+                                      minimumSize: Size(double.infinity, 48),
                                     ),
-                                    child: const Text(
+
+                                    child: loginController.isLoading.value
+                                        ? const SizedBox(
+                                      height: 22,
+                                      width: 22,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                        : const Text(
                                       "Login",
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.black, fontSize: 16),
                                     ),
-                                  ),
+                                  );
+                                })
+
 
                               ],
 
