@@ -1,9 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -23,17 +23,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  // 🔥 BLINKING OPACITY FOR stars.png
+  double starOpacity = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    startBlinking();
+  }
+
+  /// 🔥 Infinite Blink Animation
+  void startBlinking() {
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {
+        starOpacity = starOpacity == 1.0 ? 0.2 : 1.0;
+      });
+      startBlinking(); // loop forever
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var h = SizeConfig.screenHeight;
     var w = SizeConfig.screenWidth;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, // FIXED KEYBOARD OVERFLOW
-
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          /// 🔵 FULL SCREEN BACKGROUND IMAGE
           Positioned.fill(
             child: Image.asset(
               "assets/images/background_for_login.png",
@@ -41,7 +58,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          /// USE A SCROLL VIEW SO SCREEN NEVER OVERFLOWS
           Positioned.fill(
             child: SingleChildScrollView(
               child: Column(
@@ -50,43 +66,53 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   Image.asset('assets/images/open_book_login.png'),
                   SizedBox(height: h * 0.03),
-                  Image.asset('assets/images/login_book.png'),
-                 SizedBox(height: h * 0.05),
 
-                  /// -----------------------------------------------------------------
-                  /// MAIN LOGIN/SIGNUP BOX
-                  /// -----------------------------------------------------------------
+                  /// ⭐ TWO IMAGES: stars.png (bottom blinking) + login-boy-image.png (center)
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      /// 🔥 BLINKING IMAGE
+                      AnimatedOpacity(
+                        duration: const Duration(milliseconds: 700),
+                        opacity: starOpacity,
+                        child: Image.asset(
+                          'assets/images/stars.png',
+                          width: w,
+                        ),
+                      ),
+
+                      /// Top centered image
+                      Image.asset(
+                        'assets/images/login-boy-image.png',
+                        width: w * 0.5,
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: h * 0.05),
+
                   Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: w * 0.04),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       width: double.infinity,
                       height: h * 0.55,
-                      
-
-                      decoration:  BoxDecoration(
-                        image: DecorationImage(
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
                           image: AssetImage("assets/images/background_for_box.png"),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.circular(17),
                       ),
-
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Form(
                           key: formKey,
-
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-
-                              /// ----------------------------------------------------
-                              /// 🔵 LOGIN / SIGNUP TOGGLE BUTTONS
-                              /// ----------------------------------------------------
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  // LOGIN BUTTON
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -98,8 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           horizontal: 20, vertical: 8),
                                       decoration: BoxDecoration(
                                         color: isLogin
-                                            ? const Color(0xFFFFD54F) // SELECTED = YELLOW
-                                            : Colors.white24, // UNSELECTED
+                                            ? const Color(0xFFFFD54F)
+                                            : Colors.white24,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
@@ -111,10 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ),
                                   ),
-
                                   const SizedBox(width: 20),
-
-                                  // SIGNUP BUTTON
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -144,9 +167,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               const SizedBox(height: 20),
 
-                              /// ----------------------------------------------------
-                              /// 🔵 LOGIN FIELDS
-                              /// ----------------------------------------------------
                               if (isLogin) ...[
                                 _textField(
                                   controller: emailController,
@@ -154,9 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isPassword: false,
                                   onEyeTap: null,
                                 ),
-
                                 const SizedBox(height: 15),
-
                                 _textField(
                                   controller: pass1Controller,
                                   hint: "Password",
@@ -168,14 +186,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   isVisible: passwordVisible1,
                                 ),
-
                                 const SizedBox(height: 20),
-
-                                /// LOGIN BUTTON (YELLOW)
                                 ElevatedButton(
                                   onPressed: () {
                                     if (formKey.currentState!.validate()) {
-                                      // login logic
                                       context.go('/lets-begin');
                                     }
                                   },
@@ -189,9 +203,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ],
 
-                              /// ----------------------------------------------------
-                              /// 🔵 SIGNUP FIELDS
-                              /// ----------------------------------------------------
                               if (!isLogin) ...[
                                 _textField(
                                   controller: emailController,
@@ -199,9 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isPassword: false,
                                   onEyeTap: null,
                                 ),
-
                                 const SizedBox(height: 15),
-
                                 _textField(
                                   controller: pass1Controller,
                                   hint: "Password",
@@ -213,9 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   isVisible: passwordVisible1,
                                 ),
-
                                 const SizedBox(height: 15),
-
                                 _textField(
                                   controller: pass2Controller,
                                   hint: "Re-enter Password",
@@ -227,10 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   isVisible: passwordVisible2,
                                 ),
-
                                 const SizedBox(height: 20),
-
-                                /// SIGNUP BUTTON (YELLOW)
                                 ElevatedButton(
                                   onPressed: () {
                                     if (formKey.currentState!.validate()) {
@@ -242,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         );
                                         return;
                                       }
-                                     context.go('/lets-begin');
+                                      context.go('/lets-begin');
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -265,15 +269,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );
   }
 
-  /// ------------------------------------------------------------
-  /// CUSTOM TEXT FIELD FUNCTION WITH VALIDATION
-  /// ------------------------------------------------------------
   Widget _textField({
     required TextEditingController controller,
     required String hint,
@@ -284,7 +284,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextFormField(
       controller: controller,
       obscureText: isPassword ? !isVisible : false,
-
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "$hint cannot be empty";
@@ -294,16 +293,12 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         return null;
       },
-
       style: const TextStyle(color: Colors.black),
-
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white, // WHITE BACKGROUND ✔
-
+        fillColor: Colors.white,
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.black54),
-
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black26),
           borderRadius: BorderRadius.circular(12),
@@ -312,7 +307,6 @@ class _LoginScreenState extends State<LoginScreen> {
           borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(12),
         ),
-
         suffixIcon: isPassword
             ? IconButton(
           icon: Icon(
@@ -326,5 +320,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-
