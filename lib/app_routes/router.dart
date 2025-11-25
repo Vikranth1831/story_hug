@@ -11,37 +11,24 @@ import 'package:story_hug/pages/Reminder/reminders.dart';
 import 'package:story_hug/pages/SuccesspageClass/successpage.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
-import 'package:story_hug/pages/login_screen.dart';
+import 'package:story_hug/pages/Authentication/login_screen.dart';
 import 'package:story_hug/pages/lets-begin.dart';
-import 'package:story_hug/pages/otp-screen.dart';
+
 import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
 import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
 import 'package:story_hug/pages/Section1/card-parts.dart';
 import 'package:story_hug/pages/Section1/card-view.dart';
-import 'package:story_hug/pages/Section1/menu.dart';
-import 'package:story_hug/pages/sign_up_screen.dart';
+import 'package:story_hug/pages/Section1/Home.dart';
+
 import 'package:story_hug/pages/splash_screen.dart';
 import 'package:story_hug/pages/verify_email.dart';
 import 'package:story_hug/pages/Section1/playicard.dart';
 import 'package:story_hug/pages/Subscriptions%20page/subscriptions.dart';
 import 'package:story_hug/pages/favorites/favorites.dart';
-// import 'package:studio_app/presentation/bankscreen.dart';
-// import 'package:studio_app/presentation/client_details_screen.dart';
-// import 'package:studio_app/presentation/clients_screen.dart';
-// import 'package:studio_app/presentation/contactscreen.dart';
-// import 'package:studio_app/presentation/dashboard.dart';
-// import 'package:studio_app/presentation/notification.dart';
-// import 'package:studio_app/presentation/otp_screen.dart';
-// import 'package:studio_app/presentation/upload_pictures.dart';
-// import 'package:studio_app/presentation/createclient.dart';
-// import 'package:studio_app/presentation/stats.dart';
-// import '../presentation/profilescreen.dart';
-// import 'package:studio_app/presentation/LogginIn.dart';
-// import 'package:studio_app/presentation/sign_in_screen.dart';
-// import 'package:studio_app/presentation/splash_screen.dart';
-// import '../presentation/sucess_
+import '../pages/Authentication/otp-screen.dart';
+import '../pages/Authentication/sign_up_screen.dart';
 import '../pages/creating_profile_for_kids/create_profile_forkids.dart';
 
 import '../utils/CrashlyticsNavObserver.dart';

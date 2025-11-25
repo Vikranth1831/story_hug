@@ -1,11 +1,16 @@
+import 'dart:developer' as AppLogger;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/app_routes/app_routes.dart';
-import 'package:story_hug/pages/Section1/menu.dart';
-import 'package:story_hug/pages/login_screen.dart';
+import 'package:story_hug/pages/Section1/Home.dart';
+import 'package:story_hug/pages/Authentication/login_screen.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
+
+import '../services/AuthService.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -14,15 +19,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
-
-    // Wait for 1.5 seconds then navigate
-    Future.delayed(const Duration(milliseconds: 1500), () {
-     Get.offAll(()=>LoginScreen());
-
+    Future.delayed(const Duration(milliseconds: 1500), () async {
+      final token = await AuthService.getAccessToken();
+      AppLogger.log("Token:$token");
+      if (!mounted) return;
+      if (token == null || token.isEmpty) {
+        Get.offAllNamed(Routes.login);
+      } else {
+        Get.offAllNamed(Routes.HomeScreen);
+      }
     });
   }
 
@@ -38,11 +46,8 @@ class _SplashScreenState extends State<SplashScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Center(
-          child: Image.asset('assets/images/app_icon.png'),
-        ),
+        child: Center(child: Image.asset('assets/images/app_icon.png')),
       ),
     );
   }
 }
-

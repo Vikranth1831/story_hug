@@ -10,9 +10,9 @@ import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
-import '../controller/AuthController.dart';
-import '../data/remote_data_source.dart';
-import '../repositories/auth_repository.dart';
+import '../../controller/AuthController.dart';
+import '../../data/remote_data_source.dart';
+import '../../repositories/auth_repository.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
