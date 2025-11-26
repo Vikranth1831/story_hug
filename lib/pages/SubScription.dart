@@ -85,7 +85,7 @@ class _SubScriptionsState extends State<SubScriptions> {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
     AppLogger.log(
       "✅ Payment successful: ${response.paymentId} ${response.signature}",
     );
@@ -95,11 +95,11 @@ class _SubScriptionsState extends State<SubScriptions> {
       "razorpay_signature": response.signature,
     };
     AppLogger.log("successdata::${data}");
-    final res = verifyPaymentController.createPayments(data);
+    final res = await verifyPaymentController.createPayments(data);
 
-    // if (res != null && res.success == true) {
-    //   Get.back();
-    // }
+    if (res != null && res.success == true) {
+      Get.back();
+    }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
