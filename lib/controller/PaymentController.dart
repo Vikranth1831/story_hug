@@ -39,6 +39,7 @@ class PaymentController extends GetxController {
       isLoading.value = false;
     }
   }
+
 }
 
 class VerifyPaymentController extends GetxController {
