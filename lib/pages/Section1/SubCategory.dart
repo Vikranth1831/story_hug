@@ -219,10 +219,10 @@ class _SubCategoryState extends State<SubCategory> {
               Positioned.fill(
                 child: GestureDetector(
                   onTap: () => setState(() => showMenu = false),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(color: Colors.black.withOpacity(0.3)),
-                  ),
+                  // child: BackdropFilter(
+                  //   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  //   child: Container(color: Colors.black.withOpacity(0.3)),
+                  // ),
                 ),
               ),
 

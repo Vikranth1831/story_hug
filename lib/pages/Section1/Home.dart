@@ -75,12 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
             Column(
               children: [
                 SizedBox(height: h * 0.03),
-                //
-                // CustomTopBar(
-                //   onMenuTap: () {
-                //     setState(() => showMenu = true);
-                //   },
-                // ),
+
+                CustomTopBar(
+                  onMenuTap: () {
+                    setState(() => showMenu = true);
+                  }, showMenu: showMenu,
+                ),
 
                 Expanded(
                   child: CustomScrollView(
@@ -219,10 +219,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Positioned.fill(
                 child: GestureDetector(
                   onTap: () => setState(() => showMenu = false),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                    child: Container(color: Colors.black.withOpacity(0.25)),
-                  ),
+                  // child: BackdropFilter(
+                  //   filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                  //   child: Container(color: Colors.black.withOpacity(0.25)),
+                  // ),
                 ),
               ),
             AnimatedPositioned(
