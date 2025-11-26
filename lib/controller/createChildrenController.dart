@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:story_hug/app_routes/app_routes.dart';
 import 'package:story_hug/models/create_child_model.dart';
 import 'package:story_hug/models/register_model.dart';
-import 'package:story_hug/pages/Section1/menu.dart';
+
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/lets-begin.dart';
 import 'package:story_hug/repositories/create_child_repository.dart';

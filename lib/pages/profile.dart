@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../controller/getAllChildrenController.dart';
@@ -203,7 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ? "assets/images/boy_avator.png"
             : "assets/images/girl_avator.png";
 
-        return KidCard(w, h, child.name ?? "", avatar);
+        return KidCard(w, h, child.name ?? "", avatar,child);
       },
     );
   }
@@ -211,29 +213,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // -----------------------------------------------------
   // YOUR ORIGINAL CARD — EXACT SAME UI
   // -----------------------------------------------------
-  Widget KidCard(double w, double h, String name, String avatar) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: w * 0.1,
-            height: w * 0.15,
-            child: Image.asset(avatar),
-          ),
-          SizedBox(height: h * 0.015),
-          Text(
-            name,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+  Widget KidCard(double w, double h, String name, String avatar, Children child) {
+    return InkWell(
+      onTap: ()
+      {
+        Get.to(() => EnteringFieldsForKid(childData: child));
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: w * 0.1,
+              height: w * 0.15,
+              child: Image.asset(avatar),
             ),
-          ),
-        ],
+            SizedBox(height: h * 0.015),
+            Text(
+              name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
