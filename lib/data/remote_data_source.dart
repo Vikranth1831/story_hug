@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:story_hug/models/create_child_model.dart';
 import 'package:story_hug/models/get_all_children_model.dart';
 import 'package:story_hug/models/otp_sent_model.dart';
+import 'package:story_hug/models/otp_verified_model.dart';
 import 'package:story_hug/models/register_model.dart';
 import 'package:story_hug/repositories/get_all_children_repository.dart';
 import '../core/endpoints.dart';
@@ -19,6 +20,12 @@ abstract class RemoteDataSource {
   Future<SubCategoryModel?> fetchSubCategory(String catId);
   Future<GetAllChildrenModel?> getAllChildren();
   Future<OTPSentModel?> sendotp();
+  Future<OTPVerifiedModel?> verifyOtp(Map<String, dynamic> data);
+
+
+
+
+
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -50,6 +57,20 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
+  @override
+  Future<OTPVerifiedModel?> verifyOtp(Map<String, dynamic> data) async {
+    try {
+      final res = await ApiClient.post("${APIEndpointUrls.verifyotp}", data: data);
+      AppLogger.log('verifyOtp : ${res.data}');
+      return OTPVerifiedModel.fromJson(res.data);
+    } catch (e) {
+      print('verifyOtp : $e');
+      return null;
+    }
+  }
+
+
   @override
   Future<OTPSentModel?> sendotp() async {
     try {

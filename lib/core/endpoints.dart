@@ -15,5 +15,6 @@ class APIEndpointUrls {
   static const String getAllChildren='${children}/getallchildrensofaparent';
   static const String createChildren='${children}/createchild';
   static const String sendotp='${AuthUrl}changepassword';
+  static const String verifyotp='${AuthUrl}verifyotp';
 
 }
