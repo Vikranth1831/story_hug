@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/SubCategoryController.dart';
@@ -10,6 +11,8 @@ import 'package:story_hug/utils/spinkittsLoader.dart';
 import '../../components/CommonLoader.dart';
 import '../../data/remote_data_source.dart';
 import '../../repositories/SubCategoryRepo.dart';
+import '../Widgets/SubCategoryCard.dart';
+import '../Widgets/menuPannel.dart';
 import 'Home.dart';
 
 class SubCategory extends StatefulWidget {
@@ -55,7 +58,6 @@ class _SubCategoryState extends State<SubCategory> {
 
     final bool isTablet = w > 600;
     final int gridCount = isTablet ? 2 : 1;
-
 
     double getResponsiveAspectRatio() {
       if (w < 600) {
@@ -181,17 +183,18 @@ class _SubCategoryState extends State<SubCategory> {
                 // Dynamic Grid of Subcategories
                 SliverPadding(
                   padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: gridCount,
-                      childAspectRatio: childAspectRatio,
-                      crossAxisSpacing: w * 0.04,
-                      mainAxisSpacing: h * 0.025,
-                    ),
-                    delegate: SliverChildBuilderDelegate((context, index) {
+                  sliver: SliverMasonryGrid.count(
+                    crossAxisCount: gridCount,
+                    mainAxisSpacing: h * 0.025,
+                    crossAxisSpacing: w * 0.04,
+                    childCount: subCats.length,
+                    itemBuilder: (context, index) {
                       final subCat = subCats[index];
 
-                      return GestureDetector(
+                      return SubCategoryCommonCard(
+                        imageUrl: subCat.image,
+                        title: subCat.subcategoryName ?? "Untitled",
+                        isTablet: isTablet,
                         onTap: () {
                           Get.toNamed(
                             '/view_cards',
@@ -202,78 +205,8 @@ class _SubCategoryState extends State<SubCategory> {
                             },
                           );
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFFF3C5),
-                            borderRadius: BorderRadius.circular(24),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 8,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Image
-                              ClipRRect(
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(24),
-                                ),
-                                child: CachedNetworkImage(
-                                  imageUrl: subCat.image ?? "",
-                                  height: isTablet ? h * 0.28 : h * 0.3,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                  placeholder: (_, __) => Center(
-                                    child: spinkits.getSpinningLinespinkit(),
-                                  ),
-                                  errorWidget: (_, __, ___) => Container(
-                                    color: Colors.grey[300],
-                                    child: const Icon(
-                                      Icons.broken_image,
-                                      size: 50,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              Padding(
-                                padding: EdgeInsets.all(w * 0.04),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      subCat.subcategoryName ?? "Untitled",
-                                      style: const TextStyle(
-                                        fontFamily: "Arial Rounded MT Bold",
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "Tap to read stories",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.black54,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       );
-                    }, childCount: subCats.length),
+                    },
                   ),
                 ),
 

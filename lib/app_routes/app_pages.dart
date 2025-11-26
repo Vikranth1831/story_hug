@@ -5,7 +5,7 @@ import '../pages/Authentication/otp-screen.dart';
 import '../pages/Authentication/sign_up_screen.dart';
 import '../pages/Passwordchange/passwordchange.dart';
 import '../pages/Reminder/reminders.dart';
-import '../pages/Section1/card-parts.dart';
+import '../pages/Section1/SubSubCategory.dart';
 import '../pages/Section1/SubCategory.dart';
 import '../pages/Section1/Home.dart';
 import '../pages/Section1/playicard.dart';
@@ -42,7 +42,7 @@ class AppRoutes {
     GetPage(name: Routes.ManageKids, page: () => ManageKids()),
     GetPage(name: Routes.RecordingVoice, page: () => RecordingVoice()),
     GetPage(name: Routes.SaveVoice, page: () => SaveVoice()),
-    GetPage(name: Routes.ViewCardParts, page: () => ViewCardParts()),
+    GetPage(name: Routes.ViewCardParts, page: () => SubSubCategory()),
     GetPage(name: Routes.PlayStory, page: () => PlayStory()),
     GetPage(name: Routes.Favorites, page: () => Favorites()),
     GetPage(name: Routes.Subscribepage, page: () => Subscribepage()),

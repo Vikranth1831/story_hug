@@ -18,7 +18,7 @@ import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/pages/recording_voice/recording_voice.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
 import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
-import 'package:story_hug/pages/Section1/card-parts.dart';
+import 'package:story_hug/pages/Section1/SubSubCategory.dart';
 import 'package:story_hug/pages/Section1/SubCategory.dart';
 import 'package:story_hug/pages/Section1/Home.dart';
 
@@ -129,7 +129,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/view_cards',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(ViewCardParts(), state);
+        return buildSlideTransitionPage(SubSubCategory(), state);
       },
     ),
     GoRoute(

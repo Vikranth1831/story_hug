@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -9,7 +10,6 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/CategoryController.dart';
-import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
@@ -18,6 +18,8 @@ import '../../components/CommonLoader.dart';
 import '../../data/remote_data_source.dart';
 import '../../utils/spinkittsLoader.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import '../Widgets/menuPannel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,20 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ? (w > 1000 ? 5 : 4)
         : 2; // Better for large tablets & web
 
-    double getResponsiveAspectRatio() {
-      if (w < 600) {
-        // Mobile: slightly taller than square
-        return 0.80; // width / height → makes card taller (good for image + text)
-      } else if (w < 1000) {
-        // Tablet
-        return 0.85;
-      } else {
-        // Large tablet / desktop
-        return 0.90;
-      }
-    }
-
-    final double childAspectRatio = getResponsiveAspectRatio();
 
     return Scaffold(
       backgroundColor: const Color(0xFFACBCF1),
@@ -87,13 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
             Column(
               children: [
                 SizedBox(height: h * 0.03),
-
-                CustomTopBar(
-                  showMenu: showMenu,        // 👈 added
-                  onMenuTap: () {
-                    setState(() => showMenu = !showMenu);  // 👈 toggle menu
-                  },
-                ),
+                //
+                // CustomTopBar(
+                //   onMenuTap: () {
+                //     setState(() => showMenu = true);
+                //   },
+                // ),
 
                 Expanded(
                   child: CustomScrollView(
@@ -136,23 +123,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       SliverPadding(
                         padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                        sliver: SliverGrid(
-                          delegate: SliverChildBuilderDelegate((
-                            context,
-                            index,
-                          ) {
+                        sliver: SliverMasonryGrid.count(
+                          crossAxisCount: gridCount,
+                          mainAxisSpacing: h * 0.02,
+                          crossAxisSpacing: w * 0.03,
+                          childCount: data.length,
+                          itemBuilder: (context, index) {
                             final cat = data[index];
 
                             return GestureDetector(
                               onTap: () {
                                 Get.toNamed(
                                   Routes.SelectedCardView,
-                                  arguments: {'id': cat.id, 'name': cat.categoryName}
+                                  arguments: {
+                                    'id': cat.id,
+                                    'name': cat.categoryName,
+                                  },
                                 );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFF59399),
+                                  color: const Color(0xFFF59399),
                                   borderRadius: BorderRadius.circular(22),
                                   boxShadow: const [
                                     BoxShadow(
@@ -167,7 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                                 padding: EdgeInsets.all(w * 0.03),
-
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
@@ -177,42 +167,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: CachedNetworkImage(
                                         imageUrl: cat.image ?? "",
                                         width: double.infinity,
-                                        height: isTablet ? h * 0.20 : h * 0.16,
+                                        height: isTablet ? 180 : 130, // 🔒 FIXED HEIGHT
                                         fit: BoxFit.cover,
-
-                                        placeholder: (context, url) => SizedBox(
+                                        placeholder: (_, __) => SizedBox(
                                           width: double.infinity,
-                                          height: isTablet
-                                              ? h * 0.20
-                                              : h * 0.16,
+                                          height: isTablet ? 180 : 130,
                                           child: Center(
-                                            child: spinkits
-                                                .getSpinningLinespinkit(),
+                                            child: spinkits.getSpinningLinespinkit(),
                                           ),
                                         ),
-
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                              width: double.infinity,
-                                              height: isTablet
-                                                  ? h * 0.20
-                                                  : h * 0.16,
-                                              color: const Color(0xffF8FAFE),
-                                              alignment: Alignment.center,
-                                              child: Icon(
-                                                Icons.broken_image_outlined,
-                                                size: 48,
-                                                color: Colors.grey.shade500,
-                                              ),
-                                            ),
+                                        errorWidget: (_, __, ___) => Container(
+                                          width: double.infinity,
+                                          height: isTablet ? 180 : 130,
+                                          color: const Color(0xffF8FAFE),
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.broken_image_outlined,
+                                            size: 48,
+                                            color: Colors.grey.shade500,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(height: 8),
+                                    const SizedBox(height: 8),
                                     Text(
                                       cat.categoryName ?? "",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color(0xff333333),
                                         fontSize: 14,
                                         fontFamily: "Arial",
@@ -223,16 +205,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             );
-                          }, childCount: data.length),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: gridCount,
-                                childAspectRatio: childAspectRatio,
-                                crossAxisSpacing: w * 0.03,
-                                mainAxisSpacing: h * 0.02,
-                              ),
+                          },
                         ),
                       ),
+
                     ],
                   ),
                 ),
@@ -243,10 +219,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Positioned.fill(
                 child: GestureDetector(
                   onTap: () => setState(() => showMenu = false),
-                  // child: BackdropFilter(
-                  //   filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                  //   child: Container(color: Colors.black.withOpacity(0.25)),
-                  // ),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: Container(color: Colors.black.withOpacity(0.25)),
+                  ),
                 ),
               ),
             AnimatedPositioned(
@@ -258,88 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       }),
-    );
-  }
-}
-
-class MenuPanel extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final h = SizeConfig.screenHeight;
-    final w = SizeConfig.screenWidth;
-
-    return Container(
-      width: w * 0.65,
-      padding: EdgeInsets.symmetric(vertical: h * 0.02),
-      decoration: const BoxDecoration(
-        color: Color(0xFF3A3F92),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          bottomLeft: Radius.circular(40),
-        ),
-      ),
-
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _menuItem("Vector (1).png", "Profile", context),
-          _menuItem("SpeakerHigh.png", "Voice", context),
-          _menuItem("Heart.png", "My Favorites", context),
-          _menuItem("CrownSimple.png", "Subscriptions", context),
-          _menuItem("Alarm.png", "Reminder", context),
-          _menuItem("SignOut.png", "Logout", context),
-        ],
-      ),
-    );
-  }
-
-  Widget _menuItem(String path, String title, BuildContext context) {
-    final h = SizeConfig.screenHeight;
-    final w = SizeConfig.screenWidth;
-
-    return InkWell(
-      onTap: () {
-        if (title == 'Profile') {
-          Get.to(()=>ProfileScreen());
-        } else if (title == 'Voice') {
-          context.push('/recording_voice');
-        } else if (title == 'My Favorites') {
-          context.push('/favorites');
-        } else if (title == 'Subscriptions') {
-          context.push('/subscribe');
-        } else if (title == 'Reminder') {
-          context.push('/reminders');
-        }
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.01),
-        child: Container(
-          height: h * 0.065,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            gradient: const LinearGradient(
-              colors: [Color(0xFFFCDB69), Color(0xFFFCBF5D)],
-            ),
-          ),
-
-          child: Row(
-            children: [
-              SizedBox(width: w * 0.05),
-             Image.asset('assets/images/${path}',height:(title=='Profile')?
-             h * 0.03 : h * 0.04),
-              SizedBox(width: w * 0.05),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF24305B),
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
