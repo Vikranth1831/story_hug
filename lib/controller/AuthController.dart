@@ -9,6 +9,7 @@ import '../app_routes/app_routes.dart';
 import '../repositories/auth_repository.dart';
 import '../models/login_model.dart';
 import '../services/AuthService.dart';
+import '../utils/app_snackbar.dart';
 
 class AuthController extends GetxController {
   final AuthRepository repository;
@@ -31,9 +32,10 @@ class AuthController extends GetxController {
           loginModel?.accessTokenExpiry ?? 0,
         );
 
-        Get.offAllNamed(Routes.HomeScreen);
+        Get.offAllNamed(Routes.ChooseProfile);
       } else {
-        // AppSnackbar.error(loginModel?.message ?? "Login failed");
+        AppSnackBar.show(Get.context!, loginModel?.message ?? "Login failed");
+
       }
     } catch (e) {
       //  AppSnackbar.exception(e.toString());
@@ -48,9 +50,17 @@ class AuthController extends GetxController {
 
       registerModel = await repository.register(data);
       if (registerModel != null && registerModel?.success == true) {
+        await AuthService.saveTokens(
+          registerModel?.accessToken ?? "",
+          registerModel?.refreshToken ?? "",
+          registerModel?.accessTokenExpiry ?? 0,
+        );
         print("Register sucess");
-        Get.offAllNamed(Routes.HomeScreen);
+        Get.offAllNamed(Routes.LetsBegin);
       } else {
+//
+  //      AppSnackBar.show(Get.context!,,registerModel?.message ?? "Cannot Register Now");
+
         // AppSnackbar.error(loginModel?.message ?? "Login failed");
       }
     } catch (e) {

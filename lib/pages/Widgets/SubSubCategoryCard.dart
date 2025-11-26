@@ -1,68 +1,44 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:story_hug/utils/constants.dart';
-
-import '../../utils/media_query_helper.dart';
-import '../../utils/spinkittsLoader.dart';
+import 'package:go_router/go_router.dart';
 
 class SubSubCategoryCard extends StatelessWidget {
   final int index;
   final bool isTablet;
-  final String title;
-  final String imageUrl;
-  final int duration;
   final VoidCallback? onPlayTap;
 
   const SubSubCategoryCard({
     Key? key,
     required this.index,
     required this.isTablet,
-    required this.title,
-    required this.imageUrl,
-    required this.duration,
     this.onPlayTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final w = size.width;
     final h = size.height;
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white30,
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
-          BoxShadow(color: Colors.black26, blurRadius: 1),
+          BoxShadow(color: Colors.black26, blurRadius: 1, offset: Offset(0, 0)),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // IMAGE
           ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: CachedNetworkImage(
-              imageUrl: imageUrl ?? "",
-              width: SizeConfig.screenWidth,
-              height: isTablet ? h * 0.23 : h * 0.26,
+            borderRadius: BorderRadius.circular(14),
+            child: Image.asset(
+              "assets/images/card1.jpg",
+              height: isTablet ? 180 : 200, // 🔒 Fixed for masonry grid
+              width: double.infinity,
               fit: BoxFit.cover,
-              placeholder: (context, url) => SizedBox(
-                width: SizeConfig.screenWidth,
-                height: isTablet ? h * 0.23 : h * 0.26,
-                child: Center(child: spinkits.getSpinningLinespinkit()),
-              ),
-              errorWidget: (context, url, error) => Container(
-                width: SizeConfig.screenWidth,
-                height: isTablet ? h * 0.23 : h * 0.26,
-                color: const Color(0xffF8FAFE),
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.broken_image_outlined,
-                  size: 48,
-                  color: Colors.grey.shade500,
-                ),
-              ),
             ),
           ),
 
@@ -73,8 +49,9 @@ class SubSubCategoryCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                capitalize(title),
+                "Part ${index + 1}",
                 style: const TextStyle(
+                  fontFamily: "Arial",
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: Color(0xff444444),
@@ -87,37 +64,51 @@ class SubSubCategoryCard extends StatelessWidget {
 
           const SizedBox(height: 12),
 
+          // PLAY NOW SECTION
           Row(
             children: [
               const Icon(Icons.play_circle_fill,
                   size: 28, color: Color(0xff444444)),
               const SizedBox(width: 6),
               Text(
-                "$duration Minutes",
-                style: const TextStyle(fontSize: 15, color: Color(0xff444444)),
+                "${10 + index * 3} Minutes",
+                style: const TextStyle(
+                  fontFamily: "Arial",
+                  fontSize: 15,
+                  color: Color(0xff444444),
+                ),
               ),
               const Spacer(),
               GestureDetector(
-                onTap: onPlayTap,
+                onTap: onPlayTap ??
+                        () => context.push('/play-story'), // default action
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: isTablet ? 18 : 14,
+                    vertical: isTablet ? 10 : 10,
+                    horizontal: isTablet ? 16 : 14,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     gradient: const LinearGradient(
                       colors: [Color(0xFFFCDB69), Color(0xFFFCBF5D)],
                     ),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x3F303000),
+                        blurRadius: 8,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
                   ),
-                  child: const Row(
-                    children: [
+                  child: Row(
+                    children: const [
                       Icon(Icons.play_arrow_rounded,
                           color: Color(0xFF24305B), size: 20),
                       SizedBox(width: 5),
                       Text(
                         "Play Now",
                         style: TextStyle(
+                          fontFamily: "Arial",
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF24305B),

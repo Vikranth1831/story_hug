@@ -5,10 +5,18 @@ import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:story_hug/components/create_now_button.dart';
 import 'package:story_hug/controller/sent_otp_controller.dart';
+import 'package:story_hug/controller/verify_otp_controller.dart';
+import 'package:story_hug/repositories/verify_otp_repository.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../data/remote_data_source.dart';
 import '../../repositories/opt_sent_repository.dart';
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:story_hug/components/create_now_button.dart';
+import 'package:story_hug/utils/media_query_helper.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -18,13 +26,13 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final SendOtpController controller = Get.put(
-    SendOtpController(
-      repository: otpsentRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
-    ),
-  );
   final String bgAssetPath = 'assets/images/bgimage.png';
   final String logoAssetPath = 'assets/images/logo.png';
+  final VerifyOtpController controller = Get.put(
+    VerifyOtpController(
+      repository: VerifyOtpRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
 
   String otpValue = "";
   String? errorMessage;
@@ -216,10 +224,12 @@ class _OtpScreenState extends State<OtpScreen> {
                                       setState(() {
                                         errorMessage = "Please enter all 6 digits";
                                       });
+                                      print(otpValue);
                                       return;
                                     }
-
-                                      controller.sendotp();
+                                    controller.verifyotp({
+                                      "otp": otpValue,
+                                    });
                                   },
                                   child: const CreateNowButton(text: "Submit OTP"),
                                 ),

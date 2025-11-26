@@ -118,6 +118,8 @@ class _ManageKidsState extends State<ManageKids> {
           onTap: () {
            // context.push('/home');
             Get.offAllNamed(Routes.HomeScreen);
+            // context.push('/home');
+          //  Get.offAllNamed(Routes.HomeScreen);
           },
           child: CreateNowButton(text: 'Done'),
         ),

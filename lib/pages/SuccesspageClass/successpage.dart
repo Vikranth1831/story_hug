@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/components/create_now_button.dart';
+import 'package:story_hug/pages/Section1/Home.dart';
 
 class SuccessPage extends StatelessWidget {
   final String titleText;
@@ -88,7 +91,7 @@ class SuccessPage extends StatelessWidget {
                               {
                                 if(titleText=='Password Changed Successfully')
                                   {
-                                    context.go('/home');
+                                    Get.offAll(()=>HomeScreen());
                                   }
                                 else
                                 context.push('/password-change');

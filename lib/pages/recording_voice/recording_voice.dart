@@ -25,15 +25,9 @@ class _RecordingVoiceState extends State<RecordingVoice> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF2A2D64),
-              Color(0xFF687EC7),
-            ],
-          ),
+        decoration: BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/images/backgroundimage.png'),
+          fit: BoxFit.cover)
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: w * 0.04),

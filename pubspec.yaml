@@ -73,10 +73,8 @@ dependencies:
   dotted_border: ^2.0.0
   pdfx: ^2.9.2
   get: ^4.7.2
-  razorpay_flutter: ^1.4.0
-  flutter_html: ^3.0.0
-
   #flutter_local_notifications: ^19.5.0
+
 
 
 

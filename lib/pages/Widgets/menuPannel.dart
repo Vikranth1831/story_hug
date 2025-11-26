@@ -4,11 +4,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../app_routes/app_routes.dart';
-import '../../utils/color_constants.dart';
 import '../../utils/media_query_helper.dart';
 import '../profile.dart';
-import 'LogOut.dart';
 
 class MenuPanel extends StatelessWidget {
   @override
@@ -53,20 +50,15 @@ class MenuPanel extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (title == 'Profile') {
-          Get.to(() => ProfileScreen());
+          Get.to(()=>ProfileScreen());
         } else if (title == 'Voice') {
           context.push('/recording_voice');
         } else if (title == 'My Favorites') {
           context.push('/favorites');
         } else if (title == 'Subscriptions') {
-          Get.toNamed(Routes.Subscribepage);
+          context.push('/subscribe');
         } else if (title == 'Reminder') {
           context.push('/reminders');
-        } else if (title == 'Logout') {
-          showDialog(
-            context: Navigator.of(context, rootNavigator: true).context,
-            builder: (_) => LogoutDialog(primaryColor: primarycolor),
-          );
         }
       },
       child: Padding(
@@ -83,10 +75,8 @@ class MenuPanel extends StatelessWidget {
           child: Row(
             children: [
               SizedBox(width: w * 0.05),
-              Image.asset(
-                'assets/images/${path}',
-                height: (title == 'Profile') ? h * 0.03 : h * 0.04,
-              ),
+              Image.asset('assets/images/${path}',height:(title=='Profile')?
+              h * 0.03 : h * 0.04),
               SizedBox(width: w * 0.05),
               Text(
                 title,
