@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:story_hug/pages/profile.dart';
 import '../binding/subcategory_binding.dart';
+import '../pages/Authentication/choose_profile.dart';
 import '../pages/Authentication/otp-screen.dart';
 import '../pages/Authentication/sign_up_screen.dart';
 import '../pages/Passwordchange/passwordchange.dart';
@@ -50,5 +51,7 @@ class AppRoutes {
     GetPage(name: Routes.OtpScreen, page: () => OtpScreen()),
     GetPage(name: Routes.Passwordchange, page: () => Passwordchange()),
     GetPage(name: Routes.LetsBegin, page: () => LetsBegin()),
+    GetPage(name: Routes.ChooseProfile, page: () => ChooseProfile()),
+
   ];
 }

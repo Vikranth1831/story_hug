@@ -1,7 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/components/text_field.dart';
+import 'package:story_hug/controller/password_update_controller.dart';
+import 'package:story_hug/repositories/update_password_repository.dart';
+
+import '../../data/remote_data_source.dart';
 
 class Passwordchange extends StatefulWidget {
   const Passwordchange({super.key});
@@ -14,6 +20,13 @@ class _PasswordchangeState extends State<Passwordchange> {
   final TextEditingController newPass = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
 
+  String? newPassError;
+  String? confirmPassError;
+  final UpdatePasswordController controller = Get.put(
+    UpdatePasswordController(
+      repository: UpdatePasswordRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
@@ -116,7 +129,15 @@ class _PasswordchangeState extends State<Passwordchange> {
                       ),
                       SizedBox(height: 6),
 
-                     CustomInputField(controller: newPass, label1: 'password'),
+                      CustomInputField(controller: newPass, label1: 'password'),
+                      if (newPassError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            newPassError!,
+                            style: TextStyle(color: Colors.redAccent, fontSize: 12),
+                          ),
+                        ),
 
                       SizedBox(height: 18),
 
@@ -131,18 +152,54 @@ class _PasswordchangeState extends State<Passwordchange> {
                       SizedBox(height: 6),
 
                       CustomInputField(controller: confirmPass, label1: 'password'),
+                      if (confirmPassError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            confirmPassError!,
+                            style: TextStyle(color: Colors.redAccent, fontSize: 12),
+                          ),
+                        ),
 
                       SizedBox(height: 26),
 
                       Center(
                         child: InkWell(
-                          onTap: ()
-                          {
-                            context.push('/success',extra: {
-                              'title': "Password Changed Successfully",
-                              'button': "Done",
-                            },);
+                          onTap: () {
+                            setState(() {
+                              newPassError = null;
+                              confirmPassError = null;
+
+                              String p1 = newPass.text.trim();
+                              String p2 = confirmPass.text.trim();
+
+                              bool hasError = false;
+
+                              if (p1.length < 5) {
+                                newPassError = "Password must be at least 5 characters.";
+                                hasError = true;
+                              }
+
+                              if (p2.length < 5) {
+                                confirmPassError = "Password must be at least 5 characters.";
+                                hasError = true;
+                              }
+
+                              if (!hasError && p1 != p2) {
+                                confirmPassError = "Passwords do not match.";
+                                hasError = true;
+                              }
+
+                              if (!hasError) {
+
+                                controller.updatepassword({
+                                  "password": p1,
+                                  "confirm_password":p2
+                                });
+                              }
+                            });
                           },
+
                           child: Container(
                             width: w * 0.60,
                             padding: const EdgeInsets.symmetric(vertical: 14),
@@ -179,45 +236,4 @@ class _PasswordchangeState extends State<Passwordchange> {
     );
   }
 
-  // ⭐ PERFECT WHITE TEXTFIELD
-  Widget _textField(TextEditingController controller) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        color: Colors.white, // FULL WHITE BG
-        borderRadius: BorderRadius.circular(26),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.20),
-            blurRadius: 10,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: true,
-        style: const TextStyle(
-          color: Colors.black,     // TEXT COLOR BLACK (correct)
-          fontSize: 14,
-        ),
-
-        decoration: InputDecoration(
-          filled: true,                 // VERY IMPORTANT
-          fillColor: Colors.white,      // PURE WHITE FILL
-          hintText: "Password",
-          hintStyle: TextStyle(
-            color: Colors.grey.shade600,
-            fontSize: 14,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(26),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding:
-          const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-        ),
-      ),
-    );
-  }
 }

@@ -14,6 +14,8 @@ import '../models/SubCategoryModel.dart';
 import '../models/SubSubOfCategoryModel.dart';
 import '../models/VerifyPaymentModel.dart';
 import '../models/login_model.dart';
+import '../models/password_update_model.dart';
+import '../models/select_child_model.dart';
 import '../services/ApiClient.dart';
 import '../utils/AppLogger.dart';
 
@@ -31,6 +33,9 @@ abstract class RemoteDataSource {
   Future<CreatePaymentModel?> createPayment(Map<String, dynamic> data);
   Future<VerifyPaymentModel?> verifyPayment(Map<String, dynamic> data);
   Future<OTPVerifiedModel?> verifyOtp(Map<String, dynamic> data);
+  Future<SelectChildModel?> selectchild(Map<String, dynamic> data);
+  Future<PasswordUpdateModel?> updatepassword(Map<String, dynamic> data);
+
 
 
 
@@ -76,6 +81,30 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return OTPVerifiedModel.fromJson(res.data);
     } catch (e) {
       print('verifyOtp : $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<PasswordUpdateModel?> updatepassword(Map<String, dynamic> data) async {
+    try {
+      final res = await ApiClient.put("${APIEndpointUrls.updatepassword}", data: data);
+      AppLogger.log('Update Password : ${res.data}');
+      return PasswordUpdateModel.fromJson(res.data);
+    } catch (e) {
+      print('Update Password : $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<SelectChildModel?> selectchild(Map<String, dynamic> data) async {
+    try {
+      final res = await ApiClient.post("${APIEndpointUrls.selectchild}", data: data);
+      AppLogger.log('Select Child : ${res.data}');
+      return SelectChildModel.fromJson(res.data);
+    } catch (e) {
+      print('Select Child : $e');
       return null;
     }
   }

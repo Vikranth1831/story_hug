@@ -24,5 +24,7 @@ class Routes {
   static const OtpScreen = '/otp-screen';
   static const Passwordchange = '/password-change';
   static const LetsBegin = '/lets-begin';
+  static const ChooseProfile ='/choose-profile';
+
 
 }

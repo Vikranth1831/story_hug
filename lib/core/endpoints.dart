@@ -23,5 +23,8 @@ class APIEndpointUrls {
   static const String deletefaverates='${ApiUrl}favourate/deletefavourate';
   static const String createPayment='${ApiUrl}payment/createpayment';
   static const String verifyPayment='${ApiUrl}payment/verifypayment';
+  static const String updatepassword='${AuthUrl}updatepassword';
+  static const String selectchild='${children}/selectchild';
+
 
 }
