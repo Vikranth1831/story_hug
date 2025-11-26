@@ -4,7 +4,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/app_routes/app_routes.dart';
+import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
+import 'package:story_hug/pages/verify_email.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../controller/getAllChildrenController.dart';
@@ -99,6 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               InkWell(
                 onTap: () {
+                  Get.to(()=>Passwordchange());
                   context.push('/verify_email');
                 },
                 child: ChangePasswordButton(w, h, context),
@@ -176,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: TextStyle(
               color: Colors.white,
               fontSize: w * 0.07,
-              fontFamily: 'Arial Rounded MT Bold',
+              fontFamily: 'Arial',
             ),
           ),
         ],
@@ -251,23 +255,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // ORIGINAL BUTTON — UNCHANGED
   // -----------------------------------------------------
   Widget ChangePasswordButton(double w, double h, BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: h * 0.07,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(116),
-        border: Border.all(
-          color: const Color(0xFFFCD667),
-          width: 1,
+    return InkWell(
+      onTap: ()
+      {
+        Get.to(()=>VerifyEmail());
+      },
+      child: Container(
+        width: double.infinity,
+        height: h * 0.07,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(116),
+          border: Border.all(
+            color: const Color(0xFFFCD667),
+            width: 1,
+          ),
         ),
-      ),
-      child: Center(
-        child: Text(
-          "Change Password",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: w * 0.05,
-            fontFamily: 'Arial',
+        child: Center(
+          child: Text(
+            "Change Password",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: w * 0.05,
+              fontFamily: 'Arial',
+            ),
           ),
         ),
       ),

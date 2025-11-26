@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:story_hug/pages/Authentication/otp-screen.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 import 'package:go_router/go_router.dart';
 
-class VerifyEmail extends StatelessWidget {
+import '../controller/sent_otp_controller.dart';
+import '../data/remote_data_source.dart';
+import '../repositories/opt_sent_repository.dart';
+
+class VerifyEmail extends StatefulWidget {
   const VerifyEmail({super.key});
 
+  @override
+  State<VerifyEmail> createState() => _VerifyEmailState();
+}
+
+class _VerifyEmailState extends State<VerifyEmail> {
+  final SendOtpController controller = Get.put(
+    SendOtpController(
+      repository: otpsentRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
   @override
   Widget build(BuildContext context) {
 
@@ -78,15 +94,25 @@ class VerifyEmail extends StatelessWidget {
 
 // ---------------------------------------------------------
 
-class VerificationCard extends StatelessWidget {
+class VerificationCard extends StatefulWidget {
   final double w, h;
   const VerificationCard({super.key, required this.w, required this.h});
 
   @override
+  State<VerificationCard> createState() => _VerificationCardState();
+}
+
+class _VerificationCardState extends State<VerificationCard> {
+  final SendOtpController controller = Get.put(
+    SendOtpController(
+      repository: otpsentRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: w * 0.90,
-      height: h * 0.40,
+      width: widget.w * 0.90,
+      height: widget.h * 0.40,
 
       // CARD STYLE
       decoration: BoxDecoration(
@@ -99,12 +125,12 @@ class VerificationCard extends StatelessWidget {
 
           // ⭐ TOP IMAGE
           Positioned(
-            left: w * 0.26,
-            top: h * 0.02,
+            left: widget.w * 0.26,
+            top: widget.h * 0.02,
             child: Image.asset(
               "assets/images/verify.png",
-              width: w * 0.30,
-              height: h * 0.16,
+              width: widget.w * 0.30,
+              height: widget.h * 0.16,
 
               fit: BoxFit.cover,
             ),
@@ -112,10 +138,10 @@ class VerificationCard extends StatelessWidget {
 
           // ⭐ TEXT + BUTTON
           Positioned(
-            left: w * 0.05,
-            top: h * 0.18,
+            left: widget.w * 0.05,
+            top: widget.h * 0.18,
             child: SizedBox(
-              width: w * 0.80,
+              width: widget.w * 0.80,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -125,7 +151,7 @@ class VerificationCard extends StatelessWidget {
                     "Please Verify",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: w * 0.055,
+                      fontSize: widget.w * 0.055,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Arial Rounded MT Bold',
                     ),
@@ -135,22 +161,23 @@ class VerificationCard extends StatelessWidget {
                     "To Change your Password",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: w * 0.045,
+                      fontSize: widget.w * 0.045,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Arial Rounded MT Bold',
                     ),
                   ),
 
-                  SizedBox(height: h * 0.03),
+                  SizedBox(height: widget.h * 0.03),
 
                   // BUTTON
                   GestureDetector(
                     onTap:(){
-                      context.push('/otp-screen');
+                     // context.push('/otp-screen');
+                     controller.sendotp();
                     },
                     child: Container(
                       width: double.infinity,
-                      height: h * 0.06,
+                      height: widget.h * 0.06,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
@@ -165,7 +192,7 @@ class VerificationCard extends StatelessWidget {
                           "Send OTP to Gmail",
                           style: TextStyle(
                             color: const Color(0xFF333333),
-                            fontSize: w * 0.042,
+                            fontSize: widget.w * 0.042,
                             fontWeight: FontWeight.bold,     // ★ bold added
                             fontFamily: 'Arial Rounded MT Bold',
                           ),

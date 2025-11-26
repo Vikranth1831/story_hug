@@ -116,7 +116,10 @@ class _SubCategoryState extends State<SubCategory> {
 
                         // Top Bar
                         CustomTopBar(
-                          onMenuTap: () => setState(() => showMenu = true),
+                          showMenu: showMenu,        // 👈 added
+                          onMenuTap: () {
+                            setState(() => showMenu = !showMenu);  // 👈 toggle menu
+                          },
                         ),
 
                         SizedBox(height: h * 0.02),

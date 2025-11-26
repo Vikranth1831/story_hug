@@ -1,11 +1,19 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:story_hug/pages/Section1/Home.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 class CustomTopBar extends StatelessWidget {
   final VoidCallback onMenuTap;
+  final bool showMenu; // 👈 added
 
-  const CustomTopBar({super.key, required this.onMenuTap});
+  const CustomTopBar({
+    super.key,
+    required this.onMenuTap,
+    required this.showMenu, // 👈 added
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +59,7 @@ class CustomTopBar extends StatelessWidget {
 
               SizedBox(width: w * 0.03),
 
-              /// MENU BUTTON
+              /// MENU BUTTON (changed icon only)
               GestureDetector(
                 onTap: onMenuTap,
                 child: Container(
@@ -60,7 +68,10 @@ class CustomTopBar extends StatelessWidget {
                     color: Color(0xFF6067BC),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.menu, color: Colors.amber),
+                  child: Icon(
+                    showMenu ? Icons.close : Icons.menu,   // 👈 only change
+                    color: Colors.amber,
+                  ),
                 ),
               ),
             ],
@@ -70,4 +81,5 @@ class CustomTopBar extends StatelessWidget {
     );
   }
 }
+
 

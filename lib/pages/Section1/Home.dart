@@ -9,6 +9,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/CategoryController.dart';
+import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
@@ -88,8 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: h * 0.03),
 
                 CustomTopBar(
+                  showMenu: showMenu,        // 👈 added
                   onMenuTap: () {
-                    setState(() => showMenu = true);
+                    setState(() => showMenu = !showMenu);  // 👈 toggle menu
                   },
                 ),
 
@@ -241,10 +243,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Positioned.fill(
                 child: GestureDetector(
                   onTap: () => setState(() => showMenu = false),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                    child: Container(color: Colors.black.withOpacity(0.25)),
-                  ),
+                  // child: BackdropFilter(
+                  //   filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                  //   child: Container(color: Colors.black.withOpacity(0.25)),
+                  // ),
                 ),
               ),
             AnimatedPositioned(
@@ -280,25 +282,25 @@ class MenuPanel extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _menuItem(Icons.person, "Profile", context),
-          _menuItem(Icons.volume_up, "Voice", context),
-          _menuItem(Icons.favorite, "My Favorites", context),
-          _menuItem(Icons.workspace_premium, "Subscriptions", context),
-          _menuItem(Icons.alarm, "Reminder", context),
-          _menuItem(Icons.logout, "Logout", context),
+          _menuItem("Vector (1).png", "Profile", context),
+          _menuItem("SpeakerHigh.png", "Voice", context),
+          _menuItem("Heart.png", "My Favorites", context),
+          _menuItem("CrownSimple.png", "Subscriptions", context),
+          _menuItem("Alarm.png", "Reminder", context),
+          _menuItem("SignOut.png", "Logout", context),
         ],
       ),
     );
   }
 
-  Widget _menuItem(IconData icon, String title, BuildContext context) {
+  Widget _menuItem(String path, String title, BuildContext context) {
     final h = SizeConfig.screenHeight;
     final w = SizeConfig.screenWidth;
 
     return InkWell(
       onTap: () {
         if (title == 'Profile') {
-          context.push('/profile_screen');
+          Get.to(()=>ProfileScreen());
         } else if (title == 'Voice') {
           context.push('/recording_voice');
         } else if (title == 'My Favorites') {
@@ -323,7 +325,8 @@ class MenuPanel extends StatelessWidget {
           child: Row(
             children: [
               SizedBox(width: w * 0.05),
-              Icon(icon, color: const Color(0xFF24305B)),
+             Image.asset('assets/images/${path}',height:(title=='Profile')?
+             h * 0.03 : h * 0.04),
               SizedBox(width: w * 0.05),
               Text(
                 title,

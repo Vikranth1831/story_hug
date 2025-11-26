@@ -68,8 +68,9 @@ class _ViewCardPartsState extends State<ViewCardParts> {
                       // CUSTOM TOP BAR WITH MENU BUTTON
                       //-------------------------------------------------
                       CustomTopBar(
+                        showMenu: showMenu,        // 👈 added
                         onMenuTap: () {
-                          setState(() => showMenu = true);
+                          setState(() => showMenu = !showMenu);  // 👈 toggle menu
                         },
                       ),
 

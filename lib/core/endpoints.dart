@@ -14,5 +14,6 @@ class APIEndpointUrls {
   static const String fetchSubCategory='${story}fetchsubcategoriesbycategoryid/';
   static const String getAllChildren='${children}/getallchildrensofaparent';
   static const String createChildren='${children}/createchild';
+  static const String sendotp='${AuthUrl}changepassword';
 
 }
