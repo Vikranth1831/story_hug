@@ -15,5 +15,8 @@ class APIEndpointUrls {
   static const String children='${ApiUrl}children';
   static const String createChildren='${children}/createchild';
   static const String getAllChildren='${children}/getallchildrensofaparent';
+  static const String getSampleText='${ApiUrl}voice/fetchsampletext';
+  static const String saveAudio='${ApiUrl}voice/clonevoice';
+
 
 }

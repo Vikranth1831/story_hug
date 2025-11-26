@@ -73,6 +73,9 @@ dependencies:
   dotted_border: ^2.0.0
   pdfx: ^2.9.2
   get: ^4.7.2
+  flutter_sound: ^9.2.14
+  shared_preferences: ^2.0.15
+
   #flutter_local_notifications: ^19.5.0
 
 

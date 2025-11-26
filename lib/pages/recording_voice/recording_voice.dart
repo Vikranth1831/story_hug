@@ -1,11 +1,19 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:story_hug/controller/SampleTextController.dart';
 import 'package:story_hug/pages/recording_voice/save_voice.dart';
-import 'package:story_hug/pages/recording_voice/start_recording_voice.dart';
+import 'package:story_hug/repositories/sample_text_repository.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
-import '../../components/create_now_button.dart';
+import '../../app_routes/app_routes.dart';
+import '../../controller/AudioController.dart';
+import '../../data/remote_data_source.dart';
+
 class RecordingVoice extends StatefulWidget {
   const RecordingVoice({super.key});
 
@@ -14,7 +22,81 @@ class RecordingVoice extends StatefulWidget {
 }
 
 class _RecordingVoiceState extends State<RecordingVoice> {
+  final Sampletextcontroller controller = Get.put(
+    Sampletextcontroller(
+      repository:
+      SampleTextRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
+
   bool isRecording = false;
+  FlutterSoundRecorder recorder = FlutterSoundRecorder();
+  Timer? timer;
+  int seconds = 0;
+
+  File? recordedFile; // <-- FILE (not path)
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getSampleText();
+    initRecorder();
+  }
+
+  Future<void> initRecorder() async {
+    await Permission.microphone.request();
+    await recorder.openRecorder();
+  }
+
+  Future<void> startRecording() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    String path =
+        "${dir.path}/user_voice_${DateTime.now().millisecondsSinceEpoch}.aac";
+
+    await recorder.startRecorder(
+      toFile: path,
+      codec: Codec.aacMP4,
+    );
+
+    timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      setState(() => seconds++);
+    });
+
+    setState(() => isRecording = true);
+  }
+
+  Future<void> stopRecording() async {
+    String? finalPath = await recorder.stopRecorder();
+    timer?.cancel();
+
+    if (finalPath != null) {
+      recordedFile = File(finalPath); // <-- STORE FILE
+      print("Audio file path: ${recordedFile}");
+
+    }
+
+    setState(() => isRecording = false);
+
+    Get.toNamed(
+      Routes.SaveVoice,
+      arguments: {
+        "audioFile": recordedFile,  // <- pass File here
+      },
+    );
+  }
+
+  String formatTime(int sec) {
+    final m = (sec ~/ 60).toString().padLeft(2, "0");
+    final s = (sec % 60).toString().padLeft(2, "0");
+    return "$m:$s";
+  }
+
+  @override
+  void dispose() {
+    recorder.closeRecorder();
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +107,11 @@ class _RecordingVoiceState extends State<RecordingVoice> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/backgroundimage.png'),
-          fit: BoxFit.cover)
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/backgroundimage.png'),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: w * 0.04),
@@ -42,50 +126,50 @@ class _RecordingVoiceState extends State<RecordingVoice> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: w * 0.05,
                   fontFamily: 'Arial',
-                  fontWeight: FontWeight.w400,
                 ),
               ),
 
               SizedBox(height: h * 0.04),
+
               Text(
-                'Please read the following passage clearly \n  this helps us capture the unique magic of your voice!',
+                'Please read the following passage clearly\nthis helps us capture your voice!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Color(0xFFF5F5F5),
-                  fontSize: 14,
+                  color: const Color(0xFFF5F5F5),
+                  fontSize: w * 0.035,
                   fontFamily: 'Arial',
-                  fontWeight: FontWeight.w400,
-                  height: 1.70,
+                  height: 1.7,
                 ),
               ),
 
               SizedBox(height: h * 0.1),
 
+              // BOX WITH SAMPLE TEXT
               Container(
                 width: double.infinity,
-                height: h * 0.15,
-                padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 10),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 23, vertical: 10),
                 decoration: ShapeDecoration(
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
                     side: const BorderSide(
                       width: 6,
-                      strokeAlign: BorderSide.strokeAlignOutside,
                       color: Color(0xFF98A2C5),
                     ),
                     borderRadius: BorderRadius.circular(32),
                   ),
                 ),
-                child: const Center(
-                  child: Text(
-                    'The little bear loved to read \nstories under the big\n friendly moon, dreaming adventures',
-                    style: TextStyle(
-                      color: Color(0xFF666666),
-                      fontSize: 14,
-                      fontFamily: 'Arial',
-                      fontWeight: FontWeight.w400,
+                child: Center(
+                  child: Obx(
+                        () => Text(
+                      '${controller.sampletext.value}',
+                      style: TextStyle(
+                        color: const Color(0xFF666666),
+                        fontSize: w * 0.035,
+                        fontFamily: 'Arial',
+                      ),
                     ),
                   ),
                 ),
@@ -94,35 +178,33 @@ class _RecordingVoiceState extends State<RecordingVoice> {
               SizedBox(height: h * 0.02),
 
               Text(
-                'Recording 0:15 / 1:00',
+                isRecording
+                    ? "Recording ${formatTime(seconds)}"
+                    : "Recording 00:00",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 12,
+                  fontSize: w * 0.032,
                   fontFamily: 'Arial',
-                  fontWeight: FontWeight.w400,
                 ),
               ),
 
               SizedBox(height: h * 0.14),
-              
-              InkWell(
-                onTap: () {
-                  if (!isRecording) {
-                    setState(() => isRecording = true);
-                  } else {
-               //  context.push('/save_voice');
-                 Get.to(()=>SaveVoice());
 
+              // RECORDING BUTTON
+              InkWell(
+                onTap: () async {
+                  if (!isRecording) {
+                    seconds = 0;
+                    await startRecording();
+                  } else {
+                    await stopRecording();
                   }
                 },
                 child: Container(
                   width: w,
                   height: h * 0.07,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: ShapeDecoration(
                     gradient: const LinearGradient(
-                      begin: Alignment(0.00, 0.50),
-                      end: Alignment(1.00, 0.50),
                       colors: [
                         Color(0xFFFCDB69),
                         Color(0xFFFCBF5D),
@@ -136,19 +218,19 @@ class _RecordingVoiceState extends State<RecordingVoice> {
                         color: Color(0x3F000000),
                         blurRadius: 2,
                         offset: Offset(0, 4),
-                        spreadRadius: 1,
                       ),
                     ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // RED DOT
                       Container(
                         width: 26,
                         height: 26,
-                        decoration: BoxDecoration(
-                          color :  Color(0xFFFF3636),
-                          shape:  BoxShape.circle,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFF3636),
+                          shape: BoxShape.circle,
                         ),
                         child: Center(
                           child: Container(
@@ -156,7 +238,9 @@ class _RecordingVoiceState extends State<RecordingVoice> {
                             height: 20,
                             decoration: BoxDecoration(
                               color: Colors.red,
-                              shape: isRecording ? BoxShape.rectangle :  BoxShape.circle,
+                              shape: isRecording
+                                  ? BoxShape.rectangle
+                                  : BoxShape.circle,
                               border: Border.all(
                                 width: 2,
                                 color: Colors.white,
@@ -165,14 +249,12 @@ class _RecordingVoiceState extends State<RecordingVoice> {
                           ),
                         ),
                       ),
-
-                      const SizedBox(width: 10),
-
+                      SizedBox(width: w * 0.03),
                       Text(
                         isRecording ? 'Stop Recording' : 'Start Recording',
-                        style: const TextStyle(
-                          color: Color(0xFF24305B),
-                          fontSize: 15,
+                        style: TextStyle(
+                          color: const Color(0xFF24305B),
+                          fontSize: w * 0.04,
                           fontFamily: 'Arial',
                           fontWeight: FontWeight.w800,
                         ),
@@ -180,7 +262,7 @@ class _RecordingVoiceState extends State<RecordingVoice> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -188,4 +270,3 @@ class _RecordingVoiceState extends State<RecordingVoice> {
     );
   }
 }
-

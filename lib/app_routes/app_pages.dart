@@ -46,5 +46,6 @@ class AppRoutes {
     GetPage(name: Routes.Passwordchange, page: () => Passwordchange()),
     GetPage(name: Routes.LetsBegin, page: () => LetsBegin()),
     GetPage(name: Routes.ChooseProfile, page: () => ChooseProfile()),
+
   ];
 }

@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:story_hug/models/SaveAudioModel.dart';
 import 'package:story_hug/models/create_child_model.dart';
 import 'package:story_hug/models/get_all_children_model.dart';
 import 'package:story_hug/models/register_model.dart';
+import 'package:story_hug/models/sample_text_model.dart';
 import 'package:story_hug/repositories/get_all_children_repository.dart';
 import '../core/endpoints.dart';
 import '../models/CategoryModel.dart';
 import '../models/SubCategoryModel.dart';
 import '../models/login_model.dart';
+import '../pages/recording_voice/save_voice.dart';
 import '../services/ApiClient.dart';
 import '../utils/AppLogger.dart';
 
@@ -18,6 +21,12 @@ abstract class RemoteDataSource {
   Future<SubCategoryModel?> fetchSubCategory(int catId);
 
   Future<GetAllChildrenModel?> getAllChildren();
+
+  Future<SampleTextModel?> getSampleText();
+
+  Future<SaveAudioModel?> saveaudio(FormData data);
+
+
 
 }
 
@@ -35,6 +44,27 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+  @override
+  Future<SaveAudioModel?> saveaudio(FormData data) async {
+    try {
+      final res = await ApiClient.post(
+        "${APIEndpointUrls.saveAudio}",
+        data: data,
+        options: Options(
+          contentType: "multipart/form-data",
+        ),
+      );
+
+      AppLogger.log('saveAudio : ${res.data}');
+      return SaveAudioModel.fromJson(res.data);
+
+    } catch (e) {
+      print('saveAudio error : $e');
+      return null;
+    }
+  }
+
+
 
   @override
   Future<RegisterModel?> register(Map<String, dynamic> data) async {
@@ -74,6 +104,20 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       );
       AppLogger.log('Register : ${res.data}');
       return GetAllChildrenModel.fromJson(res.data);
+    } catch (e) {
+      // AppLogger.error('login : $e');
+      return null;
+    }
+  }
+  @override
+  Future<SampleTextModel?> getSampleText() async {
+    try {
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.getSampleText}",
+
+      );
+      AppLogger.log('Register : ${res.data}');
+      return SampleTextModel.fromJson(res.data);
     } catch (e) {
       // AppLogger.error('login : $e');
       return null;
