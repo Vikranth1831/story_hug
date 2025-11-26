@@ -9,6 +9,7 @@ import 'package:story_hug/controller/getAllChildrenController.dart';
 import 'package:story_hug/repositories/get_all_children_repository.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
+import '../../app_routes/app_routes.dart';
 import '../../components/create_now_button.dart';
 import '../../components/text_field.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -115,8 +116,8 @@ class _ManageKidsState extends State<ManageKids> {
       bottomNavigationBar: SafeArea(
         child: InkWell(
           onTap: () {
-           // context.push('/home');
-            Get.to(()=>HomeScreen());
+            // context.push('/home');
+            Get.offAllNamed(Routes.HomeScreen);
           },
           child: CreateNowButton(text: 'Done'),
         ),

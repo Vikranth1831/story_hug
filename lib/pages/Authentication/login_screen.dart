@@ -7,13 +7,12 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
-import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
+import '../../controller/AuthController.dart';
+import '../../data/remote_data_source.dart';
+import '../../repositories/auth_repository.dart';
 
-import '../controller/AuthController.dart';
-import '../data/remote_data_source.dart';
-import '../repositories/auth_repository.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -31,10 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController pass1Controller = TextEditingController();
   final TextEditingController pass2Controller = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-
   final TextEditingController mobileController = TextEditingController();
-
-
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -44,22 +40,22 @@ class _LoginScreenState extends State<LoginScreen> {
     ),
   );
 
-  // 🔥 BLINKING OPACITY FOR stars.png
+  // ⭐ ADDED FOR STAR BLINK ANIMATION
   double starOpacity = 1.0;
 
   @override
   void initState() {
     super.initState();
-    startBlinking();
+    blinkStar();
   }
 
-  /// 🔥 Infinite Blink Animation
-  void startBlinking() {
-    Future.delayed(const Duration(milliseconds: 1000), () {
+  // ⭐ BLINK FUNCTION
+  void blinkStar() {
+    Future.delayed(const Duration(milliseconds: 700), () {
       setState(() {
         starOpacity = starOpacity == 1.0 ? 0.2 : 1.0;
       });
-      startBlinking(); // loop forever
+      blinkStar(); // loop forever
     });
   }
 
@@ -70,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
+
       body: Stack(
         children: [
           Positioned.fill(
@@ -88,21 +85,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   Image.asset('assets/images/open_book_login.png'),
                   SizedBox(height: h * 0.03),
 
-                  /// ⭐ TWO IMAGES: stars.png (bottom blinking) + login-boy-image.png (center)
+                  ///
+                  /// ⭐⭐ BLINKING STAR IMAGE HERE ⭐⭐
+                  ///
                   Stack(
                     alignment: Alignment.center,
                     children: [
-                      /// 🔥 BLINKING IMAGE
                       AnimatedOpacity(
                         duration: const Duration(milliseconds: 700),
                         opacity: starOpacity,
                         child: Image.asset(
                           'assets/images/stars.png',
-                          width: w,
+                          width: w * 1,
                         ),
                       ),
 
-                      /// Top centered image
                       Image.asset(
                         'assets/images/login-boy-image.png',
                         width: w * 0.5,
@@ -112,17 +109,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   SizedBox(height: h * 0.05),
 
-                  /// -----------------------------------------------------------------
-                  /// MAIN LOGIN/SIGNUP BOX
-                  /// -----------------------------------------------------------------
                   Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: w * 0.04),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       width: double.infinity,
-                      height: (isLogin) ? h * 0.4 :  h * 0.75,
-                      
+                      height: (isLogin) ? h * 0.4 : h * 0.75,
 
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage("assets/images/background_for_box.png"),
                           fit: BoxFit.cover,
@@ -138,14 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-
-                              /// ----------------------------------------------------
-                              /// 🔵 LOGIN / SIGNUP TOGGLE BUTTONS
-                              /// ----------------------------------------------------
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  // LOGIN BUTTON
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -157,8 +145,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           horizontal: 20, vertical: 8),
                                       decoration: BoxDecoration(
                                         color: isLogin
-                                            ? const Color(0xFFFFD54F) // SELECTED = YELLOW
-                                            : Colors.white24, // UNSELECTED
+                                            ? const Color(0xFFFFD54F)
+                                            : Colors.white24,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
@@ -173,7 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                   const SizedBox(width: 20),
 
-                                  // SIGNUP BUTTON
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -203,9 +190,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               const SizedBox(height: 20),
 
-                              /// ----------------------------------------------------
-                              /// 🔵 LOGIN FIELDS
-                              /// ----------------------------------------------------
                               if (isLogin) ...[
                                 _textField(
                                   controller: emailController,
@@ -227,35 +211,33 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   isVisible: passwordVisible1,
                                 ),
+
                                 const SizedBox(height: 20),
 
-
-
-                                /// LOGIN BUTTON (YELLOW)
                                 Obx(() {
                                   return ElevatedButton(
                                     onPressed: authController.isLoading.value
-                                        ? null   // disable button while loading
+                                        ? null
                                         : () async {
                                       if (formKey.currentState!.validate()) {
-                                        String? fcmToken = await FirebaseMessaging.instance.getToken();
-                                        debugPrint("Login FCM Token: $fcmToken");
+                                        String? fcmToken =
+                                        await FirebaseMessaging.instance.getToken();
 
                                         final data = {
                                           "email": emailController.text.trim(),
                                           "password": pass1Controller.text.trim(),
                                           "fcm_token": fcmToken,
-                                          "device_type": Platform.isIOS ? "ios" : "android",
+                                          "device_type":
+                                          Platform.isIOS ? "ios" : "android",
                                         };
 
-                                       authController.login(data);
+                                        authController.login(data);
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFFFFD54F),
                                       minimumSize: Size(double.infinity, 48),
                                     ),
-
                                     child: authController.isLoading.value
                                         ? const SizedBox(
                                       height: 22,
@@ -267,18 +249,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     )
                                         : const Text(
                                       "Login",
-                                      style: TextStyle(color: Colors.black, fontSize: 16),
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
                                     ),
                                   );
                                 })
-
-
                               ],
 
-
-                              /// ----------------------------------------------------
-                              /// 🔵 SIGNUP FIELDS
-                              /// ----------------------------------------------------
                               if (!isLogin) ...[
                                 _textField(
                                   controller: nameController,
@@ -335,7 +312,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 const SizedBox(height: 20),
 
-                                /// SIGNUP BUTTON (YELLOW)
                                 Obx(
                                       () => ElevatedButton(
                                     onPressed: authController.isLoading.value
@@ -343,24 +319,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                         : () async {
                                       if (formKey.currentState!.validate()) {
                                         if (pass1Controller.text != pass2Controller.text) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
                                             const SnackBar(
-                                              content: Text("Passwords do not match"),
+                                              content:
+                                              Text("Passwords do not match"),
                                             ),
                                           );
                                           return;
                                         }
 
-                                        String? fcmToken = await FirebaseMessaging.instance.getToken();
+                                        String? fcmToken =
+                                        await FirebaseMessaging.instance.getToken();
 
                                         final data = {
                                           "name": nameController.text.trim(),
                                           "email": emailController.text.trim(),
                                           "password": pass1Controller.text.trim(),
-                                          "confirm_password": pass2Controller.text.trim(),
-                                          "phone_number": mobileController.text.trim(),
+                                          "confirm_password":
+                                          pass2Controller.text.trim(),
+                                          "phone_number":
+                                          mobileController.text.trim(),
                                           "fcm_token": fcmToken,
-                                          "device_type": Platform.isIOS ? "ios" : "android",
+                                          "device_type":
+                                          Platform.isIOS ? "ios" : "android",
                                         };
 
                                         authController.register(data);
@@ -381,11 +363,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     )
                                         : const Text(
                                       "Sign Up Now",
-                                      style: TextStyle(color: Colors.black, fontSize: 16),
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
                                     ),
                                   ),
                                 )
-
                               ],
                             ],
                           ),
@@ -398,15 +380,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );
   }
 
-  /// ------------------------------------------------------------
-  /// CUSTOM TEXT FIELD FUNCTION WITH VALIDATION
-  /// ------------------------------------------------------------
   Widget _textField({
     required TextEditingController controller,
     required String hint,
@@ -432,7 +410,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white, // WHITE BACKGROUND ✔
+        fillColor: Colors.white,
 
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.black54),
@@ -459,5 +437,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-

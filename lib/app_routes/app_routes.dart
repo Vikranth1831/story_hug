@@ -1,3 +1,5 @@
+import 'package:story_hug/pages/Authentication/choose_profile.dart';
+
 class Routes {
   static const splash = '/';
   static const onboard = '/onboard';
@@ -24,5 +26,6 @@ class Routes {
   static const OtpScreen = '/otp-screen';
   static const Passwordchange = '/password-change';
   static const LetsBegin = '/lets-begin';
+  static const ChooseProfile ='/choose-profile';
 
 }

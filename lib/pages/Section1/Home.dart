@@ -1,12 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/CategoryController.dart';
+import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
@@ -49,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final double textHeight = 32; // 2 lines approx
 
     final double cardHeight =
-        imageHeight + (verticalPadding * 2) + 8 + textHeight;
+        imageHeight + (verticalPadding * 2) + 22 + textHeight;
 
     final double cardWidth = w / gridCount;
 
@@ -286,7 +288,7 @@ class MenuPanel extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (title == 'Profile') {
-          context.push('/profile_screen');
+          Get.to(ProfileScreen());
         } else if (title == 'Voice') {
           context.push('/recording_voice');
         } else if (title == 'My Favorites') {

@@ -26,11 +26,12 @@ class _SplashScreenState extends State<SplashScreen> {
       final token = await AuthService.getAccessToken();
       AppLogger.log("Token:$token");
       if (!mounted) return;
-      if (token == null || token.isEmpty) {
+     // if (token == null || token.isEmpty) {
         Get.offAllNamed(Routes.login);
-      } else {
-        Get.offAllNamed(Routes.HomeScreen);
-      }
+    //  }
+      //else {
+        //Get.offAllNamed(Routes.HomeScreen);
+     // }
     });
   }
 

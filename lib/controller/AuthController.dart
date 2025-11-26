@@ -31,7 +31,7 @@ class AuthController extends GetxController {
           loginModel?.accessTokenExpiry ?? 0,
         );
 
-        Get.offAllNamed(Routes.HomeScreen);
+        Get.offAllNamed(Routes.LetsBegin);
       } else {
         // AppSnackbar.error(loginModel?.message ?? "Login failed");
       }

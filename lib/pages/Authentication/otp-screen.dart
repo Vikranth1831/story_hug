@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:story_hug/components/create_now_button.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
@@ -14,89 +15,8 @@ class _OtpScreenState extends State<OtpScreen> {
   final String bgAssetPath = 'assets/images/bgimage.png';
   final String logoAssetPath = 'assets/images/logo.png';
 
-  final List<TextEditingController> _otpControllers =
-  List.generate(6, (index) => TextEditingController());
-
-  String? errorMessage; // <-- ADDED
-
-  @override
-  void dispose() {
-    for (var c in _otpControllers) {
-      c.dispose();
-    }
-    super.dispose();
-  }
-
-  /// OTP BOX UI
-  Widget otpBox(int index, double w, double h) {
-    return Container(
-      width: w * 0.115,
-      height: h * 0.065,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        color: Colors.white30,
-      ),
-      child: TextField(
-        controller: _otpControllers[index],
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.number,
-        maxLength: 1,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: w * 0.055,
-        ),
-
-        decoration: const InputDecoration(
-          counterText: "",
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          filled: true,
-          fillColor: Colors.transparent,
-          contentPadding: EdgeInsets.zero,
-        ),
-
-        onChanged: (value) {
-          // Remove errors while typing
-          setState(() => errorMessage = null);
-
-          // Validate only digits
-          if (value.isNotEmpty && !RegExp(r'^[0-9]$').hasMatch(value)) {
-            setState(() {
-              errorMessage = "Invalid OTP (only digits allowed)";
-            });
-            _otpControllers[index].clear();
-            return;
-          }
-
-          // Auto move to next field
-          if (value.isNotEmpty && index < 5) {
-            FocusScope.of(context).nextFocus();
-          }
-
-          // Last digit → Auto close keyboard
-          if (index == 5 && value.isNotEmpty) {
-            FocusScope.of(context).unfocus();
-          }
-
-          // Backspace → go to previous field
-          if (value.isEmpty && index > 0) {
-            FocusScope.of(context).previousFocus();
-          }
-        },
-      ),
-    );
-  }
-
-  /// OTP VALIDATION
-  bool validateOtp() {
-    for (var c in _otpControllers) {
-      if (c.text.isEmpty) return false;
-    }
-    return true;
-  }
+  String otpValue = "";
+  String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +100,10 @@ class _OtpScreenState extends State<OtpScreen> {
                                 Text(
                                   "Enter OTP",
                                   style: TextStyle(
-                                      fontSize: w * 0.065,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: w * 0.065,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
 
                                 SizedBox(height: h * 0.01),
@@ -198,27 +119,56 @@ class _OtpScreenState extends State<OtpScreen> {
 
                                 SizedBox(height: h * 0.03),
 
-                                /// OTP BOXES
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children:
-                                  List.generate(6, (i) => otpBox(i, w, h)),
+                                /// ⭐ PINCODE FIELDS (Same UI)
+                                PinCodeTextField(
+                                  length: 6,
+                                  appContext: context,
+                                  keyboardType: TextInputType.number,
+                                  cursorColor: Colors.white,
+                                  autoDismissKeyboard: true,
+                                  animationType: AnimationType.fade,
+
+                                  textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: w * 0.055,
+                                  ),
+
+                                  pinTheme: PinTheme(
+                                    shape: PinCodeFieldShape.box,
+                                    borderRadius: BorderRadius.circular(14),
+                                    fieldHeight: h * 0.065,
+                                    fieldWidth: w * 0.115,
+
+                                    activeColor: Colors.white30,
+                                    inactiveColor: Colors.white30,
+                                    selectedColor: const Color(0xFFFFC84F),
+
+                                    activeFillColor: Colors.white30,
+                                    inactiveFillColor: Colors.white30,
+                                    selectedFillColor: Colors.white24,
+
+                                    borderWidth: 1,
+                                  ),
+
+                                  enableActiveFill: true,
+
+                                  onChanged: (value) {
+                                    setState(() {
+                                      otpValue = value;
+                                      errorMessage = null;
+                                    });
+                                  },
                                 ),
 
                                 SizedBox(height: h * 0.015),
 
-                                /// ERROR MESSAGE BELOW OTP BOXES  <--- ADDED
+                                /// ERROR MESSAGE
                                 if (errorMessage != null)
-                                  Padding(
-                                    padding: EdgeInsets.only(top: h * 0.005),
-                                    child: Text(
-                                      errorMessage!,
-                                      style: TextStyle(
+                                  Text(
+                                    errorMessage!,
+                                    style: TextStyle(
                                         color: Colors.redAccent,
-                                        fontSize: w * 0.036,
-                                      ),
-                                    ),
+                                        fontSize: w * 0.036),
                                   ),
 
                                 SizedBox(height: h * 0.015),
@@ -228,9 +178,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   alignment: Alignment.centerRight,
                                   child: GestureDetector(
                                     onTap: () {
-                                      setState(() {
-                                        errorMessage = null;
-                                      });
+                                      setState(() => errorMessage = null);
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                           content: Text("OTP Resent")));
@@ -250,25 +198,22 @@ class _OtpScreenState extends State<OtpScreen> {
 
                                 SizedBox(height: h * 0.03),
 
-                                /// CONTINUE BUTTON WITH VALIDATION
+                                /// SUBMIT BUTTON
                                 InkWell(
                                   onTap: () {
-                                    if (!validateOtp()) {
+                                    if (otpValue.length != 6) {
                                       setState(() {
-                                        errorMessage =
-                                        "Please enter all 6 digits";
+                                        errorMessage = "Please enter all 6 digits";
                                       });
                                       return;
                                     }
 
-                                    context.push('/success',extra: {
+                                    context.push('/success', extra: {
                                       'title': "Verified",
                                       'button': "Continue",
-                                    },);
+                                    });
                                   },
-                                  child: const CreateNowButton(
-                                    text: "Submit OTP",
-                                  ),
+                                  child: const CreateNowButton(text: "Submit OTP"),
                                 ),
                               ],
                             ),

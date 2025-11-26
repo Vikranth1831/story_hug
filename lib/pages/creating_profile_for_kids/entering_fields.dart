@@ -10,7 +10,6 @@ import '../../components/text_field.dart';
 import '../../controller/createChildrenController.dart';
 import '../../data/remote_data_source.dart';
 import '../../models/get_all_children_model.dart';
-
 class EnteringFieldsForKid extends StatefulWidget {
   final Children? childData;   // 🔥 comes only in Update mode
 

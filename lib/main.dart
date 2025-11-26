@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       // home: SplashScreen(),
       title: 'StoryHug',
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.splash,
+      initialRoute: Routes.ChooseProfile,
       getPages: AppRoutes.pages,
       theme: AppTheme.lightTheme(),
     );
