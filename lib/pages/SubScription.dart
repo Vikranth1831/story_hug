@@ -97,9 +97,9 @@ class _SubScriptionsState extends State<SubScriptions> {
     AppLogger.log("successdata::${data}");
     final res = verifyPaymentController.createPayments(data);
 
-    if (res != null && res.success == true) {
-      Get.back();
-    }
+    // if (res != null && res.success == true) {
+    //   Get.back();
+    // }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
