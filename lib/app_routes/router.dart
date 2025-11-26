@@ -25,7 +25,7 @@ import 'package:story_hug/pages/Section1/Home.dart';
 import 'package:story_hug/pages/splash_screen.dart';
 import 'package:story_hug/pages/verify_email.dart';
 import 'package:story_hug/pages/Section1/playicard.dart';
-import 'package:story_hug/pages/Subscriptions%20page/subscriptions.dart';
+import 'package:story_hug/pages/SubScription.dart';
 import 'package:story_hug/pages/favorites/favorites.dart';
 import '../pages/Authentication/otp-screen.dart';
 import '../pages/Authentication/sign_up_screen.dart';
@@ -147,7 +147,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/subscribe',
       pageBuilder: (context, state) {
-        return buildSlideTransitionPage(Subscribepage(), state);
+        return buildSlideTransitionPage(SubScriptions(), state);
       },
     ),
     GoRoute(

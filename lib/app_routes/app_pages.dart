@@ -9,7 +9,7 @@ import '../pages/Section1/SubSubCategory.dart';
 import '../pages/Section1/SubCategory.dart';
 import '../pages/Section1/Home.dart';
 import '../pages/Section1/playicard.dart';
-import '../pages/Subscriptions page/subscriptions.dart';
+import '../pages/SubScription.dart';
 import '../pages/creating_profile_for_kids/create_profile_forkids.dart';
 import '../pages/creating_profile_for_kids/manage_kids.dart';
 import '../pages/favorites/favorites.dart';
@@ -45,7 +45,7 @@ class AppRoutes {
     GetPage(name: Routes.ViewCardParts, page: () => SubSubCategory()),
     GetPage(name: Routes.PlayStory, page: () => PlayStory()),
     GetPage(name: Routes.Favorites, page: () => Favorites()),
-    GetPage(name: Routes.Subscribepage, page: () => Subscribepage()),
+    GetPage(name: Routes.Subscribepage, page: () => SubScriptions()),
     GetPage(name: Routes.RemindersPage, page: () => RemindersPage()),
     GetPage(name: Routes.OtpScreen, page: () => OtpScreen()),
     GetPage(name: Routes.Passwordchange, page: () => Passwordchange()),

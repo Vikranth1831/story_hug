@@ -5,9 +5,11 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/SubCategoryController.dart';
+import 'package:story_hug/utils/constants.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 import 'package:story_hug/utils/spinkittsLoader.dart';
 
+import '../../app_routes/app_routes.dart';
 import '../../components/CommonLoader.dart';
 import '../../data/remote_data_source.dart';
 import '../../repositories/SubCategoryRepo.dart';
@@ -59,20 +61,6 @@ class _SubCategoryState extends State<SubCategory> {
     final bool isTablet = w > 600;
     final int gridCount = isTablet ? 2 : 1;
 
-    double getResponsiveAspectRatio() {
-      if (w < 600) {
-        // Mobile: slightly taller than square
-        return 0.80; // width / height → makes card taller (good for image + text)
-      } else if (w < 1000) {
-        // Tablet
-        return 0.85;
-      } else {
-        // Large tablet / desktop
-        return 0.90;
-      }
-    }
-
-    final double childAspectRatio = getResponsiveAspectRatio();
     return Scaffold(
       backgroundColor: const Color(0xFFACBCF1),
       body: Obx(() {
@@ -118,9 +106,11 @@ class _SubCategoryState extends State<SubCategory> {
 
                         // Top Bar
                         CustomTopBar(
-                          showMenu: showMenu,        // 👈 added
+                          showMenu: showMenu, // 👈 added
                           onMenuTap: () {
-                            setState(() => showMenu = !showMenu);  // 👈 toggle menu
+                            setState(
+                              () => showMenu = !showMenu,
+                            ); // 👈 toggle menu
                           },
                         ),
 
@@ -179,8 +169,6 @@ class _SubCategoryState extends State<SubCategory> {
                     ),
                   ),
                 ),
-
-                // Dynamic Grid of Subcategories
                 SliverPadding(
                   padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                   sliver: SliverMasonryGrid.count(
@@ -190,18 +178,17 @@ class _SubCategoryState extends State<SubCategory> {
                     childCount: subCats.length,
                     itemBuilder: (context, index) {
                       final subCat = subCats[index];
-
                       return SubCategoryCommonCard(
                         imageUrl: subCat.image,
-                        title: subCat.subcategoryName ?? "Untitled",
+                        title: capitalize(subCat.subcategoryName ?? "Untitled"),
                         isTablet: isTablet,
                         onTap: () {
                           Get.toNamed(
-                            '/view_cards',
+                            Routes.ViewCardParts,
                             arguments: {
-                              'subCatId': subCat.id,
-                              'title': subCat.subcategoryName,
-                              'image': subCat.image,
+                              'id': subCat.id,
+                              'catName': catName,
+                              'name': subCat.subcategoryName,
                             },
                           );
                         },

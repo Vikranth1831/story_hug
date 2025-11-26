@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/CategoryController.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
+import 'package:story_hug/utils/constants.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../app_routes/app_routes.dart';
@@ -52,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ? (w > 1000 ? 5 : 4)
         : 2; // Better for large tablets & web
 
-
     return Scaffold(
       backgroundColor: const Color(0xFFACBCF1),
 
@@ -79,7 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomTopBar(
                   onMenuTap: () {
                     setState(() => showMenu = true);
-                  }, showMenu: showMenu,
+                  },
+                  showMenu: showMenu,
                 ),
 
                 Expanded(
@@ -167,13 +168,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: CachedNetworkImage(
                                         imageUrl: cat.image ?? "",
                                         width: double.infinity,
-                                        height: isTablet ? 180 : 130, // 🔒 FIXED HEIGHT
+                                        height: isTablet
+                                            ? 180
+                                            : 130, // 🔒 FIXED HEIGHT
                                         fit: BoxFit.cover,
                                         placeholder: (_, __) => SizedBox(
                                           width: double.infinity,
                                           height: isTablet ? 180 : 130,
                                           child: Center(
-                                            child: spinkits.getSpinningLinespinkit(),
+                                            child: spinkits
+                                                .getSpinningLinespinkit(),
                                           ),
                                         ),
                                         errorWidget: (_, __, ___) => Container(
@@ -191,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      cat.categoryName ?? "",
+                                      capitalize(cat.categoryName ?? ""),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -208,7 +212,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                       ),
-
                     ],
                   ),
                 ),

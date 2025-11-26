@@ -19,7 +19,7 @@ class Routes {
   static const ViewCardParts = '/view_cards';
   static const PlayStory = '/play-story';
   static const Favorites = '/favorites';
-  static const Subscribepage = '/favorites';
+  static const Subscribepage = '/subscribe';
   static const RemindersPage = '/reminders';
   static const OtpScreen = '/otp-screen';
   static const Passwordchange = '/password-change';

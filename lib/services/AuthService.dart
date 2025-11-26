@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:go_router/go_router.dart';
+import '../app_routes/app_routes.dart';
 import '../core/api_config.dart';
 import '../utils/constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -165,13 +168,13 @@ class AuthService {
 
     final context = navigatorKey.currentContext;
     if (context != null) {
-      GoRouter.of(context).go('/onboarding');
+      Get.offAllNamed(Routes.login);
     } else {
       debugPrint('Context is null, scheduling GoRouter navigation after frame');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final postFrameContext = navigatorKey.currentContext;
         if (postFrameContext != null) {
-          GoRouter.of(postFrameContext).go('/onboarding');
+          Get.offAllNamed(Routes.login);
         } else {
           debugPrint('Still no context available after frame');
           // Optional: consider forcing rebuild or restarting app
