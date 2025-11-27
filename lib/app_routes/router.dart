@@ -23,7 +23,7 @@ import 'package:story_hug/pages/Section1/SubCategory.dart';
 import 'package:story_hug/pages/Section1/Home.dart';
 
 import 'package:story_hug/pages/splash_screen.dart';
-import 'package:story_hug/pages/verify_email.dart';
+import 'package:story_hug/pages/Authentication/verify_email.dart';
 import 'package:story_hug/pages/Section1/PlayStory.dart';
 import 'package:story_hug/pages/SubScription.dart';
 import 'package:story_hug/pages/favorites.dart';
@@ -51,9 +51,7 @@ final GoRouter appRouter = GoRouter(
         return buildSlideTransitionPage(LoginScreen(), state);
       },
     ),
-
     GoRoute(
-
       path: '/homepage',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(HomeScreen(), state);

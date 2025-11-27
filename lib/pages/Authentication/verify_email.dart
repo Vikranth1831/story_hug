@@ -4,9 +4,10 @@ import 'package:story_hug/pages/Authentication/otp-screen.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 import 'package:go_router/go_router.dart';
 
-import '../controller/sent_otp_controller.dart';
-import '../data/remote_data_source.dart';
-import '../repositories/opt_sent_repository.dart';
+import '../../components/CustomAppButton.dart';
+import '../../controller/sent_otp_controller.dart';
+import '../../data/remote_data_source.dart';
+import '../../repositories/opt_sent_repository.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({super.key});
@@ -155,36 +156,16 @@ class _VerificationCardState extends State<VerificationCard> {
                       fontFamily: 'Arial Rounded MT Bold',
                     ),
                   ),
-
                   SizedBox(height: widget.h * 0.03),
-
-                  // BUTTON
-                  GestureDetector(
-                    onTap: () {
-                      controller.sendotp();
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: widget.h * 0.06,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFFCDB69), Color(0xFFFCBF5D)],
-                        ),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Send OTP to Gmail",
-                          style: TextStyle(
-                            color: const Color(0xFF333333),
-                            fontSize: widget.w * 0.042,
-                            fontWeight: FontWeight.bold, // ★ bold added
-                            fontFamily: 'Arial Rounded MT Bold',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Obx(() {
+                    return CustomAppButton1(
+                      onPlusTap: () {
+                        controller.sendotp();
+                      },
+                      text: "Send OTP to Gmail",
+                      isLoading: controller.isLoading.value,   // FIXED
+                    );
+                  }),
                 ],
               ),
             ),

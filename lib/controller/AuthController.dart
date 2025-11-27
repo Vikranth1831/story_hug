@@ -21,7 +21,6 @@ class AuthController extends GetxController {
   LoginModel? loginModel;
   RegisterModel? registerModel;
 
-
   Future<void> login(Map<String, dynamic> data) async {
     try {
       isLoading.value = true;
@@ -37,7 +36,6 @@ class AuthController extends GetxController {
       } else {
         print("Login failed::${loginModel?.message}");
         AppSnackBar.show(Get.context!, loginModel?.message ?? "Login failed");
-
       }
     } catch (e) {
       //  AppSnackbar.exception(e.toString());
@@ -57,11 +55,13 @@ class AuthController extends GetxController {
           registerModel?.refreshToken ?? "",
           registerModel?.accessTokenExpiry ?? 0,
         );
-        print("Register sucess");
         Get.offAllNamed(Routes.LetsBegin);
       } else {
-//
-       AppSnackBar.show(Get.context!,registerModel?.message ?? "Cannot Register Now");
+        //
+        AppSnackBar.show(
+          Get.context!,
+          registerModel?.message ?? "Cannot Register Now",
+        );
 
         // AppSnackbar.error(loginModel?.message ?? "Login failed");
       }
@@ -71,5 +71,4 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-
 }

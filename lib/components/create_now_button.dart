@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 class CreateNowButton extends StatelessWidget {
-
   final String text;
   const CreateNowButton({super.key,required this.text});
-
   @override
   Widget build(BuildContext context) {
     var w=SizeConfig.screenWidth;

@@ -21,7 +21,7 @@ import '../pages/recording_voice/recording_voice.dart';
 import '../pages/recording_voice/save_voice.dart';
 import '../pages/recording_voice/start_recording_voice.dart';
 import '../pages/splash_screen.dart';
-import '../pages/verify_email.dart';
+import '../pages/Authentication/verify_email.dart';
 import 'app_routes.dart';
 
 class AppRoutes {

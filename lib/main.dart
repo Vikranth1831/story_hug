@@ -16,9 +16,7 @@ import 'controller/AudioController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
   ApiClient.setupInterceptors();
-  // await NotificationService().init();
   Get.put(AudioController());
   await NotificationService().init();
   runApp(MyApp());

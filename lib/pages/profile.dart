@@ -7,13 +7,14 @@ import 'package:go_router/go_router.dart';
 import 'package:story_hug/app_routes/app_routes.dart';
 import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
-import 'package:story_hug/pages/verify_email.dart';
+import 'package:story_hug/pages/Authentication/verify_email.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../controller/getAllChildrenController.dart';
 import '../data/remote_data_source.dart';
 import '../models/get_all_children_model.dart';
 import '../repositories/get_all_children_repository.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -33,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    controller.getAllChildren();   // 🔥 Fetch children from API
+    controller.getAllChildren(); // 🔥 Fetch children from API
   }
 
   @override
@@ -49,7 +50,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
               SizedBox(height: h * 0.08),
 
               /// DO NOT CHANGE — SAME
@@ -61,9 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   name: "Akhil",
                 ),
               ),
-
               SizedBox(height: h * 0.04),
-
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -75,7 +73,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-
               /// 🔥 Replace static grid → Add API children
               Obx(() {
                 if (controller.isLoading.value) {
@@ -102,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               InkWell(
                 onTap: () {
-                  Get.to(()=>Passwordchange());
+                  Get.to(() => Passwordchange());
                   context.push('/verify_email');
                 },
                 child: ChangePasswordButton(w, h, context),
@@ -127,12 +124,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }) {
     double circleSize = w * 0.32;
     double smallCircle = w * 0.08;
-
     return SizedBox(
       width: circleSize,
       child: Column(
         children: [
-
           Stack(
             children: [
               Container(
@@ -152,29 +147,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-
-              Positioned(
-                right: circleSize * 0.04,
-                top: circleSize * 0.04,
-                child: Container(
-                  width: smallCircle,
-                  height: smallCircle,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.edit,
-                    size: circleSize * 0.13,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
+              //
+              // Positioned(
+              //   right: circleSize * 0.04,
+              //   top: circleSize * 0.04,
+              //   child: Container(
+              //     width: smallCircle,
+              //     height: smallCircle,
+              //     decoration: const BoxDecoration(
+              //       color: Colors.white,
+              //       shape: BoxShape.circle,
+              //     ),
+              //     child: Icon(
+              //       Icons.edit,
+              //       size: circleSize * 0.13,
+              //       color: Colors.black87,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
-
           SizedBox(height: h * 0.02),
-
           Text(
             name,
             style: TextStyle(
@@ -209,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ? "assets/images/boy_avator.png"
             : "assets/images/girl_avator.png";
 
-        return KidCard(w, h, child.name ?? "", avatar,child);
+        return KidCard(w, h, child.name ?? "", avatar, child);
       },
     );
   }
@@ -217,12 +210,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // -----------------------------------------------------
   // YOUR ORIGINAL CARD — EXACT SAME UI
   // -----------------------------------------------------
-  Widget KidCard(double w, double h, String name, String avatar, Children child) {
+  Widget KidCard(
+    double w,
+    double h,
+    String name,
+    String avatar,
+    Children child,
+  ) {
     return InkWell(
-      onTap: ()
-      {
+      onTap: () {
         Get.to(() => EnteringFieldsForKid(childData: child));
-
       },
       child: Container(
         decoration: BoxDecoration(
@@ -240,10 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: h * 0.015),
             Text(
               name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
           ],
         ),
@@ -256,19 +250,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // -----------------------------------------------------
   Widget ChangePasswordButton(double w, double h, BuildContext context) {
     return InkWell(
-      onTap: ()
-      {
-        Get.to(()=>VerifyEmail());
+      onTap: () {
+        Get.to(() => VerifyEmail());
       },
       child: Container(
         width: double.infinity,
         height: h * 0.07,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(116),
-          border: Border.all(
-            color: const Color(0xFFFCD667),
-            width: 1,
-          ),
+          border: Border.all(color: const Color(0xFFFCD667), width: 1),
         ),
         child: Center(
           child: Text(
@@ -284,6 +274,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
-
-

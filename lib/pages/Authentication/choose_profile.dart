@@ -230,10 +230,8 @@ class _ChooseProfileState extends State<ChooseProfile> {
                          AppSnackBar.show(context, "Please Select a Kid");
                           return;
                         }
-
                         final selectedChild = controller.childrenList[selectedIndex!].id;
                         final data = {"child_id": selectedChild};
-
                         selectcontroller.selectchild(data);
                       },
                       child: CreateNowButton(text: "Select"),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:story_hug/components/create_now_button.dart';
@@ -9,6 +11,7 @@ import 'package:story_hug/controller/verify_otp_controller.dart';
 import 'package:story_hug/repositories/verify_otp_repository.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
+import '../../components/CustomAppButton.dart';
 import '../../data/remote_data_source.dart';
 import '../../repositories/opt_sent_repository.dart';
 
@@ -78,7 +81,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: GestureDetector(
-                              onTap: () => context.pop(),
+                              onTap: () => Get.back(),
                               child: Container(
                                 width: w * 0.14,
                                 height: w * 0.14,
@@ -129,7 +132,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                                 /// SUBTEXT
                                 Text(
-                                  "OTP sent to the surya@gmail.com",
+                                  "OTP sent to your Email",
                                   style: TextStyle(
                                     color: Colors.white.withOpacity(0.9),
                                     fontSize: w * 0.04,
@@ -141,23 +144,21 @@ class _OtpScreenState extends State<OtpScreen> {
                                 /// ⭐ PINCODE FIELDS (Same UI)
                                 PinCodeTextField(
                                   length: 6,
+                                  backgroundColor: Colors.transparent,
                                   appContext: context,
                                   keyboardType: TextInputType.number,
                                   cursorColor: Colors.white,
                                   autoDismissKeyboard: true,
                                   animationType: AnimationType.fade,
-
                                   textStyle: TextStyle(
                                     color: Colors.white,
                                     fontSize: w * 0.055,
                                   ),
-
                                   pinTheme: PinTheme(
                                     shape: PinCodeFieldShape.box,
                                     borderRadius: BorderRadius.circular(14),
-                                    fieldHeight: h * 0.065,
-                                    fieldWidth: w * 0.115,
-
+                                    fieldHeight: w * 0.12,
+                                    fieldWidth: w * 0.12,
                                     activeColor: Colors.white30,
                                     inactiveColor: Colors.white30,
                                     selectedColor: const Color(0xFFFFC84F),
@@ -216,23 +217,24 @@ class _OtpScreenState extends State<OtpScreen> {
                                 ),
 
                                 SizedBox(height: h * 0.03),
-
-                                /// SUBMIT BUTTON
-                                InkWell(
-                                  onTap: () {
-                                    if (otpValue.length != 6) {
-                                      setState(() {
-                                        errorMessage = "Please enter all 6 digits";
+                                Obx(() {
+                                  return CustomAppButton1(
+                                    onPlusTap: () {
+                                      if (otpValue.length != 6) {
+                                        setState(() {
+                                          errorMessage = "Please enter all 6 digits";
+                                        });
+                                        print(otpValue);
+                                        return;
+                                      }
+                                      controller.verifyotp({
+                                        "otp": otpValue,
                                       });
-                                      print(otpValue);
-                                      return;
-                                    }
-                                    controller.verifyotp({
-                                      "otp": otpValue,
-                                    });
-                                  },
-                                  child: const CreateNowButton(text: "Submit OTP"),
-                                ),
+                                    },
+                                    text: "Submit OTP",
+                                    isLoading: controller.isLoading.value,   // FIXED
+                                  );
+                                }),
                               ],
                             ),
                           ),

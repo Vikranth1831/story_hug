@@ -33,9 +33,9 @@ class CustomAppButton1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double buttonWidth = width ?? MediaQuery.of(context).size.width;
-    final double buttonHeight = height ?? 48;
-    final int borderRadius = radius ?? 24;
-    final Color textColor = textcolor ?? Colors.white;
+    final double buttonHeight = height ?? 50;
+    final int borderRadius = radius ?? 36;
+    final Color textColor = textcolor ?? Color(0xff333333);
 
     return SizedBox(
       width: buttonWidth,
@@ -67,7 +67,7 @@ class CustomAppButton1 extends StatelessWidget {
                     height: 24,
                     width: 24,
                     child: CircularProgressIndicator(
-                      color: Colors.white,
+                      color: Colors.black,
                       strokeWidth: 1.5,
                     ),
                   )

@@ -117,7 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage("assets/images/background_for_box.png"),
+                          image: AssetImage(
+                            "assets/images/background_for_box.png",
+                          ),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.circular(17),
@@ -142,7 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 8),
+                                        horizontal: 20,
+                                        vertical: 8,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: isLogin
                                             ? const Color(0xFFFFD54F)
@@ -152,7 +156,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Text(
                                         "Login",
                                         style: TextStyle(
-                                          color: isLogin ? Colors.black : Colors.white,
+                                          color: isLogin
+                                              ? Colors.black
+                                              : Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -169,7 +175,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 8),
+                                        horizontal: 20,
+                                        vertical: 8,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: !isLogin
                                             ? const Color(0xFFFFD54F)
@@ -179,7 +187,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Text(
                                         "Sign Up",
                                         style: TextStyle(
-                                          color: !isLogin ? Colors.black : Colors.white,
+                                          color: !isLogin
+                                              ? Colors.black
+                                              : Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -219,71 +229,73 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: authController.isLoading.value
                                         ? null
                                         : () async {
-                                      if (formKey.currentState!.validate()) {
-                                        String? fcmToken =
-                                        await FirebaseMessaging.instance.getToken();
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              String? fcmToken =
+                                                  await FirebaseMessaging
+                                                      .instance
+                                                      .getToken();
 
-                                        final data = {
-                                          "email": emailController.text.trim(),
-                                          "password": pass1Controller.text.trim(),
-                                          "fcm_token": fcmToken,
-                                          "device_type":
-                                          Platform.isIOS ? "ios" : "android",
-                                        };
+                                              final data = {
+                                                "email": emailController.text
+                                                    .trim(),
+                                                "password": pass1Controller.text
+                                                    .trim(),
+                                                "fcm_token": fcmToken,
+                                                "device_type": Platform.isIOS
+                                                    ? "ios"
+                                                    : "android",
+                                              };
 
-                                        authController.login(data);
-                                      }
-                                    },
+                                              authController.login(data);
+                                            }
+                                          },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFFFFD54F),
                                       minimumSize: Size(double.infinity, 48),
                                     ),
                                     child: authController.isLoading.value
                                         ? const SizedBox(
-                                      height: 22,
-                                      width: 22,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.black,
-                                        strokeWidth: 2,
-                                      ),
-                                    )
+                                            height: 22,
+                                            width: 22,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.black,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
                                         : const Text(
-                                      "Login",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
+                                            "Login",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                            ),
+                                          ),
                                   );
-                                })
+                                }),
                               ],
 
                               if (!isLogin) ...[
                                 _textField(
                                   controller: nameController,
-                                  hint: "name",
+                                  hint: "Name",
                                   isPassword: false,
                                   onEyeTap: null,
                                 ),
-
                                 const SizedBox(height: 15),
-
                                 _textField(
                                   controller: mobileController,
                                   hint: "Mobile",
                                   isPassword: false,
                                   onEyeTap: null,
                                 ),
-
                                 const SizedBox(height: 15),
-
                                 _textField(
                                   controller: emailController,
                                   hint: "Email",
                                   isPassword: false,
                                   onEyeTap: null,
                                 ),
-
                                 const SizedBox(height: 15),
-
                                 _textField(
                                   controller: pass1Controller,
                                   hint: "Password",
@@ -295,9 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   isVisible: passwordVisible1,
                                 ),
-
                                 const SizedBox(height: 15),
-
                                 _textField(
                                   controller: pass2Controller,
                                   hint: "Re-enter Password",
@@ -313,61 +323,75 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const SizedBox(height: 20),
 
                                 Obx(
-                                      () => ElevatedButton(
+                                  () => ElevatedButton(
                                     onPressed: authController.isLoading.value
                                         ? null
                                         : () async {
-                                      if (formKey.currentState!.validate()) {
-                                        if (pass1Controller.text != pass2Controller.text) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content:
-                                              Text("Passwords do not match"),
-                                            ),
-                                          );
-                                          return;
-                                        }
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              if (pass1Controller.text !=
+                                                  pass2Controller.text) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Passwords do not match",
+                                                    ),
+                                                  ),
+                                                );
+                                                return;
+                                              }
+                                              String? fcmToken =
+                                                  await FirebaseMessaging
+                                                      .instance
+                                                      .getToken();
+                                              final data = {
+                                                "name": nameController.text
+                                                    .trim(),
+                                                "email": emailController.text
+                                                    .trim(),
+                                                "password": pass1Controller.text
+                                                    .trim(),
+                                                "confirm_password":
+                                                    pass2Controller.text.trim(),
+                                                "phone_number": mobileController
+                                                    .text
+                                                    .trim(),
+                                                "fcm_token": fcmToken,
+                                                "device_type": Platform.isIOS
+                                                    ? "ios"
+                                                    : "android",
+                                              };
 
-                                        String? fcmToken =
-                                        await FirebaseMessaging.instance.getToken();
-
-                                        final data = {
-                                          "name": nameController.text.trim(),
-                                          "email": emailController.text.trim(),
-                                          "password": pass1Controller.text.trim(),
-                                          "confirm_password":
-                                          pass2Controller.text.trim(),
-                                          "phone_number":
-                                          mobileController.text.trim(),
-                                          "fcm_token": fcmToken,
-                                          "device_type":
-                                          Platform.isIOS ? "ios" : "android",
-                                        };
-
-                                        authController.register(data);
-                                      }
-                                    },
+                                              authController.register(data);
+                                            }
+                                          },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFFFFD54F),
-                                      minimumSize: const Size(double.infinity, 48),
+                                      minimumSize: const Size(
+                                        double.infinity,
+                                        48,
+                                      ),
                                     ),
                                     child: authController.isLoading.value
                                         ? const SizedBox(
-                                      height: 22,
-                                      width: 22,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.black,
-                                        strokeWidth: 2,
-                                      ),
-                                    )
+                                            height: 22,
+                                            width: 22,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.black,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
                                         : const Text(
-                                      "Sign Up Now",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
+                                            "Sign Up Now",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                            ),
+                                          ),
                                   ),
-                                )
+                                ),
                               ],
                             ],
                           ),
@@ -395,7 +419,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextFormField(
       controller: controller,
       obscureText: isPassword ? !isVisible : false,
-
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "$hint cannot be empty";
@@ -405,16 +428,12 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         return null;
       },
-
       style: const TextStyle(color: Colors.black),
-
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-
         hintText: hint,
         hintStyle: const TextStyle(color: Colors.black54),
-
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black26),
           borderRadius: BorderRadius.circular(12),
@@ -423,15 +442,14 @@ class _LoginScreenState extends State<LoginScreen> {
           borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(12),
         ),
-
         suffixIcon: isPassword
             ? IconButton(
-          icon: Icon(
-            isVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.black,
-          ),
-          onPressed: onEyeTap,
-        )
+                icon: Icon(
+                  isVisible ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.black,
+                ),
+                onPressed: onEyeTap,
+              )
             : null,
       ),
     );

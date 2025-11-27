@@ -16,26 +16,24 @@ import 'package:story_hug/utils/app_snackbar.dart';
 import '../repositories/auth_repository.dart';
 import '../models/login_model.dart';
 import '../services/AuthService.dart';
+
 class SendOtpController extends GetxController {
-  final  OtpSentRepository repository;
-
+  final OtpSentRepository repository;
   SendOtpController({required this.repository});
-
   var isLoading = false.obs;
-
   OTPSentModel? otpSentModel;
-
-
   Future<void> sendotp() async {
     try {
       isLoading.value = true;
-
-      otpSentModel= await repository.sendotp();
-      if (otpSentModel != null && otpSentModel?.success==true ) {
+      otpSentModel = await repository.sendotp();
+      if (otpSentModel != null && otpSentModel?.success == true) {
         print("Otp Sent");
         Get.to(() => OtpScreen());
       } else {
-         AppSnackBar.show(Get.context! , otpSentModel?.message ?? "Cannot Verify Now");
+        AppSnackBar.show(
+          Get.context!,
+          otpSentModel?.message ?? "Cannot Verify Now",
+        );
       }
     } catch (e) {
       //  AppSnackbar.exception(e.toString());

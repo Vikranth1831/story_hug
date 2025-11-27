@@ -13,8 +13,7 @@ const Color borderColor = Color(0xffe2e8f0);
 
 const LinearGradient kCommonGradient = LinearGradient(
   colors: [
-    Color(0xFFA258F7), // Purple
-    Color(0xFF726CF7), // Bluish Purple
-    Color(0xFF4280F6), // Blue
+    Color(0xFFFCDB69),
+    Color(0xFFFCBF5D),
   ],
 );

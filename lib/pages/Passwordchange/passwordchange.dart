@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/components/text_field.dart';
 import 'package:story_hug/controller/password_update_controller.dart';
@@ -35,7 +36,6 @@ class _PasswordchangeState extends State<Passwordchange> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xFF192346),
-
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
@@ -74,7 +74,7 @@ class _PasswordchangeState extends State<Passwordchange> {
                 InkWell(
                   onTap: ()
                   {
-                    context.pop();
+                    Get.back();
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20),
