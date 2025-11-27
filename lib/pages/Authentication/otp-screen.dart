@@ -37,6 +37,12 @@ class _OtpScreenState extends State<OtpScreen> {
     ),
   );
 
+  final SendOtpController otpsendcontroller = Get.put(
+    SendOtpController(
+      repository: otpsentRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
+
   String otpValue = "";
   String? errorMessage;
 
@@ -199,9 +205,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() => errorMessage = null);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                          content: Text("OTP Resent")));
+                                      otpsendcontroller.sendotp(false);
                                     },
                                     child: Text(
                                       "Resend OTP",

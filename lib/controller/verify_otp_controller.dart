@@ -7,6 +7,7 @@ import 'package:story_hug/pages/Section1/Home.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/lets-begin.dart';
 import 'package:story_hug/repositories/verify_otp_repository.dart';
+import 'package:story_hug/utils/app_snackbar.dart';
 
 import '../app_routes/app_routes.dart';
 import '../repositories/auth_repository.dart';
@@ -31,7 +32,7 @@ class VerifyOtpController extends GetxController {
 
         Get.to(()=>Passwordchange());
       } else {
-        // AppSnackbar.error(loginModel?.message ?? "Login failed");
+         AppSnackBar.show(Get.context! , otpVerifiedModel?.message ?? "");
       }
     } catch (e) {
       //  AppSnackbar.exception(e.toString());

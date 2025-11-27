@@ -28,7 +28,7 @@ class CreatechildrenController extends GetxController {
       createChildrenModel= await repository.createChildren(data);
       if (createChildrenModel != null && createChildrenModel?.success == true) {
         print("Created Children");
-        Get.offAll(() => ManageKids());
+        Get.to(() => ManageKids());
       } else {
         // AppSnackbar.error(loginModel?.message ?? "Login failed");
       }
