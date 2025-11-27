@@ -12,6 +12,7 @@ import '../app_routes/app_routes.dart';
 import '../components/CommonLoader.dart';
 import '../data/remote_data_source.dart';
 import '../services/AuthService.dart';
+import '../utils/back_button.dart';
 import 'Widgets/SubSubCategoryCard.dart';
 
 class Favorites extends StatefulWidget {
@@ -71,6 +72,8 @@ class _FavoritesState extends State<Favorites> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: h * 0.06),
+                CustomBackButton(size: MediaQuery.of(context).size.width),
+
 
                 Image.asset(
                   "assets/images/favoritesimage.png",

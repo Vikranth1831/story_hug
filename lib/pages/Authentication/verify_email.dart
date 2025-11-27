@@ -8,6 +8,7 @@ import '../../components/CustomAppButton.dart';
 import '../../controller/sent_otp_controller.dart';
 import '../../data/remote_data_source.dart';
 import '../../repositories/opt_sent_repository.dart';
+import '../../utils/back_button.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({super.key});
@@ -46,15 +47,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
             children: [
               SizedBox(height: h * 0.2),
               // 🔵 Back Button
-              Align(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: CircleIconButton(icon: Icons.chevron_left, w: w),
-                ),
-              ),
+              CustomBackButton(size: MediaQuery.of(context).size.width),
+
               SizedBox(height: h * 0.08),
               // 🔵 Centered Card
               Center(
