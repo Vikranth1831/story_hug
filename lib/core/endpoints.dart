@@ -33,6 +33,9 @@ class APIEndpointUrls {
   static const String verifyPayment='${ApiUrl}payment/verifypayment';
   static const String updatepassword='${AuthUrl}updatepassword';
   static const String selectchild='${children}/selectchild';
+  static const String fetchavators='${ApiUrl}/avatars/fetchavatar';
+
+
 
 
 }

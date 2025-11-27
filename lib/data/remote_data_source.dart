@@ -6,6 +6,7 @@ import 'package:story_hug/models/create_child_model.dart';
 import 'package:story_hug/models/default_voice_model.dart';
 import 'package:story_hug/models/gel_all_voices_model.dart';
 import 'package:story_hug/models/get_all_children_model.dart';
+import 'package:story_hug/models/get_avators.dart';
 import 'package:story_hug/models/otp_sent_model.dart';
 import 'package:story_hug/models/otp_verified_model.dart';
 import 'package:story_hug/models/register_model.dart';
@@ -35,6 +36,8 @@ abstract class RemoteDataSource {
   Future<CategoryModel?> fetchCategory();
   Future<SubCategoryModel?> fetchSubCategory(String catId);
   Future<GetAllChildrenModel?> getAllChildren();
+  Future<AvatorsModel?> getAvators();
+
   Future<OTPSentModel?> sendotp();
   Future<SubSubOfCategoryModel?> fetchSubSubCategory(String catId);
   Future<SubScriptionModel?> fetchSubscriptionPlans();
@@ -107,6 +110,22 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
+  @override
+  Future<AvatorsModel?> getAvators() async {
+    try {
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.fetchavators}",
+
+      );
+      AppLogger.log('fetched  avators: ${res.data}');
+      return AvatorsModel.fromJson(res.data);
+    } catch (e) {
+      // AppLogger.error('login : $e');
+      return null;
+    }
+  }
+
 
 
 

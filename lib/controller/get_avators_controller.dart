@@ -1,52 +1,42 @@
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
 import 'package:story_hug/app_routes/app_routes.dart';
-import 'package:story_hug/models/ParentNameModel.dart';
 import 'package:story_hug/models/create_child_model.dart';
-import 'package:story_hug/models/gel_all_voices_model.dart';
 import 'package:story_hug/models/get_all_children_model.dart';
+import 'package:story_hug/models/get_avators.dart';
 import 'package:story_hug/models/register_model.dart';
 
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/lets-begin.dart';
 import 'package:story_hug/repositories/create_child_repository.dart';
 import 'package:story_hug/repositories/get_all_children_repository.dart';
-import 'package:story_hug/repositories/get_all_voices_repository.dart';
+import 'package:story_hug/repositories/getavators_repository.dart';
 
 import '../repositories/auth_repository.dart';
 import '../models/login_model.dart';
-import '../repositories/getparent_details_repository.dart';
 import '../services/AuthService.dart';
-class GetParentDetailsController extends GetxController {
-  final  GetParentDetailsRepository repository;
+class GetAvatorsController extends GetxController {
+  final  GetavatorsRepository repository;
 
-  GetParentDetailsController({required this.repository});
+  GetAvatorsController({required this.repository});
 
   var isLoading = false.obs;
 
-  var ParentDetails = Data().obs;
-  var parentname="".obs;
+  var avatorsList = <Data>[].obs;
 
-  GetParentDetailsModel? getParentDetailsModel;
+  AvatorsModel? avatorsModel;
 
 
-  Future<void> getParentDetails() async {
+  Future<void> getAvators() async {
     try {
       isLoading.value = true;
 
-      print(":Came in controler");
-
-      getParentDetailsModel= await repository.getParentDetails();
-
-      if ( getParentDetailsModel!= null && getParentDetailsModel?.success == true) {
+      avatorsModel= await repository.getAvators();
+      if (avatorsModel != null && avatorsModel?.success == true) {
         isLoading.value=false;
-
-        ParentDetails.value = getParentDetailsModel!.data!;
-        print("Hello ${getParentDetailsModel}");
-        parentname.value=getParentDetailsModel?.data?.name ?? '';
+        avatorsList.assignAll(avatorsModel!.data ?? []);
+        print("Fetched  Children");
       } else {
-        print("Hello ${getParentDetailsModel}");
-
         // AppSnackbar.error(loginModel?.message ?? "Login failed");
       }
     } catch (e) {

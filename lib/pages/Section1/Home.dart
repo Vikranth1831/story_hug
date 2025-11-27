@@ -6,11 +6,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/CategoryController.dart';
+import 'package:story_hug/controller/ParentNameController.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
+import 'package:story_hug/repositories/getparent_details_repository.dart';
 import 'package:story_hug/utils/constants.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
@@ -31,20 +34,31 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool showMenu = false;
+  var parentname="".obs;
   final CategoryController categoryController = Get.put(
     CategoryController(
       categoryrepo: CategoryImpl(remoteDataSource: RemoteDataSourceImpl()),
     ),
   );
 
+  final GetParentDetailsController getparentsdetailscontroller = Get.put(
+    GetParentDetailsController(
+      repository: GetParentDetailsRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+    ),
+  );
   @override
   void initState() {
     categoryController.fetchCategory();
+    getparentsdetailscontroller.getParentDetails();
+    parentname.value=getparentsdetailscontroller.parentname.value;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    getparentsdetailscontroller.getParentDetails();
+
+    print(parentname);
     final double h = SizeConfig.screenHeight;
     final double w = SizeConfig.screenWidth;
 
@@ -106,13 +120,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               SizedBox(height: h * 0.005),
 
-                              const Text(
-                                "Vikranth",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 38,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: "Arial",
+                              Obx(
+        ()=> Text(
+                                  '${parentname.value}',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 38,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Arial",
+                                  ),
                                 ),
                               ),
 
