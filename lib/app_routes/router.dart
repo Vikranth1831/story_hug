@@ -40,7 +40,6 @@ final GoRouter appRouter = GoRouter(
   // observers: [CrashlyticsNavObserver()],
   // overridePlatformDefaultLocation: false,
   routes: [
-
     GoRoute(
       path: '/',
       pageBuilder: (context, state) {
