@@ -26,13 +26,14 @@ class SendOtpController extends GetxController {
   OTPSentModel? otpSentModel;
 
 
-  Future<void> sendotp() async {
+  Future<void> sendotp(bool fromverify) async {
     try {
       isLoading.value = true;
 
       otpSentModel= await repository.sendotp();
       if (otpSentModel != null && otpSentModel?.success==true ) {
         print("Otp Sent");
+        if(fromverify)
         Get.to(() => OtpScreen());
       } else {
          AppSnackBar.show(Get.context! , otpSentModel?.message ?? "Cannot Verify Now");

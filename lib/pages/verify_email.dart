@@ -153,7 +153,7 @@ class _VerificationCardState extends State<VerificationCard> {
                       color: Colors.white,
                       fontSize: widget.w * 0.055,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Arial Rounded MT Bold',
+                      fontFamily: 'Arial',
                     ),
                   ),
 
@@ -163,7 +163,7 @@ class _VerificationCardState extends State<VerificationCard> {
                       color: Colors.white,
                       fontSize: widget.w * 0.045,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Arial Rounded MT Bold',
+                      fontFamily: 'Arial',
                     ),
                   ),
 
@@ -173,7 +173,7 @@ class _VerificationCardState extends State<VerificationCard> {
                   GestureDetector(
                     onTap:(){
                      // context.push('/otp-screen');
-                     controller.sendotp();
+                     controller.sendotp(true);
                     },
                     child: Container(
                       width: double.infinity,
@@ -194,7 +194,7 @@ class _VerificationCardState extends State<VerificationCard> {
                             color: const Color(0xFF333333),
                             fontSize: widget.w * 0.042,
                             fontWeight: FontWeight.bold,     // ★ bold added
-                            fontFamily: 'Arial Rounded MT Bold',
+                            fontFamily: 'Arial',
                           ),
                         ),
                       ),

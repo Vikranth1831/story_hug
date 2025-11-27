@@ -3,10 +3,12 @@ import 'dart:ui';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_hug/pages/verify_email.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../controller/AuthController.dart';
@@ -367,12 +369,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                           color: Colors.black, fontSize: 16),
                                     ),
                                   ),
-                                )
+                                ),
+
                               ],
                             ],
                           ),
                         ),
                       ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16,top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                          Spacer(),
+                        InkWell(
+                          onTap: ()
+                          {
+                            Get.to(()=>VerifyEmail());
+                          },
+                          child: Text('Forgot Password',style: TextStyle(
+                              fontFamily: 'Arial',
+                              color: Colors.black
+                          ),),
+                        )
+                      ],
                     ),
                   ),
                   SizedBox(height: h * 0.1),
