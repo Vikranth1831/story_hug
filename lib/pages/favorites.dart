@@ -8,10 +8,10 @@ import 'package:story_hug/controller/faverateController.dart';
 import 'package:story_hug/repositories/faveratesRepo.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
-import '../../app_routes/app_routes.dart';
-import '../../components/CommonLoader.dart';
-import '../../data/remote_data_source.dart';
-import '../Widgets/SubSubCategoryCard.dart';
+import '../app_routes/app_routes.dart';
+import '../components/CommonLoader.dart';
+import '../data/remote_data_source.dart';
+import 'Widgets/SubSubCategoryCard.dart';
 
 class Favorites extends StatefulWidget {
   const Favorites({super.key});
@@ -126,12 +126,13 @@ class _FavoritesState extends State<Favorites> {
                       itemBuilder: (context, index) {
                         final item = fav[index];
                         return SubSubCategoryCard(
+                          content: item.story?.content ?? "",
                           index: index,
                           isTablet: isTablet,
                           title: item.story?.title ?? "",
                           imageUrl: item.story?.image ?? "",
                           duration: 10,
-                          onPlayTap: () {
+                          onTap: () {
                             Get.toNamed(
                               Routes.PlayStory,
                               arguments: {'id': item.id},

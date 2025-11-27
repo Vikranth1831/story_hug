@@ -1,18 +1,19 @@
 import '../data/remote_data_source.dart';
+import '../models/FetchStorysModel.dart';
 import '../models/SubCategoryModel.dart';
 import '../models/SubScriptionModel.dart';
 import '../models/SubSubOfCategoryModel.dart';
 
-abstract class SubScriptionRepo {
-  Future<SubScriptionModel?> fetchSubscriptionPlans();
+abstract class FetchStoryRepo {
+  Future<FetchStorysModel?> fetchStory(String storyId);
 }
 
-class SubScriptionImpl implements SubScriptionRepo {
+class FetchStoryImpl implements FetchStoryRepo {
   RemoteDataSource remoteDataSource;
-  SubScriptionImpl({required this.remoteDataSource});
+  FetchStoryImpl({required this.remoteDataSource});
 
   @override
-  Future<SubScriptionModel?> fetchSubscriptionPlans() async {
-    return await remoteDataSource.fetchSubscriptionPlans();
+  Future<FetchStorysModel?> fetchStory(String storyId) async {
+    return await remoteDataSource.fetchStory(storyId);
   }
 }

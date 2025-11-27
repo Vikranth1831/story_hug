@@ -4,6 +4,7 @@ import 'package:story_hug/models/CategoryModel.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
 import 'package:story_hug/repositories/faveratesRepo.dart';
 
+import '../models/AddToFaverateModel.dart';
 import '../models/FaveratesModel.dart';
 import '../models/SubCategoryModel.dart';
 import '../models/SubSubOfCategoryModel.dart';
@@ -43,7 +44,7 @@ class AddToFaverateController extends GetxController {
   AddToFaverateController({required this.faveratesListRepo});
 
   var isLoading = false.obs;
-  Rx<FaveratesModel?> favrateList = Rx<FaveratesModel?>(null);
+  Rx<AddToFaverateModel?> favrateList = Rx<AddToFaverateModel?>(null);
 
   final RxnString errorMessage = RxnString();
 

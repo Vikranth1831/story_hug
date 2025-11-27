@@ -1,4 +1,5 @@
 import '../data/remote_data_source.dart';
+import '../models/AddToFaverateModel.dart';
 import '../models/FaveratesModel.dart';
 import '../models/SubCategoryModel.dart';
 import '../models/SubScriptionModel.dart';
@@ -6,7 +7,7 @@ import '../models/SubSubOfCategoryModel.dart';
 
 abstract class FaveratesListRepo {
   Future<FaveratesModel?> fetchFaverateList(String childId);
-  Future<FaveratesModel?> addToFaverateList(Map<String, dynamic> data);
+  Future<AddToFaverateModel?> addToFaverateList(Map<String, dynamic> data);
 }
 
 class FaveratesListImpl implements FaveratesListRepo {
@@ -19,7 +20,7 @@ class FaveratesListImpl implements FaveratesListRepo {
   }
 
   @override
-  Future<FaveratesModel?> addToFaverateList(Map<String, dynamic> data) async {
+  Future<AddToFaverateModel?> addToFaverateList(Map<String, dynamic> data) async {
     return await remoteDataSource.addFaveraToteList(data);
   }
 }

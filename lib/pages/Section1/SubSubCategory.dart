@@ -204,7 +204,7 @@ class _SubSubCategoryState extends State<SubSubCategory> {
                           title: item.subofSubcategoryName ?? "Untitled",
                           imageUrl: item.image ?? "",
                           duration: 10,
-                          onPlayTap: () {
+                          onTap: () {
                             Get.toNamed(
                               Routes.PlayStory,
                               arguments: {'id': item.id},

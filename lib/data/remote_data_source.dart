@@ -9,9 +9,12 @@ import 'package:story_hug/models/register_model.dart';
 import 'package:story_hug/models/sample_text_model.dart';
 import 'package:story_hug/repositories/get_all_children_repository.dart';
 import '../core/endpoints.dart';
+import '../models/AddToFaverateModel.dart';
 import '../models/CategoryModel.dart';
 import '../models/CreatePaymentModel.dart';
 import '../models/FaveratesModel.dart';
+import '../models/FetchStorysModel.dart';
+import '../models/StoryDetailModel.dart';
 import '../models/SubCategoryModel.dart';
 import '../models/SubSubOfCategoryModel.dart';
 import '../models/VerifyPaymentModel.dart';
@@ -38,19 +41,11 @@ abstract class RemoteDataSource {
   Future<OTPVerifiedModel?> verifyOtp(Map<String, dynamic> data);
   Future<SelectChildModel?> selectchild(Map<String, dynamic> data);
   Future<PasswordUpdateModel?> updatepassword(Map<String, dynamic> data);
-  Future<FaveratesModel?> addFaveraToteList(Map<String, dynamic> data);
-
-
-
-
-
-
+  Future<AddToFaverateModel?> addFaveraToteList(Map<String, dynamic> data);
+  Future<FetchStorysModel?> fetchStory(String storyId);
   Future<SampleTextModel?> getSampleText();
-
   Future<SaveAudioModel?> saveaudio(FormData data);
-
-
-
+  Future<StoryDetailModel?> fetchStoryDetails(String storyId);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -67,6 +62,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
   @override
   Future<SaveAudioModel?> saveaudio(FormData data) async {
     try {
@@ -75,22 +71,17 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         data: data,
         options: Options(
           contentType: "multipart/form-data",
-          headers: {
-            "Accept": "application/json",
-          },
+          headers: {"Accept": "application/json"},
         ),
       );
 
       AppLogger.log('saveAudio : ${res.data}');
       return SaveAudioModel.fromJson(res.data);
-
     } catch (e) {
       print('saveAudio error : $e');
       return null;
     }
   }
-
-
 
   @override
   Future<RegisterModel?> register(Map<String, dynamic> data) async {
@@ -221,13 +212,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
   @override
   Future<SampleTextModel?> getSampleText() async {
     try {
-      final res = await ApiClient.get(
-        "${APIEndpointUrls.getSampleText}",
-
-      );
+      final res = await ApiClient.get("${APIEndpointUrls.getSampleText}");
       AppLogger.log('Register : ${res.data}');
       return SampleTextModel.fromJson(res.data);
     } catch (e) {
@@ -263,6 +252,33 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
+  Future<FetchStorysModel?> fetchStory(String storyId) async {
+    try {
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.fetchStorys}?subof_subcategory_id=${storyId}",
+      );
+      AppLogger.log('fetch Storys : ${res.data}');
+      return FetchStorysModel.fromJson(res.data);
+    } catch (e) {
+      AppLogger.error('fetch Storys : $e');
+      return null;
+    }
+  }
+  @override
+  Future<StoryDetailModel?> fetchStoryDetails(String storyId) async {
+    try {
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.fetchStoryDetail}?subof_subcategory_id=${storyId}",
+      );
+      AppLogger.log('fetch Story Details : ${res.data}');
+      return StoryDetailModel.fromJson(res.data);
+    } catch (e) {
+      AppLogger.error('fetch Storys : $e');
+      return null;
+    }
+  }
+
+  @override
   Future<SubSubOfCategoryModel?> fetchSubSubCategory(String catId) async {
     try {
       final res = await ApiClient.get(
@@ -292,7 +308,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<FaveratesModel?> fetchFaverateList(String childId) async {
     try {
       final res = await ApiClient.get(
-        "${APIEndpointUrls.faverates}?child_id=${childId}",
+        "${APIEndpointUrls.faverates}/${childId}",
       );
       AppLogger.log('fetch Faverates List : ${res.data}');
       return FaveratesModel.fromJson(res.data);
@@ -303,14 +319,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<FaveratesModel?> addFaveraToteList(Map<String, dynamic> data) async {
+  Future<AddToFaverateModel?> addFaveraToteList(Map<String, dynamic> data) async {
     try {
       final res = await ApiClient.post(
         "${APIEndpointUrls.addfaverates}",
         data: data,
       );
       AppLogger.log('fetch Faverates List : ${res.data}');
-      return FaveratesModel.fromJson(res.data);
+      return AddToFaverateModel.fromJson(res.data);
     } catch (e) {
       AppLogger.error('fetch Faverates List: $e');
       return null;

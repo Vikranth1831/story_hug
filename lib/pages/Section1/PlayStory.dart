@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:story_hug/utils/media_query_helper.dart'; // Your SizeConfig
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter/material.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../controller/fetchStoryDetailsController.dart';
+import '../../data/remote_data_source.dart';
+import '../../repositories/FetchStoryDetailsRepo.dart';
 
 class PlayStory extends StatefulWidget {
   const PlayStory({super.key});
@@ -16,6 +23,20 @@ class PlayStory extends StatefulWidget {
 class _PlayStoryState extends State<PlayStory> {
   bool isTablet = false;
   bool isLiked = false;
+  final FetchStoryDetailsController fetchStoryDetailsController = Get.put(
+    FetchStoryDetailsController(
+      fetchStoryDetailsRepo: FetchStoryDetailsImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
+    ),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+
+    fetchStoryDetailsController.fetchStoryDetails("");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +50,6 @@ class _PlayStoryState extends State<PlayStory> {
         height: double.infinity,
         width: double.infinity,
 
-        // BACKGROUND
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/bgimage.png"),
@@ -45,11 +65,12 @@ class _PlayStoryState extends State<PlayStory> {
               children: [
                 SizedBox(height: h * 0.01),
 
-                // BACK BUTTON
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () => context.pop(),
+                      onTap: () {
+                        Get.back();
+                      },
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           vertical: isTablet ? 14 : 10,
@@ -58,10 +79,7 @@ class _PlayStoryState extends State<PlayStory> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFFFCDB69),
-                              Color(0xFFFCBF5D),
-                            ],
+                            colors: [Color(0xFFFCDB69), Color(0xFFFCBF5D)],
                           ),
                         ),
                         child: const Text(
@@ -79,8 +97,6 @@ class _PlayStoryState extends State<PlayStory> {
                 ),
 
                 SizedBox(height: h * 0.015),
-
-                // LOGO CENTER
                 Center(
                   child: Image.asset(
                     "assets/images/logo.png",
@@ -127,7 +143,9 @@ class _PlayStoryState extends State<PlayStory> {
                         child: Icon(
                           isLiked ? Icons.favorite : Icons.favorite_border,
                           size: isTablet ? 40 : 32,
-                          color: isLiked ? Color(0xffF9E2A1) :Color(0xffF9E2A1),
+                          color: isLiked
+                              ? Color(0xffF9E2A1)
+                              : Color(0xffF9E2A1),
                         ),
                       ),
                     ),
@@ -193,14 +211,16 @@ class _PlayStoryState extends State<PlayStory> {
                               Text(
                                 "0:42",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               Text(
                                 "2:42",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),

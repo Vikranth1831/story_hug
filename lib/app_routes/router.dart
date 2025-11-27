@@ -24,9 +24,9 @@ import 'package:story_hug/pages/Section1/Home.dart';
 
 import 'package:story_hug/pages/splash_screen.dart';
 import 'package:story_hug/pages/verify_email.dart';
-import 'package:story_hug/pages/Section1/playicard.dart';
+import 'package:story_hug/pages/Section1/PlayStory.dart';
 import 'package:story_hug/pages/SubScription.dart';
-import 'package:story_hug/pages/favorites/favorites.dart';
+import 'package:story_hug/pages/favorites.dart';
 import '../pages/Authentication/otp-screen.dart';
 import '../pages/Authentication/sign_up_screen.dart';
 import '../pages/creating_profile_for_kids/create_profile_forkids.dart';

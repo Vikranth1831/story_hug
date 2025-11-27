@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../utils/spinkittsLoader.dart';
@@ -7,6 +8,7 @@ import '../../utils/spinkittsLoader.dart';
 class SubCategoryCommonCard extends StatelessWidget {
   final String? imageUrl;
   final String title;
+  final String? content;
   final bool isTablet;
   final VoidCallback? onTap;
 
@@ -14,6 +16,7 @@ class SubCategoryCommonCard extends StatelessWidget {
     Key? key,
     required this.imageUrl,
     required this.title,
+     this.content,
     required this.isTablet,
     this.onTap,
   }) : super(key: key);
@@ -74,11 +77,29 @@ class SubCategoryCommonCard extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style:  TextStyle(
                 color: Color(0xff333333),
                 fontSize: 14,
                 fontFamily: "Arial",
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+
+            SizedBox(
+              height: 50,
+              child: Html(
+                data: """<p>$content</p>""",
+                style: {
+                  "p": Style(
+                    color: Color(0xff333333),
+                    fontSize: FontSize(12),
+                    fontFamily: 'Arial',
+                    fontWeight: FontWeight.w400,
+                    margin: Margins.zero,
+                    maxLines: 2, // Supported inside Style
+                    textOverflow: TextOverflow.ellipsis,
+                  ),
+                },
               ),
             ),
           ],

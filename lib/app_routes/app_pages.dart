@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:story_hug/pages/Section1/StoryList.dart';
 import 'package:story_hug/pages/profile.dart';
 import '../binding/subcategory_binding.dart';
 import '../pages/Authentication/choose_profile.dart';
@@ -9,11 +10,11 @@ import '../pages/Reminder/reminders.dart';
 import '../pages/Section1/SubSubCategory.dart';
 import '../pages/Section1/SubCategory.dart';
 import '../pages/Section1/Home.dart';
-import '../pages/Section1/playicard.dart';
+import '../pages/Section1/PlayStory.dart';
 import '../pages/SubScription.dart';
 import '../pages/creating_profile_for_kids/create_profile_forkids.dart';
 import '../pages/creating_profile_for_kids/manage_kids.dart';
-import '../pages/favorites/favorites.dart';
+import '../pages/favorites.dart';
 import '../pages/lets-begin.dart';
 import '../pages/Authentication/login_screen.dart';
 import '../pages/recording_voice/recording_voice.dart';
@@ -52,6 +53,7 @@ class AppRoutes {
     GetPage(name: Routes.Passwordchange, page: () => Passwordchange()),
     GetPage(name: Routes.LetsBegin, page: () => LetsBegin()),
     GetPage(name: Routes.ChooseProfile, page: () => ChooseProfile()),
+    GetPage(name: Routes.StoryList, page: () => StoryList()),
 
   ];
 }
