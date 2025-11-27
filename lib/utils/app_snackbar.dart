@@ -21,6 +21,7 @@ class AppSnackBar {
         top: 20,
         left: 12,
         right: 12,
+        bottom: 40,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

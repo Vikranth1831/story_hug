@@ -43,22 +43,22 @@ class ApiClient {
             return handler.next(options);
           }
 
-          // final isExpired = await AuthService.isTokenExpired();
-          // if (isExpired) {
-          //   debugPrint('Token expired → trying refresh...');
-          //   final refreshed = await _refreshToken();
-          //   if (!refreshed) {
-          //     debugPrint('❌ Token refresh failed, logging out...');
-          //     await AuthService.logout();
-          //     return handler.reject(
-          //       DioException(
-          //         requestOptions: options,
-          //         error: 'Token refresh failed, please log in again',
-          //         type: DioExceptionType.cancel,
-          //       ),
-          //     );
-          //   }
-          // }
+          final isExpired = await AuthService.isTokenExpired();
+          if (isExpired) {
+            debugPrint('Token expired → trying refresh...');
+            final refreshed = await _refreshToken();
+            if (!refreshed) {
+              debugPrint('❌ Token refresh failed, logging out...');
+              await AuthService.logout();
+              return handler.reject(
+                DioException(
+                  requestOptions: options,
+                  error: 'Token refresh failed, please log in again',
+                  type: DioExceptionType.cancel,
+                ),
+              );
+            }
+          }
 
           final accessToken = await AuthService.getAccessToken();
           if (accessToken?.isNotEmpty == true) {
@@ -87,6 +87,11 @@ class ApiClient {
           if (status == 422) {
             // treat 422 as non-exceptional, let the caller handle the payload
             debugPrint('422 response — forwarding to caller for handling');
+            return handler.next(response);
+          }
+          if (status == 400) {
+            // treat 422 as non-exceptional, let the caller handle the payload
+            debugPrint('400 response — forwarding to caller for handling');
             return handler.next(response);
           }
           if (status == 409) {

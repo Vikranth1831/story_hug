@@ -11,6 +11,7 @@ import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/lets-begin.dart';
 import 'package:story_hug/repositories/create_child_repository.dart';
 import 'package:story_hug/repositories/opt_sent_repository.dart';
+import 'package:story_hug/utils/app_snackbar.dart';
 
 import '../repositories/auth_repository.dart';
 import '../models/login_model.dart';
@@ -32,9 +33,9 @@ class SendOtpController extends GetxController {
       otpSentModel= await repository.sendotp();
       if (otpSentModel != null && otpSentModel?.success==true ) {
         print("Otp Sent");
-        Get.offAll(() => OtpScreen());
+        Get.to(() => OtpScreen());
       } else {
-        // AppSnackbar.error(loginModel?.message ?? "Login failed");
+         AppSnackBar.show(Get.context! , otpSentModel?.message ?? "Cannot Verify Now");
       }
     } catch (e) {
       //  AppSnackbar.exception(e.toString());
