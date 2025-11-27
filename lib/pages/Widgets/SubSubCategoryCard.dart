@@ -4,72 +4,104 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:story_hug/utils/constants.dart';
 
+import '../../controller/faverateController.dart';
+import '../../data/remote_data_source.dart';
+import '../../repositories/faveratesRepo.dart';
 import '../../utils/media_query_helper.dart';
 import '../../utils/spinkittsLoader.dart';
 
 class SubSubCategoryCard extends StatelessWidget {
   final int index;
   final bool isTablet;
-
+  final bool? isFav;
+  final bool? showFav;
   final String title;
   final String? content;
   final String imageUrl;
   final int duration;
   final VoidCallback? onTap;
+  final VoidCallback? onTapfav;
 
-  const SubSubCategoryCard({
+  SubSubCategoryCard({
     Key? key,
     required this.index,
     required this.isTablet,
-
+    this.isFav,
+    this.showFav,
     required this.title,
     this.content,
     required this.imageUrl,
     required this.duration,
     this.onTap,
+    this.onTapfav,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final h = size.height;
-    return GestureDetector(onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white30,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: const [
-            BoxShadow(color: Colors.black26, blurRadius: 1),
-          ],
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 1)],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl ?? "",
-                width: SizeConfig.screenWidth,
-                height: isTablet ? h * 0.23 : h * 0.26,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => SizedBox(
-                  width: SizeConfig.screenWidth,
-                  height: isTablet ? h * 0.23 : h * 0.26,
-                  child: Center(child: spinkits.getSpinningLinespinkit()),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  width: SizeConfig.screenWidth,
-                  height: isTablet ? h * 0.23 : h * 0.26,
-                  color: const Color(0xffF8FAFE),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.broken_image_outlined,
-                    size: 48,
-                    color: Colors.grey.shade500,
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl ?? "",
+                    width: SizeConfig.screenWidth,
+                    height: isTablet ? h * 0.23 : h * 0.26,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => SizedBox(
+                      width: SizeConfig.screenWidth,
+                      height: isTablet ? h * 0.23 : h * 0.26,
+                      child: Center(child: spinkits.getSpinningLinespinkit()),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      width: SizeConfig.screenWidth,
+                      height: isTablet ? h * 0.23 : h * 0.26,
+                      color: const Color(0xffF8FAFE),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.broken_image_outlined,
+                        size: 48,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                if(showFav==true)...[
+                  Positioned(
+                    top: 10,
+                    right: 20,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.40),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        onPressed: onTapfav,
+                        icon: Icon(
+                          (isFav ?? false) ? Icons.favorite : Icons.favorite_border,
+                          size: isTablet ? 40 : 32,
+                          color: const Color(0xffF9E2A1),
+                        ),
+                        padding: EdgeInsets.all(isTablet ? 10 : 8),
+                        splashRadius: isTablet ? 30 : 25,
+                      ),
+                    ),
+                  ),
+                ]
+              ],
             ),
 
             const SizedBox(height: 12),
@@ -86,11 +118,13 @@ class SubSubCategoryCard extends StatelessWidget {
                     color: Color(0xff444444),
                   ),
                 ),
-                const Icon(Icons.download_rounded,
-                    size: 26, color: Color(0xff444444)),
+                const Icon(
+                  Icons.download_rounded,
+                  size: 26,
+                  color: Color(0xff444444),
+                ),
               ],
             ),
-
 
             SizedBox(
               height: 50,

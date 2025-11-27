@@ -36,6 +36,7 @@ class _FavoritesState extends State<Favorites> {
       ),
     ),
   );
+  final ValueNotifier<bool> isLikedNotifier = ValueNotifier<bool>(false);
 
   @override
   void initState() {
@@ -121,11 +122,32 @@ class _FavoritesState extends State<Favorites> {
                       itemCount: fav.length,
                       shrinkWrap:
                           true, // 👈 important since we're inside SingleChildScrollView
-                      physics:
-                          const NeverScrollableScrollPhysics(), // 👈 avoid nested scroll conflict
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         final item = fav[index];
                         return SubSubCategoryCard(
+                          showFav: true,
+                          isFav: item.isFavourated ?? false,
+                          onTapfav: () async {
+                            final newStatus = !isLikedNotifier.value;
+
+                            isLikedNotifier.value =
+                                newStatus; // Optimistic update
+
+                            await addToFaverateController.addToFaveratesList({
+                              "story_id": item.storyId.toString(),
+                              "child_id": "1",
+                            });
+
+                            if (addToFaverateController.errorMessage.value !=
+                                null) {
+                              isLikedNotifier.value = !newStatus;
+                              Get.snackbar(
+                                "Error",
+                                "Failed to update favorite",
+                              );
+                            }
+                          },
                           content: item.story?.content ?? "",
                           index: index,
                           isTablet: isTablet,
@@ -134,8 +156,11 @@ class _FavoritesState extends State<Favorites> {
                           duration: 10,
                           onTap: () {
                             Get.toNamed(
-                              Routes.PlayStory,
-                              arguments: {'id': item.id},
+                              Routes.StoryList,
+                              arguments: {
+                                'id': item.parentId,
+                                'name': item.story?.title ?? "",
+                              },
                             );
                           },
                         );

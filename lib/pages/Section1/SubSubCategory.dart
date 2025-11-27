@@ -198,7 +198,7 @@ class _SubSubCategoryState extends State<SubSubCategory> {
                       childCount: list.length,
                       itemBuilder: (context, index) {
                         final item = list[index];
-                        return SubSubCategoryCard(
+                        return SubSubCategoryCard(showFav: false,
                           index: index,
                           isTablet: isTablet,
                           title: item.subofSubcategoryName ?? "Untitled",
@@ -206,8 +206,8 @@ class _SubSubCategoryState extends State<SubSubCategory> {
                           duration: 10,
                           onTap: () {
                             Get.toNamed(
-                              Routes.PlayStory,
-                              arguments: {'id': item.id},
+                              Routes.StoryList,
+                              arguments: {'id': item.id, 'name': item.subofSubcategoryName,},
                             );
                           },
                         );

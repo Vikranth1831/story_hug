@@ -39,6 +39,7 @@ class Stroy {
   String? suitableFor;
   bool? status;
   String? language;
+  bool? isFavorate;
   String? createdAt;
   String? updatedAt;
 
@@ -54,6 +55,7 @@ class Stroy {
         this.suitableFor,
         this.status,
         this.language,
+        this.isFavorate,
         this.createdAt,
         this.updatedAt});
 
@@ -69,6 +71,7 @@ class Stroy {
     suitableFor = json['suitable_for'];
     status = json['status'];
     language = json['language'];
+    isFavorate = json['is_favorate'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -86,6 +89,7 @@ class Stroy {
     data['suitable_for'] = this.suitableFor;
     data['status'] = this.status;
     data['language'] = this.language;
+    data['is_favorate'] = this.isFavorate;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     return data;

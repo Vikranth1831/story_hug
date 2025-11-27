@@ -6,7 +6,6 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:story_hug/controller/fetchStoryController.dart';
 import 'package:story_hug/repositories/FetchStoryRepo.dart';
-
 import '../../CustomTopBar.dart';
 import '../../app_routes/app_routes.dart';
 import '../../components/CommonLoader.dart';
@@ -39,7 +38,7 @@ class _StoryListState extends State<StoryList> {
 
     final args = Get.arguments as Map<String, dynamic>?;
 
-    final String storyId = args?['storyId']?.toString() ?? '';
+    final String storyId = args?['id']?.toString() ?? '';
     catName = args?['name'] ?? 'Stories';
 
     if (storyId.isNotEmpty) {
@@ -182,9 +181,9 @@ class _StoryListState extends State<StoryList> {
                         isTablet: isTablet,
                         onTap: () {
                           Get.toNamed(
-                            Routes.StoryList,
+                            Routes.PlayStory,
                             arguments: {
-                              'storyId': subCat.categoryId,
+                              'storyId': subCat.id,
                               'catName': catName,
                               'name': subCat.content,
                             },

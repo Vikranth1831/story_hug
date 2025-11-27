@@ -27,13 +27,14 @@ class Story {
   String? title;
   String? content;
   String? description;
-  Null? image;
+  String? image;
   int? categoryId;
   int? subcategoryId;
   int? subofSubcategoryId;
   String? suitableFor;
   bool? status;
   String? language;
+  bool? isFavorate;
   String? createdAt;
   String? updatedAt;
 
@@ -49,6 +50,7 @@ class Story {
         this.suitableFor,
         this.status,
         this.language,
+        this.isFavorate,
         this.createdAt,
         this.updatedAt});
 
@@ -64,6 +66,7 @@ class Story {
     suitableFor = json['suitable_for'];
     status = json['status'];
     language = json['language'];
+    isFavorate = json['is_favorate'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -81,6 +84,7 @@ class Story {
     data['suitable_for'] = this.suitableFor;
     data['status'] = this.status;
     data['language'] = this.language;
+    data['is_favorate'] = this.isFavorate;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     return data;

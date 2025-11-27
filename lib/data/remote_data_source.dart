@@ -268,7 +268,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<StoryDetailModel?> fetchStoryDetails(String storyId) async {
     try {
       final res = await ApiClient.get(
-        "${APIEndpointUrls.fetchStoryDetail}?subof_subcategory_id=${storyId}",
+        "${APIEndpointUrls.fetchStoryDetail}/${storyId}",
       );
       AppLogger.log('fetch Story Details : ${res.data}');
       return StoryDetailModel.fromJson(res.data);
@@ -325,10 +325,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         "${APIEndpointUrls.addfaverates}",
         data: data,
       );
-      AppLogger.log('fetch Faverates List : ${res.data}');
+      AppLogger.log('add Faverates List : ${res.data}');
       return AddToFaverateModel.fromJson(res.data);
     } catch (e) {
-      AppLogger.error('fetch Faverates List: $e');
+      AppLogger.error('add Faverates List: $e');
       return null;
     }
   }
