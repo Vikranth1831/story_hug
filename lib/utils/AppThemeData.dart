@@ -38,27 +38,27 @@ class AppTheme {
           fontFamily: "Inter",
         ),
         filled: true,
-        fillColor: Colors.black,
+        fillColor: Color(0xffFFFFFF),
         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          borderSide: BorderSide(color: Color(0xFF98A2C5), width: 4),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          borderSide: BorderSide(color: Color(0xFF98A2C5), width: 4),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          borderSide: BorderSide(color: Color(0xFF98A2C5), width: 4),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          borderSide: BorderSide(color: Color(0xFF98A2C5), width: 4),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: Color(0xff7C7C7C), width: 1),
+          borderSide: BorderSide(color: Color(0xFF98A2C5), width: 4),
         ),
         errorStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
       ),

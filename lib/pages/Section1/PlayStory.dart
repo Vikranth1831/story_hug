@@ -12,6 +12,7 @@ import '../../controller/fetchStoryDetailsController.dart';
 import '../../data/remote_data_source.dart';
 import '../../repositories/FetchStoryDetailsRepo.dart';
 import '../../repositories/faveratesRepo.dart';
+import '../../services/AuthService.dart';
 import '../../utils/constants.dart';
 
 class PlayStory extends StatefulWidget {
@@ -433,11 +434,11 @@ class _PlayStoryState extends State<PlayStory> {
 
                                   isLikedNotifier.value =
                                       newStatus; // Optimistic UI update
-
+                                  final savedChildId = await AuthService.getUserChildId();
                                   await addToFaverateController
                                       .addToFaveratesList({
                                         "story_id": story.id,
-                                        "child_id": "1",
+                                        "child_id": savedChildId,
                                       });
 
                                   if (addToFaverateController

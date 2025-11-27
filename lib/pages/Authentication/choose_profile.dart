@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:story_hug/components/create_now_button.dart';
 import 'package:story_hug/controller/select_child_controller.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/create_profile_forkids.dart';
 import 'package:story_hug/repositories/select_child_repository.dart';
+import 'package:story_hug/utils/AppLogger.dart';
 import 'package:story_hug/utils/app_snackbar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
-
-import '../../app_routes/app_routes.dart';
 import '../../controller/getAllChildrenController.dart';
 import '../../data/remote_data_source.dart';
-import '../../repositories/get_all_children_repository.dart'; // Your SizeConfig
+import '../../repositories/get_all_children_repository.dart';
+import '../../services/AuthService.dart';
+
 class ChooseProfile extends StatefulWidget {
   const ChooseProfile({super.key});
 
@@ -22,7 +20,8 @@ class ChooseProfile extends StatefulWidget {
 }
 
 class _ChooseProfileState extends State<ChooseProfile> {
-  int? selectedIndex;
+  // 👇 Replaces int? selectedIndex;
+  final ValueNotifier<int?> selectedIndexNotifier = ValueNotifier<int?>(null);
 
   final Getallchildrencontroller controller = Get.put(
     Getallchildrencontroller(
@@ -34,14 +33,21 @@ class _ChooseProfileState extends State<ChooseProfile> {
 
   final SelectChildController selectcontroller = Get.put(
     SelectChildController(
-      repository: SelectChildRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+      repository:
+      SelectChildRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
     ),
   );
 
   @override
   void initState() {
     super.initState();
-    controller.getAllChildren();   // 🔥 API CALL
+    controller.getAllChildren(); // 🔥 API CALL
+  }
+
+  @override
+  void dispose() {
+    selectedIndexNotifier.dispose();
+    super.dispose();
   }
 
   bool isTablet(BuildContext context) {
@@ -51,7 +57,6 @@ class _ChooseProfileState extends State<ChooseProfile> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getAllChildren();
     final double h = SizeConfig.screenHeight;
     final double w = SizeConfig.screenWidth;
 
@@ -66,7 +71,6 @@ class _ChooseProfileState extends State<ChooseProfile> {
               fit: BoxFit.cover,
             ),
           ),
-
           SafeArea(
             child: Column(
               children: [
@@ -82,14 +86,6 @@ class _ChooseProfileState extends State<ChooseProfile> {
                         fontSize: w * 0.085,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "Akhil",
-                      style: TextStyle(
-                        fontFamily: "Arial",
-                        fontSize: w * 0.06,
-                        color: Colors.white.withOpacity(0.9),
                       ),
                     ),
                   ],
@@ -110,7 +106,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
 
                 SizedBox(height: h * 0.03),
 
-                /// ⬇️ FULL SCREEN GRIDVIEW
+                /// GRID
                 Expanded(
                   child: Obx(() {
                     if (controller.isLoading.value) {
@@ -137,7 +133,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
                           if (index == list.length) {
                             return GestureDetector(
                               onTap: () {
-                                Get.to(() => CreateProfileForkids());
+                                Get.to(() => const CreateProfileForkids());
                               },
                               child: Column(
                                 children: [
@@ -147,7 +143,8 @@ class _ChooseProfileState extends State<ChooseProfile> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: Colors.white.withOpacity(0.2),
-                                      border: Border.all(color: Colors.white, width: 1),
+                                      border: Border.all(
+                                          color: Colors.white, width: 1),
                                     ),
                                     child: Center(
                                       child: Icon(
@@ -165,52 +162,60 @@ class _ChooseProfileState extends State<ChooseProfile> {
 
                           /// EXISTING KID PROFILE BOXES
                           final child = list[index];
-                          bool isSelected = selectedIndex == index;
 
                           final avatar = (child.gender?.toLowerCase() == "boy")
                               ? "assets/images/boy_avator.png"
                               : "assets/images/girl_avator.png";
 
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = index;
-                              });
+                          // 👇 wrap with ValueListenableBuilder to react to selection
+                          return ValueListenableBuilder<int?>(
+                            valueListenable: selectedIndexNotifier,
+                            builder: (context, selectedIndex, _) {
+                              final bool isSelected = selectedIndex == index;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  selectedIndexNotifier.value = index;
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: h * 0.14,
+                                      width: h * 0.14,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: Colors.white.withOpacity(0.2),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? Colors.orangeAccent
+                                              : Colors.transparent,
+                                          width: 3,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Image.asset(
+                                          avatar,
+                                          height: h * 0.085,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: h * 0.01),
+                                    Text(
+                                      child.name ?? "",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: "Arial",
+                                        fontSize: w * 0.038,
+                                        color: Colors.black,
+                                        fontWeight: isSelected
+                                            ? FontWeight.bold
+                                            : FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
                             },
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: h * 0.14,
-                                  width: h * 0.14,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white.withOpacity(0.2),
-                                    border: Border.all(
-                                      color: isSelected ? Colors.orangeAccent : Colors.transparent,
-                                      width: 3,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Image.asset(
-                                      avatar,
-                                      height: h * 0.085,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: h * 0.01),
-                                Text(
-                                  child.name ?? "",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: "Arial",
-                                    fontSize: w * 0.038,
-                                    color: Colors.black,
-                                    fontWeight:
-                                    isSelected ? FontWeight.bold : FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
                           );
                         },
                       ),
@@ -225,22 +230,40 @@ class _ChooseProfileState extends State<ChooseProfile> {
                   padding: EdgeInsets.only(bottom: h * 0.02),
                   child: SafeArea(
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        final selectedIndex = selectedIndexNotifier.value;
                         if (selectedIndex == null) {
-                         AppSnackBar.show(context, "Please Select a Kid");
+                          AppSnackBar.show(context, "Please Select a Kid");
                           return;
                         }
-                        final selectedChild = controller.childrenList[selectedIndex!].id;
+
+                        final selectedChild =
+                            controller.childrenList[selectedIndex].id;
+
+                        if (selectedChild == null) {
+                          AppSnackBar.show(
+                              context, "Invalid child. Please try again.");
+                          return;
+                        }
+
                         final data = {"child_id": selectedChild};
-                        selectcontroller.selectchild(data);
+                        AppLogger.info("child_id:${data}");
+
+                        // 🔥 API call
+                        await selectcontroller.selectchild(data);
+
+                        // 💾 Save globally
+                        await AuthService.saveUserChildId(selectedChild);
+
+                        // Optionally navigate:
+                        // Get.offAllNamed(Routes.Home);
                       },
-                      child: CreateNowButton(text: "Select"),
+                      child: const CreateNowButton(text: "Select"),
                     ),
                   ),
                 ),
               ],
             ),
-
           ),
         ],
       ),

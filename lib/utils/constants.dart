@@ -157,20 +157,6 @@ class DateHelper {
   }
 }
 
-class AppState {
-  static final ValueNotifier<int> coinsNotifier = ValueNotifier<int>(0);
-
-  static void updateCoins(int newCoins) {
-    coinsNotifier.value = newCoins;
-    AuthService.saveCoins(newCoins);
-  }
-
-  static Future<void> loadCoins() async {
-    final storedCoins = await AuthService.getCoins();
-    coinsNotifier.value = int.tryParse(storedCoins ?? "0") ?? 0;
-  }
-}
-
 class AppStateMentorCostPerMinuteCoins {
   static final ValueNotifier<int> mentorCoinsNotifier = ValueNotifier<int>(0);
 

@@ -11,6 +11,7 @@ import 'package:story_hug/utils/media_query_helper.dart';
 import '../app_routes/app_routes.dart';
 import '../components/CommonLoader.dart';
 import '../data/remote_data_source.dart';
+import '../services/AuthService.dart';
 import 'Widgets/SubSubCategoryCard.dart';
 
 class Favorites extends StatefulWidget {
@@ -133,10 +134,11 @@ class _FavoritesState extends State<Favorites> {
 
                             isLikedNotifier.value =
                                 newStatus; // Optimistic update
-
+                            final savedChildId =
+                                await AuthService.getUserChildId();
                             await addToFaverateController.addToFaveratesList({
                               "story_id": item.storyId.toString(),
-                              "child_id": "1",
+                              "child_id": savedChildId,
                             });
 
                             if (addToFaverateController.errorMessage.value !=

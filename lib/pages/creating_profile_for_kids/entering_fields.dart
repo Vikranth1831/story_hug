@@ -10,8 +10,9 @@ import '../../components/text_field.dart';
 import '../../controller/createChildrenController.dart';
 import '../../data/remote_data_source.dart';
 import '../../models/get_all_children_model.dart';
+
 class EnteringFieldsForKid extends StatefulWidget {
-  final Children? childData;   // 🔥 comes only in Update mode
+  final Children? childData; // 🔥 comes only in Update mode
 
   const EnteringFieldsForKid({super.key, this.childData});
 
@@ -23,8 +24,9 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
   final nameController = TextEditingController();
   final ageController = TextEditingController();
   String selectedGender = "";
+  int selectedAvatarIndex = -1;
 
-  bool isUpdate = false;  // 🔥 to detect update mode
+  bool isUpdate = false; // 🔥 to detect update mode
 
   String nameError = "";
   String ageError = "";
@@ -91,8 +93,10 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
               if (nameError.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
-                  child: Text(nameError,
-                      style: TextStyle(color: Colors.red, fontSize: 12)),
+                  child: Text(
+                    nameError,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                 ),
 
               SizedBox(height: h * 0.02),
@@ -100,16 +104,15 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
               TextHeader("Age"),
               SizedBox(height: h * 0.013),
 
-              CustomInputField(
-                controller: ageController,
-                label1: 'Enter age',
-              ),
+              CustomInputField(controller: ageController, label1: 'Enter age'),
 
               if (ageError.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
-                  child: Text(ageError,
-                      style: TextStyle(color: Colors.red, fontSize: 12)),
+                  child: Text(
+                    ageError,
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                 ),
 
               SizedBox(height: h * 0.02),
@@ -134,8 +137,10 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
                 if (genderError.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: Text(genderError,
-                        style: TextStyle(color: Colors.red, fontSize: 12)),
+                    child: Text(
+                      genderError,
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
                   ),
               ],
 
@@ -189,7 +194,8 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
                 "gender": selectedGender,
                 "age": ageController.text,
                 "image": "",
-                if (isUpdate) "id": widget.childData!.id,   // 🔥 send id in update
+                if (isUpdate)
+                  "id": widget.childData!.id, // 🔥 send id in update
               };
 
               controller.createChildren(data);
@@ -201,16 +207,17 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
     );
   }
 
-  // ❗ Rest UI widgets remain EXACTLY same (no change)
-  Widget AvatarSelectionBox(List<String> avatarList, var height, var width) {
+  Widget AvatarSelectionBox(
+    List<String> avatarList,
+    double height,
+    double width,
+  ) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(height * 0.02),
       decoration: ShapeDecoration(
-        color: Colors.white.withValues(alpha: 0.10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        color: Colors.white.withOpacity(0.10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,15 +238,29 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
             child: Row(
               children: List.generate(
                 avatarList.length,
-                    (index) => Padding(
-                  padding: const EdgeInsets.only(right: 32),
-                  child: Container(
-                    width: width * 0.22,
-                    height: height * 0.1,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(avatarList[index]),
-                        fit: BoxFit.cover,
+                (index) => GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedAvatarIndex = index;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 32),
+                    child: Container(
+                      width: width * 0.22,
+                      height: height * 0.1,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: selectedAvatarIndex == index
+                              ? const Color(0xffF9E2A1)
+                              : Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                          image: AssetImage(avatarList[index]),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

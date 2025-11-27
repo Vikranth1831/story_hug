@@ -18,8 +18,7 @@ class AuthService {
   static const String _userName = "user_name";
   static const String _email = "email";
   static const String _mobile = "mobile";
-  static const String _coins = "_coins";
-
+  static const String _childId = "childId";
   static final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   /// Check if the user is a guest (no token or empty token)
@@ -55,13 +54,12 @@ class AuthService {
   static Future<String?> getMobile() async {
     return await _storage.read(key: _mobile);
   }
-
-  static Future<void> saveCoins(int coins) async {
-    await _storage.write(key: _coins, value: coins.toString());
+  static Future<String?> getUserChildId() async {
+    return await _storage.read(key: _childId);
   }
 
-  static Future<String?> getCoins() async {
-    return await _storage.read(key: _coins);
+  static Future<void> saveUserChildId(int childId) async {
+    await _storage.write(key: _childId, value: childId.toString());
   }
 
   /// Get stored refresh token
@@ -93,22 +91,25 @@ class AuthService {
   }
 
   static Future<void> saveTokens(
-      String accessToken,
-      String refreshToken,
-      int expiresInMs,
-      ) async {
+    String accessToken,
+    String refreshToken,
+    int expiresInMs,
+  ) async {
     final expiryTimestamp = DateTime.now().millisecondsSinceEpoch + expiresInMs;
     await _storage.write(key: _accessTokenKey, value: accessToken);
     await _storage.write(key: _refreshTokenKey, value: refreshToken);
-    await _storage.write(key: _tokenExpiryKey, value: expiryTimestamp.toString());
+    await _storage.write(
+      key: _tokenExpiryKey,
+      value: expiryTimestamp.toString(),
+    );
   }
 
   /// Update tokens only (during refresh)
   static Future<void> updateTokens(
-      String accessToken,
-      String? refreshToken,
-      int expiresIn,
-      ) async {
+    String accessToken,
+    String? refreshToken,
+    int expiresIn,
+  ) async {
     await _storage.write(key: _accessTokenKey, value: accessToken);
     await _storage.write(key: _refreshTokenKey, value: refreshToken ?? "");
     await _storage.write(key: _tokenExpiryKey, value: expiresIn.toString());
