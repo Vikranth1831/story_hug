@@ -160,7 +160,7 @@ class _VerificationCardState extends State<VerificationCard> {
                   Obx(() {
                     return CustomAppButton1(
                       onPlusTap: () {
-                        controller.sendotp();
+                        controller.sendotp(true);
                       },
                       text: "Send OTP to Gmail",
                       isLoading: controller.isLoading.value,   // FIXED
