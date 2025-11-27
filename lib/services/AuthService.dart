@@ -1,7 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:go_router/go_router.dart';
+import '../app_routes/app_routes.dart';
+import '../core/api_config.dart';
 import '../utils/constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'ApiClient.dart';
 
 class AuthService {
   static const String _accessTokenKey = "access_token";
@@ -13,8 +19,6 @@ class AuthService {
   static const String _email = "email";
   static const String _mobile = "mobile";
   static const String _coins = "_coins";
-  static const String _collegeID = "_collegeID";
-  static const String _collegeName = "_collegeName";
 
   static final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
@@ -39,14 +43,6 @@ class AuthService {
     return await _storage.read(key: _userId);
   }
 
-  static Future<String?> getCollegeID() async {
-    return await _storage.read(key: _collegeID);
-  }
-
-  static Future<String?> getCollegeName() async {
-    return await _storage.read(key: _collegeName);
-  }
-
   /// get Name
   static Future<String?> getName() async {
     return await _storage.read(key: _userName);
@@ -64,18 +60,6 @@ class AuthService {
     await _storage.write(key: _coins, value: coins.toString());
   }
 
-  static Future<void> saveRole(String role) async {
-    await _storage.write(key: _role, value: role.toString());
-  }
-
-  static Future<void> saveCollegeID(int CollegeID) async {
-    await _storage.write(key: _collegeID, value: CollegeID.toString());
-  }
-
-  static Future<void> saveCollegeName(String CollegeName) async {
-    await _storage.write(key: _collegeName, value: CollegeName.toString());
-  }
-
   static Future<String?> getCoins() async {
     return await _storage.read(key: _coins);
   }
@@ -87,80 +71,95 @@ class AuthService {
 
   /// Check if token is expired
   static Future<bool> isTokenExpired() async {
-    final expiryTimestamp = await _storage.read(key: _tokenExpiryKey);
-    if (expiryTimestamp == null) {
+    final expiryTimestampStr = await _storage.read(key: _tokenExpiryKey);
+    if (expiryTimestampStr == null) {
       debugPrint('No expiry timestamp found, considering token expired');
       return true;
     }
+
+    final expiryTimestamp = int.tryParse(expiryTimestampStr);
+    if (expiryTimestamp == null) {
+      debugPrint('Invalid expiry timestamp, considering token expired');
+      return true;
+    }
+
     final now = DateTime.now().millisecondsSinceEpoch;
-    final isExpired = now >= (int.tryParse(expiryTimestamp) ?? 0);
+    final isExpired = now >= expiryTimestamp;
+
     debugPrint(
       'Token expiry check: now=$now, expiry=$expiryTimestamp, isExpired=$isExpired',
     );
     return isExpired;
   }
 
-  /// Save tokens and expiry time
   static Future<void> saveTokens(
-    String accessToken,
-    String refreshToken,
-    int expiresIn,
-    String role,
-    int userid,
-    String userName,
-    String email,
-    int mobile,
-  ) async {
+      String accessToken,
+      String refreshToken,
+      int expiresInMs, // <-- duration in ms
+      // String userName,
+      // String email,
+      ) async {
+    final expiryTimestamp =
+        DateTime.now().millisecondsSinceEpoch + expiresInMs;
+
     await _storage.write(key: _accessTokenKey, value: accessToken);
     await _storage.write(key: _refreshTokenKey, value: refreshToken);
-    await _storage.write(key: _role, value: role);
+    await _storage.write(
+        key: _tokenExpiryKey, value: expiryTimestamp.toString());
+    // await _storage.write(key: _userName, value: userName);
+    // await _storage.write(key: _email, value: email);
+  }
+
+  /// Update tokens only (during refresh)
+  static Future<void> updateTokens(
+      String accessToken,
+      String? refreshToken,
+      int expiresIn,
+      ) async {
+    await _storage.write(key: _accessTokenKey, value: accessToken);
+    await _storage.write(key: _refreshTokenKey, value: refreshToken ?? "");
     await _storage.write(key: _tokenExpiryKey, value: expiresIn.toString());
-    await _storage.write(key: _userName, value: userName.toString());
-    await _storage.write(key: _userId, value: userid.toString());
-    await _storage.write(key: _email, value: email.toString());
-    await _storage.write(key: _mobile, value: mobile.toString());
+    debugPrint('🔄 Tokens updated (refresh)');
   }
 
   /// Refresh token
-  // static Future<bool> refreshToken() async {
-  //   final refreshToken = await getRefreshToken();
-  //   if (refreshToken == null) {
-  //     debugPrint('❌ No refresh token available');
-  //     return false;
-  //   }
-  //   try {
-  //     // Call your RemoteDataSourceImpl or API to refresh the token
-  //     final response = await _remote.refreshTokenApi({"refresh": refreshToken});
-  //     if (response != null && response.success == true && response.data != null) {
-  //       final tokenData = response.data!;
-  //       final newAccessToken = tokenData.access;
-  //       final newRefreshToken = tokenData.refresh;
-  //       final expiryTime = tokenData.expiryTime;
-  //       final role = tokenData.role;
-  //
-  //       if (newAccessToken == null || newRefreshToken == null || expiryTime == null) {
-  //         debugPrint("❌ Missing token data in response: ${response.toJson()}");
-  //         return false;
-  //       }
-  //
-  //       // Save the tokens with expiryTime
-  //       await saveTokens(
-  //         newAccessToken,
-  //         newRefreshToken,
-  //         expiryTime,
-  //         role,
-  //       );
-  //       debugPrint("✅ Token refreshed and saved successfully");
-  //       return true;
-  //     } else {
-  //       debugPrint("❌ Refresh token request failed: ${response?.message ?? 'No message'}");
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     debugPrint("❌ Token refresh failed: $e");
-  //     return false;
-  //   }
-  // }
+  static Future<bool> refreshToken() async {
+    final refreshToken = await getRefreshToken();
+    if (refreshToken == null) {
+      debugPrint('❌ No refresh token available');
+      return false;
+    }
+
+    try {
+      final response = await ApiClient.post(
+        ApiConfig.refreshToken,
+        data: {"refreshToken": refreshToken},
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data as Map<String, dynamic>;
+        final newAccessToken = data["accessToken"];
+        final newRefreshToken = data["refreshToken"];
+        final expiryTime = data["accessTokenExpiry"];
+
+        if (newAccessToken == null ||
+            newRefreshToken == null ||
+            expiryTime == null) {
+          debugPrint("❌ Missing token data in response: $data");
+          return false;
+        }
+        await updateTokens(newAccessToken, newRefreshToken, expiryTime);
+        debugPrint("✅ Token refreshed successfully");
+        return true;
+      } else {
+        debugPrint("❌ Refresh token failed: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      debugPrint("❌ Exception during token refresh: $e");
+      return false;
+    }
+  }
 
   /// Logout and clear tokens, redirect to sign-in screen
   static Future<void> logout() async {
@@ -169,13 +168,13 @@ class AuthService {
 
     final context = navigatorKey.currentContext;
     if (context != null) {
-      GoRouter.of(context).go('/onboarding');
+      Get.offAllNamed(Routes.login);
     } else {
       debugPrint('Context is null, scheduling GoRouter navigation after frame');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final postFrameContext = navigatorKey.currentContext;
         if (postFrameContext != null) {
-          GoRouter.of(postFrameContext).go('/onboarding');
+          Get.offAllNamed(Routes.login);
         } else {
           debugPrint('Still no context available after frame');
           // Optional: consider forcing rebuild or restarting app

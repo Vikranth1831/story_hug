@@ -10,7 +10,7 @@ class CreateNowButton extends StatelessWidget {
     var w=SizeConfig.screenWidth;
     var h=SizeConfig.screenHeight;
     return Padding(
-      padding:  EdgeInsets.only(bottom: h * 0.04, left: w * 0.03, right: w * 0.026 ),
+      padding:  EdgeInsets.only(bottom: h * 0.04, left: w * 0.035, right: w * 0.035,top: h * 0.02 ),
       child: Container(
         width: double.infinity,
         height: h * 0.065,
