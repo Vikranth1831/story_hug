@@ -5,6 +5,7 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/controller/getAllChildrenController.dart';
+import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 
 import 'package:story_hug/repositories/get_all_children_repository.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
@@ -40,6 +41,7 @@ class _ManageKidsState extends State<ManageKids> {
 
   @override
   Widget build(BuildContext context) {
+    //controller.getAllChildren();
 
 
     var w = SizeConfig.screenWidth;
@@ -130,7 +132,9 @@ class _ManageKidsState extends State<ManageKids> {
   Widget AddChildButton(var h, var w, BuildContext context) {
     return InkWell(
       onTap: () {
-        context.push('/entering_fields_for_kids');
+        Get.to(()=>EnteringFieldsForKid());
+
+     //   context.push('/entering_fields_for_kids');
       },
       child: DottedBorder(
         color: const Color(0xFF82B5CA),

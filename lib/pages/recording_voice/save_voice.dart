@@ -9,6 +9,7 @@ import 'package:story_hug/controller/AudioController.dart';
 import 'package:story_hug/controller/saveAudioFileController.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/create_profile_forkids.dart';
 import 'package:story_hug/repositories/save_audio_repository.dart';
+import 'package:story_hug/utils/app_snackbar.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
 import '../../data/remote_data_source.dart';
@@ -218,73 +219,76 @@ class _SaveVoiceState extends State<SaveVoice> {
           ),
 
           // FIXED BOTTOM BUTTON
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              height: h * 0.10,
-              padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.02),
-              child: GestureDetector(
-                onTap: () async {
-                  if (voiceNameController.text.trim().isEmpty) {
-                    // Optionally show an error
-                    print("Please enter a voice name");
-                    return;
-                  }
-
-                  // Prepare FormData
-                  // ignore: implementation_imports
-                  FormData formData = FormData.fromMap({
-                    "voiceName": voiceNameController.text.trim(),
-                    "audio": await MultipartFile.fromFile(
-                      audioFile.path,
-                      filename: audioFile.path.split('/').last,
-                    ),
-                  });
-
-                  // Call controller with FormData
-                  Controller.saveaudio(formData);
-                },
-                child: Container(
-                  height: h * 0.07,
-                  decoration: ShapeDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFFFCDB69),
-                        Color(0xFFFCBF5D),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: double.infinity,
+                height: h * 0.10,
+                padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.02),
+                child: GestureDetector(
+                  onTap: () async {
+                    if (voiceNameController.text.trim().isEmpty) {
+                      // Optionally show an error
+                      AppSnackBar.show(context, "Please Enter Voice Name");
+                      print("Please enter a voice name");
+                      return;
+                    }
+            
+                    // Prepare FormData
+                    // ignore: implementation_imports
+                    FormData formData = FormData.fromMap({
+                      "voiceName": voiceNameController.text.trim(),
+                      "audio": await MultipartFile.fromFile(
+                        audioFile.path,
+                        filename: audioFile.path.split('/').last,
+                      ),
+                    });
+            
+                    // Call controller with FormData
+                    Controller.saveaudio(formData);
+                  },
+                  child: Container(
+                    height: h * 0.07,
+                    decoration: ShapeDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFFFCDB69),
+                          Color(0xFFFCBF5D),
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      shadows: [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 2,
+                          offset: Offset(0, 4),
+                        ),
                       ],
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0x3F000000),
-                        blurRadius: 2,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/images/star_2.png', width: 24),
-                      SizedBox(width: 10),
-                      Text(
-                        'Save and continue',
-                        style: TextStyle(
-                          color: Color(0xFF24305B),
-                          fontSize: w * 0.045,
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.w800,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/star_2.png', width: 24),
+                        SizedBox(width: 10),
+                        Text(
+                          'Save and continue',
+                          style: TextStyle(
+                            color: Color(0xFF24305B),
+                            fontSize: w * 0.045,
+                            fontFamily: 'Arial',
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 10),
-                      Transform.rotate(
-                        angle: 3.14,
-                        child: Image.asset('assets/images/star_2.png', width: 24),
-                      ),
-                    ],
+                        SizedBox(width: 10),
+                        Transform.rotate(
+                          angle: 3.14,
+                          child: Image.asset('assets/images/star_2.png', width: 24),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
