@@ -128,6 +128,7 @@ class _FavoritesState extends State<Favorites> {
                             isTablet: isTablet,
                             title:item.story?.title??"",
                             imageUrl: item.story?.image??"",
+
                             duration: 10,
                             onPlayTap: () {
                               Get.toNamed(
