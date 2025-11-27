@@ -18,21 +18,19 @@ class VerifyEmail extends StatefulWidget {
 class _VerifyEmailState extends State<VerifyEmail> {
   final SendOtpController controller = Get.put(
     SendOtpController(
-      repository: otpsentRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+      repository: otpsentRepositoryImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
     ),
   );
   @override
   Widget build(BuildContext context) {
-
-
     var w = SizeConfig.screenWidth;
     var h = SizeConfig.screenHeight;
-
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-
         // ⭐ BACKGROUND IMAGE
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -45,20 +43,18 @@ class _VerifyEmailState extends State<VerifyEmail> {
           padding: EdgeInsets.symmetric(horizontal: w * 0.06),
           child: Column(
             children: [
-
               SizedBox(height: h * 0.2),
-
               // 🔵 Back Button
               Align(
                 alignment: Alignment.centerLeft,
-                child: CircleIconButton(
-                  icon: Icons.chevron_left,
-                  w: w,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: CircleIconButton(icon: Icons.chevron_left, w: w),
                 ),
               ),
-
               SizedBox(height: h * 0.08),
-
               // 🔵 Centered Card
               Center(
                 child: VerificationCard(w: w, h: h),
@@ -76,17 +72,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
       height: w * 0.12,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(
-          color:  Colors.amber,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.amber, width: 1),
       ),
       child: Center(
-        child: Icon(
-          icon,
-          color: Colors.amber,
-          size: w * 0.06,
-        ),
+        child: Icon(icon, color: Colors.amber, size: w * 0.06),
       ),
     );
   }
@@ -105,7 +94,9 @@ class VerificationCard extends StatefulWidget {
 class _VerificationCardState extends State<VerificationCard> {
   final SendOtpController controller = Get.put(
     SendOtpController(
-      repository: otpsentRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+      repository: otpsentRepositoryImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
     ),
   );
   @override
@@ -122,7 +113,6 @@ class _VerificationCardState extends State<VerificationCard> {
 
       child: Stack(
         children: [
-
           // ⭐ TOP IMAGE
           Positioned(
             left: widget.w * 0.26,
@@ -145,7 +135,6 @@ class _VerificationCardState extends State<VerificationCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   // FULL BOLD TEXT
                   Text(
                     "Please Verify",
@@ -171,19 +160,15 @@ class _VerificationCardState extends State<VerificationCard> {
 
                   // BUTTON
                   GestureDetector(
-                    onTap:(){
-                     // context.push('/otp-screen');
-                     controller.sendotp();
+                    onTap: () {
+                      controller.sendotp();
                     },
                     child: Container(
                       width: double.infinity,
                       height: widget.h * 0.06,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFFFCDB69),
-                            Color(0xFFFCBF5D),
-                          ],
+                          colors: [Color(0xFFFCDB69), Color(0xFFFCBF5D)],
                         ),
                         borderRadius: BorderRadius.circular(24),
                       ),
@@ -193,7 +178,7 @@ class _VerificationCardState extends State<VerificationCard> {
                           style: TextStyle(
                             color: const Color(0xFF333333),
                             fontSize: widget.w * 0.042,
-                            fontWeight: FontWeight.bold,     // ★ bold added
+                            fontWeight: FontWeight.bold, // ★ bold added
                             fontFamily: 'Arial Rounded MT Bold',
                           ),
                         ),
