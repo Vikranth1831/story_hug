@@ -13,6 +13,7 @@ import 'package:story_hug/controller/PaymentController.dart';
 import 'package:story_hug/controller/SubScriptionController.dart';
 import 'package:story_hug/utils/color_constants.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
+import '../app_routes/app_routes.dart';
 import '../data/remote_data_source.dart';
 import '../models/CreatePaymentModel.dart';
 import '../repositories/SubScriptionRepo.dart';
@@ -98,7 +99,7 @@ class _SubScriptionsState extends State<SubScriptions> {
     final res = await verifyPaymentController.createPayments(data);
 
     if (res != null && res.success == true) {
-      Get.back();
+      Get.offAllNamed(Routes.HomeScreen);
     }
   }
 

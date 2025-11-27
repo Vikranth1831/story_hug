@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "583769513308",
+    "project_id": "storyhug-137bf",
+    "storage_bucket": "storyhug-137bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583769513308:android:32c3139f992f37c136b599",
+        "android_client_info": {
+          "package_name": "com.storyhug.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQAgNDWMdyFF10-XYzNrPMQlhMhXCn0Hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

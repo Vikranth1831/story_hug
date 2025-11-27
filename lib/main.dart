@@ -17,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   ApiClient.setupInterceptors();
-  // await NotificationService().init();
+  await NotificationService().init();
   runApp(MyApp());
 }
 
@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     return GetMaterialApp(
-      // home: SplashScreen(),
       title: 'StoryHug',
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.splash,

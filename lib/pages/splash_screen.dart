@@ -30,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Get.offAllNamed(Routes.login);
       } else {
         Get.offAllNamed(Routes.ChooseProfile);
+        // Get.offAllNamed(Routes.HomeScreen);
       }
     });
   }

@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:story_hug/controller/faverateController.dart';
+import 'package:story_hug/repositories/faveratesRepo.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
+
+import '../../app_routes/app_routes.dart';
+import '../../components/CommonLoader.dart';
+import '../../data/remote_data_source.dart';
+import '../Widgets/SubSubCategoryCard.dart';
 
 class Favorites extends StatefulWidget {
   const Favorites({super.key});
@@ -9,18 +21,30 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites> {
-  List<Map<String, dynamic>> items = [
-    {
-      "image": "assets/images/card1.jpg",
-      "title": "The Monkey & The Crocodile",
-      "duration": "12 min",
-      "fav": true,
-    },
-  ];
+  final FaverateListController faverateListController = Get.put(
+    FaverateListController(
+      faveratesListRepo: FaveratesListImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
+    ),
+  );
+
+  final AddToFaverateController addToFaverateController = Get.put(
+    AddToFaverateController(
+      faveratesListRepo: FaveratesListImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
+    ),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    faverateListController.fetchFaveratesList("1");
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final double h = SizeConfig.screenHeight;
     final double w = SizeConfig.screenWidth;
 
@@ -31,7 +55,6 @@ class _FavoritesState extends State<Favorites> {
         width: double.infinity,
         height: double.infinity,
 
-        // 🔥 FULL SCREEN BACKGROUND IMAGE
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/bgimage.png"),
@@ -47,7 +70,6 @@ class _FavoritesState extends State<Favorites> {
               children: [
                 SizedBox(height: h * 0.06),
 
-                // Center Avatar
                 Image.asset(
                   "assets/images/favoritesimage.png",
                   height: 150,
@@ -69,175 +91,61 @@ class _FavoritesState extends State<Favorites> {
                 SizedBox(height: h * 0.01),
 
                 // Grid Items
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: items.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: isTablet ? 2 : 1,
-                    childAspectRatio: 0.78,
-                    crossAxisSpacing: w * 0.04,
-                    mainAxisSpacing: h * 0.02,
-                  ),
-                  itemBuilder: (context, index) {
-                    return _buildStoryCard(index, h, w, isTablet);
-                  },
-                ),
+                Obx(() {
+                  if (faverateListController.isLoading.value) {
+                    return const Center(child: DottedProgressWithLogo());
+                  }
+                  if (faverateListController.errorMessage.value != null) {
+                    return Center(
+                      child: Text(
+                        faverateListController.errorMessage.value!,
+                        style: const TextStyle(color: Colors.red, fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                  final fav =
+                      faverateListController.favrateList.value?.favourate;
+                  if (fav == null || fav.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "No fav list found in this category",
+                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      ),
+                    );
+                  } else {
+                    return SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+                      sliver: SliverMasonryGrid.count(
+                        crossAxisCount: isTablet ? 2 : 1,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 20,
+                        childCount: fav.length,
+                        itemBuilder: (context, index) {
+                          final item = fav[index];
+                          return SubSubCategoryCard(
+                            index: index,
+                            isTablet: isTablet,
+                            title:item.story?.title??"",
+                            imageUrl: item.story?.image??"",
+                            duration: 10,
+                            onPlayTap: () {
+                              Get.toNamed(
+                                Routes.PlayStory,
+                                arguments: {'id': item.id},
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }),
 
                 SizedBox(height: h * 0.05),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  // STORY CARD WIDGET
-  Widget _buildStoryCard(int index, double h, double w, bool isTablet) {
-    final item = items[index];
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white30,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 1,
-              offset: Offset(0, 0),
-            ),
-          ],
-        ),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // IMAGE + HEART
-            Center(
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.asset(
-                      item["image"],
-                      height: isTablet ? h * 0.40 : h * 0.35,
-                      width: w* 0.7,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          item["fav"] = !item["fav"];
-                        });
-                      },
-                      child: Icon(
-                        item["fav"] ? Icons.favorite : Icons.favorite_border,
-                        color: item["fav"] ?Color(0xffF9E2A1) :Color(0xffF9E2A1),
-                        size: isTablet ? 32 : 26,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // TITLE
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.03),
-              child: Text(
-                item["title"],
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: isTablet ? 18 : 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // DURATION + PLAY BUTTON
-            Row(
-              children: [
-                const Icon(
-                  Icons.play_circle_fill,
-                  size: 28,
-                  color: Colors.white,
-                ),
-
-                const SizedBox(width: 6),
-
-                Text(
-                  item["duration"],
-                  style: const TextStyle(
-                    fontFamily: "Arial Rounded MT Bold",
-                    fontSize: 15,
-                    color: Color(0xff444444),
-                  ),
-                ),
-
-                const Spacer(),
-
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: isTablet ? 16 : 14,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFFCDB69),
-                          Color(0xFFFCBF5D),
-                        ],
-                      ),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x3F303000),
-                          blurRadius: 8,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.play_arrow_rounded,
-                          color: Color(0xFF24305B),
-                          size: 20,
-                        ),
-                        SizedBox(width: 5),
-                        Text(
-                          "Play Now",
-                          style: TextStyle(
-                            fontFamily: "Arial Rounded MT Bold",
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF24305B),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
         ),
       ),
     );

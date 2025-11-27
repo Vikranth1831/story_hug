@@ -35,12 +35,7 @@ abstract class RemoteDataSource {
   Future<OTPVerifiedModel?> verifyOtp(Map<String, dynamic> data);
   Future<SelectChildModel?> selectchild(Map<String, dynamic> data);
   Future<PasswordUpdateModel?> updatepassword(Map<String, dynamic> data);
-
-
-
-
-
-
+  Future<FaveratesModel?> addFaveraToteList(Map<String, dynamic> data);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -76,7 +71,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<OTPVerifiedModel?> verifyOtp(Map<String, dynamic> data) async {
     try {
-      final res = await ApiClient.post("${APIEndpointUrls.verifyotp}", data: data);
+      final res = await ApiClient.post(
+        "${APIEndpointUrls.verifyotp}",
+        data: data,
+      );
       AppLogger.log('verifyOtp : ${res.data}');
       return OTPVerifiedModel.fromJson(res.data);
     } catch (e) {
@@ -88,7 +86,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<PasswordUpdateModel?> updatepassword(Map<String, dynamic> data) async {
     try {
-      final res = await ApiClient.put("${APIEndpointUrls.updatepassword}", data: data);
+      final res = await ApiClient.put(
+        "${APIEndpointUrls.updatepassword}",
+        data: data,
+      );
       AppLogger.log('Update Password : ${res.data}');
       return PasswordUpdateModel.fromJson(res.data);
     } catch (e) {
@@ -100,7 +101,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<SelectChildModel?> selectchild(Map<String, dynamic> data) async {
     try {
-      final res = await ApiClient.post("${APIEndpointUrls.selectchild}", data: data);
+      final res = await ApiClient.post(
+        "${APIEndpointUrls.selectchild}",
+        data: data,
+      );
       AppLogger.log('Select Child : ${res.data}');
       return SelectChildModel.fromJson(res.data);
     } catch (e) {
@@ -108,8 +112,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
-
-
 
   @override
   Future<OTPSentModel?> sendotp() async {
@@ -137,6 +139,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
   @override
   Future<CreatePaymentModel?> createPayment(Map<String, dynamic> data) async {
     try {
@@ -151,6 +154,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
   @override
   Future<VerifyPaymentModel?> verifyPayment(Map<String, dynamic> data) async {
     try {
@@ -236,6 +240,21 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     try {
       final res = await ApiClient.get(
         "${APIEndpointUrls.faverates}?child_id=${childId}",
+      );
+      AppLogger.log('fetch Faverates List : ${res.data}');
+      return FaveratesModel.fromJson(res.data);
+    } catch (e) {
+      AppLogger.error('fetch Faverates List: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<FaveratesModel?> addFaveraToteList(Map<String, dynamic> data) async {
+    try {
+      final res = await ApiClient.post(
+        "${APIEndpointUrls.addfaverates}",
+        data: data,
       );
       AppLogger.log('fetch Faverates List : ${res.data}');
       return FaveratesModel.fromJson(res.data);

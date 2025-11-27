@@ -1,4 +1,4 @@
-package com.example.story_hug
+package com.storyhug.android
 
 import io.flutter.embedding.android.FlutterActivity
 

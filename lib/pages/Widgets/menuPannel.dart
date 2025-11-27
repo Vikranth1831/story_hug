@@ -57,7 +57,7 @@ class MenuPanel extends StatelessWidget {
         } else if (title == 'Voice') {
           context.push('/recording_voice');
         } else if (title == 'My Favorites') {
-          context.push('/favorites');
+          Get.toNamed(Routes.Favorites);
         } else if (title == 'Subscriptions') {
           Get.toNamed(Routes.Subscribepage);
         } else if (title == 'Reminder') {
