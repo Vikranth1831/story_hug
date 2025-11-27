@@ -74,6 +74,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         data: data,
         options: Options(
           contentType: "multipart/form-data",
+          headers: {
+            "Accept": "application/json",
+          },
         ),
       );
 

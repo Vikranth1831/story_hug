@@ -6,7 +6,7 @@ class SaveAudioModel {
   SaveAudioModel({this.success, this.message, this.data});
 
   SaveAudioModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
+    success = json['success']?? false ;
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }

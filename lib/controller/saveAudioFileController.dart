@@ -25,12 +25,12 @@ class SaveAudioController extends GetxController {
     try {
       isLoading.value = true;
       saveAudioModel = await repository.saveaudio(data);
-      if (SaveAudioModel != null && saveAudioModel?.success== true) {
+      if (saveAudioModel != null && saveAudioModel?.success== true) {
 
 
-        Get.offAllNamed(Routes.LetsBegin);
+        Get.offAllNamed(Routes.CreateProfileForkids);
       } else {
-        // AppSnackbar.error(loginModel?.message ?? "Login failed");
+        print(saveAudioModel?.message ?? "Upload failed");
       }
     } catch (e) {
       //  AppSnackbar.exception(e.toString());
