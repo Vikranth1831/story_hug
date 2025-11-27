@@ -102,6 +102,7 @@ class _SubScriptionsState extends State<SubScriptions> {
     }
   }
 
+
   void _handlePaymentError(PaymentFailureResponse response) {
     AppLogger.log("❌ Payment failed: ${response.message}");
   }
