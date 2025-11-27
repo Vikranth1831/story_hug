@@ -21,26 +21,21 @@ class VerifyOtpController extends GetxController {
 
   var isLoading = false.obs;
 
-  OTPVerifiedModel ? otpVerifiedModel;
-
+  OTPVerifiedModel? otpVerifiedModel;
 
   Future<void> verifyotp(Map<String, dynamic> data) async {
     try {
       isLoading.value = true;
       otpVerifiedModel = await repository.verifyotp(data);
       if (otpVerifiedModel != null && otpVerifiedModel?.success == true) {
-
-        Get.to(()=>Passwordchange());
+        Get.to(() => Passwordchange());
       } else {
-         AppSnackBar.show(Get.context! , otpVerifiedModel?.message ?? "");
+        AppSnackBar.show(Get.context!, otpVerifiedModel?.message ?? "");
       }
     } catch (e) {
-      //  AppSnackbar.exception(e.toString());
+      AppSnackBar.show(Get.context!, e.toString());
     } finally {
       isLoading.value = false;
     }
   }
-
-
-
 }

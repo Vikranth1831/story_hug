@@ -33,13 +33,17 @@ class _OtpScreenState extends State<OtpScreen> {
   final String logoAssetPath = 'assets/images/logo.png';
   final VerifyOtpController controller = Get.put(
     VerifyOtpController(
-      repository: VerifyOtpRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+      repository: VerifyOtpRepositoryImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
     ),
   );
 
   final SendOtpController otpsendcontroller = Get.put(
     SendOtpController(
-      repository: otpsentRepositoryImpl(remoteDataSource: RemoteDataSourceImpl()),
+      repository: otpsentRepositoryImpl(
+        remoteDataSource: RemoteDataSourceImpl(),
+      ),
     ),
   );
 
@@ -54,12 +58,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              bgAssetPath,
-              fit: BoxFit.cover,
-            ),
-          ),
+          Positioned.fill(child: Image.asset(bgAssetPath, fit: BoxFit.cover)),
 
           SafeArea(
             child: Padding(
@@ -67,18 +66,12 @@ class _OtpScreenState extends State<OtpScreen> {
               child: Column(
                 children: [
                   SizedBox(height: h * 0.02),
-
                   /// LOGO
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Image.asset(
-                      logoAssetPath,
-                      height: h * 0.045,
-                    ),
+                    child: Image.asset(logoAssetPath, height: h * 0.045),
                   ),
-
                   SizedBox(height: h * 0.06),
-
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -94,8 +87,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      color: Colors.white.withOpacity(0.18),
-                                      width: 1.5),
+                                    color: Colors.white.withOpacity(0.18),
+                                    width: 1.5,
+                                  ),
                                 ),
                                 child: Center(
                                   child: Icon(
@@ -193,8 +187,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                   Text(
                                     errorMessage!,
                                     style: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontSize: w * 0.036),
+                                      color: Colors.redAccent,
+                                      fontSize: w * 0.036,
+                                    ),
                                   ),
 
                                 SizedBox(height: h * 0.015),
@@ -226,17 +221,17 @@ class _OtpScreenState extends State<OtpScreen> {
                                     onPlusTap: () {
                                       if (otpValue.length != 6) {
                                         setState(() {
-                                          errorMessage = "Please enter all 6 digits";
+                                          errorMessage =
+                                              "Please enter all 6 digits";
                                         });
                                         print(otpValue);
                                         return;
                                       }
-                                      controller.verifyotp({
-                                        "otp": otpValue,
-                                      });
+                                      controller.verifyotp({"otp": otpValue});
                                     },
                                     text: "Submit OTP",
-                                    isLoading: controller.isLoading.value,   // FIXED
+                                    isLoading:
+                                        controller.isLoading.value, // FIXED
                                   );
                                 }),
                               ],

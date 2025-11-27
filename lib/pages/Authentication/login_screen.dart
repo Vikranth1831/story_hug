@@ -40,10 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
     ),
   );
 
-
   // ⭐ ADDED FOR STAR BLINK ANIMATION
   double starOpacity = 1.0;
-
   @override
   void initState() {
     super.initState();
