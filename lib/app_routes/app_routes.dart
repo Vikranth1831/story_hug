@@ -25,6 +25,7 @@ class Routes {
   static const Passwordchange = '/password-change';
   static const LetsBegin = '/lets-begin';
   static const ChooseProfile ='/choose-profile';
+  static const AllVoices = '/get-all-voices';
   static const StoryList ='/story_list';
 
 
