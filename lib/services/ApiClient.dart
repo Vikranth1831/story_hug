@@ -329,7 +329,7 @@ class ApiClient {
     }
   }
 
-  static Future<Response> post(String path, {dynamic data}) async {
+  static Future<Response> post(String path, {dynamic data, Options? options}) async {
     try {
       return await _dio.post(path, data: data);
     } catch (e) {

@@ -12,11 +12,14 @@ import 'package:story_hug/utils/media_query_helper.dart';
 
 import 'app_routes/app_pages.dart';
 import 'app_routes/app_routes.dart';
+import 'controller/AudioController.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   ApiClient.setupInterceptors();
+  // await NotificationService().init();
+  Get.put(AudioController());
   await NotificationService().init();
   runApp(MyApp());
 }
