@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:story_hug/models/ParentNameModel.dart';
 import 'package:story_hug/models/SaveAudioModel.dart';
 import 'package:story_hug/models/create_child_model.dart';
 import 'package:story_hug/models/default_voice_model.dart';
@@ -32,7 +33,7 @@ abstract class RemoteDataSource {
 
   Future<DefaultVoiceModel?> setDefault(Map<String, dynamic> data);
 
-
+  Future<GetParentDetailsModel?> getParentDetails();
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -87,6 +88,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
+
+
   @override
   Future<DefaultVoiceModel?> setDefault(Map<String, dynamic> data) async {
     try {
@@ -131,6 +135,22 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
+  @override
+  Future<GetParentDetailsModel?> getParentDetails() async {
+    try {
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.getParentDetails}",
+
+      );
+      AppLogger.log('fetched parents : ${res.data}');
+      return GetParentDetailsModel.fromJson(res.data);
+    } catch (e) {
+      // AppLogger.error('login : $e');
+      return null;
+    }
+  }
+
   @override
   Future<GetAllChildrenModel?> getAllChildren() async {
     try {
@@ -152,7 +172,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         "${APIEndpointUrls.getSampleText}",
 
       );
-      AppLogger.log('Register : ${res.data}');
+      AppLogger.log('Sample text : ${res.data}');
       return SampleTextModel.fromJson(res.data);
     } catch (e) {
       // AppLogger.error('login : $e');

@@ -49,5 +49,6 @@ class AppRoutes {
     GetPage(name: Routes.ChooseProfile, page: () => ChooseProfile()),
     GetPage(name: Routes.AllVoices, page: () => AllVoices()),
 
+
   ];
 }

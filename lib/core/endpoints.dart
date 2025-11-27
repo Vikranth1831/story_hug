@@ -19,6 +19,7 @@ class APIEndpointUrls {
   static const String saveAudio='${ApiUrl}voice/clonevoice';
   static const String getAllVoices='${ApiUrl}voice/fetchparentvoices';
   static const String setDefault ='${ApiUrl}voice/setdefaultvoice';
+  static const String getParentDetails = '${AuthUrl}me';
 
 
 }
