@@ -18,9 +18,7 @@ class APIEndpointUrls {
   static const String getAllChildren='${children}/getallchildrensofaparent';
   static const String getSampleText='${ApiUrl}voice/fetchsampletext';
   static const String saveAudio='${ApiUrl}voice/clonevoice';
-  static const String getAllVoices='${ApiUrl}voice/fetchparentvoices';
-  static const String setDefault ='${ApiUrl}voice/setdefaultvoice';
-  static const String getParentDetails = '${AuthUrl}me';
+  static const String storyNarrate='${ApiUrl}voice/storynarrate';
 
   static const String createChildren='${children}/createchild';
   static const String sendotp='${AuthUrl}changepassword';
@@ -33,9 +31,6 @@ class APIEndpointUrls {
   static const String verifyPayment='${ApiUrl}payment/verifypayment';
   static const String updatepassword='${AuthUrl}updatepassword';
   static const String selectchild='${children}/selectchild';
-  static const String fetchavators='${ApiUrl}/avatars/fetchavatar';
-
-
 
 
 }

@@ -11,6 +11,33 @@ import '../models/SubSubOfCategoryModel.dart';
 import '../repositories/SubCategoryRepo.dart';
 import '../repositories/SubSubCategoryRepo.dart';
 
+// class FaverateListController extends GetxController {
+//   final FaveratesListRepo faveratesListRepo;
+//   FaverateListController({required this.faveratesListRepo});
+//
+//   var isLoading = false.obs;
+//   Rx<FaveratesModel?> favrateList = Rx<FaveratesModel?>(null);
+//
+//   final RxnString errorMessage = RxnString();
+//
+//   Future<void> fetchFaveratesList(String childId) async {
+//     try {
+//       isLoading.value = true;
+//       final result = await faveratesListRepo.fetchFaverateList(childId);
+//
+//       if (result != null) {
+//         favrateList.value = result;
+//         errorMessage.value = null; // clear previous error
+//       } else {
+//         errorMessage.value = "Unable to load job details";
+//       }
+//     } catch (e) {
+//       errorMessage.value = e.toString();
+//     } finally {
+//       isLoading.value = false;
+//     }
+//   }
+// }
 class FaverateListController extends GetxController {
   final FaveratesListRepo faveratesListRepo;
   FaverateListController({required this.faveratesListRepo});
@@ -27,7 +54,7 @@ class FaverateListController extends GetxController {
 
       if (result != null) {
         favrateList.value = result;
-        errorMessage.value = null; // clear previous error
+        errorMessage.value = null;
       } else {
         errorMessage.value = "Unable to load job details";
       }
@@ -37,7 +64,18 @@ class FaverateListController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // 👇 NEW: remove one favourite from the list by favourite ID
+  void removeFavouriteById(int favId) {
+    final model = favrateList.value;
+    final list = model?.favourate;
+    if (model == null || list == null) return;
+
+    list.removeWhere((e) => e.id == favId); // id: 24 from your log
+    favrateList.refresh(); // 🔥 trigger Obx to rebuild
+  }
 }
+
 
 class AddToFaverateController extends GetxController {
   final FaveratesListRepo faveratesListRepo;

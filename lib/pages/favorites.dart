@@ -42,7 +42,17 @@ class _FavoritesState extends State<Favorites> {
   @override
   void initState() {
     super.initState();
-    faverateListController.fetchFaveratesList("1");
+    _loadFavList();
+  }
+
+  void _loadFavList() async {
+    final savedChildId = await AuthService.getUserChildId();
+
+    if (savedChildId != null) {
+      faverateListController.fetchFaveratesList(savedChildId);
+    } else {
+      print("No child ID found – Please select a kid first");
+    }
   }
 
   @override
@@ -121,33 +131,59 @@ class _FavoritesState extends State<Favorites> {
                       mainAxisSpacing: 20,
                       crossAxisSpacing: 20,
                       itemCount: fav.length,
-                      shrinkWrap:
-                          true, // 👈 important since we're inside SingleChildScrollView
+                      shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         final item = fav[index];
+
                         return SubSubCategoryCard(
                           showFav: true,
                           isFav: item.isFavourated ?? false,
                           onTapfav: () async {
-                            final newStatus = !isLikedNotifier.value;
-
-                            isLikedNotifier.value =
-                                newStatus; // Optimistic update
                             final savedChildId =
                                 await AuthService.getUserChildId();
+
+                            if (savedChildId == null) {
+                              Get.snackbar("Error", "Child not selected");
+                              return;
+                            }
+
+                            // Optional: optimistic UI toggle (if you want)
+                            final previous = isLikedNotifier.value;
+                            isLikedNotifier.value = !previous;
+
                             await addToFaverateController.addToFaveratesList({
                               "story_id": item.storyId.toString(),
                               "child_id": savedChildId,
                             });
 
+                            // If API errored → revert
                             if (addToFaverateController.errorMessage.value !=
                                 null) {
-                              isLikedNotifier.value = !newStatus;
+                              isLikedNotifier.value = previous;
                               Get.snackbar(
                                 "Error",
                                 "Failed to update favorite",
                               );
+                              return;
+                            }
+
+                            final apiResult =
+                                addToFaverateController.favrateList.value;
+
+                            // ✅ If favourite removed → remove item from list
+                            if (apiResult?.success == true &&
+                                apiResult?.isFavourated == false) {
+                              faverateListController.removeFavouriteById(
+                                item.id ?? -1,
+                              );
+                              Get.snackbar(
+                                "Removed",
+                                apiResult?.message ?? "Favourite removed",
+                              );
+                            } else {
+                              // If backend still says it's favourite, keep list as is
+                              isLikedNotifier.value = previous;
                             }
                           },
                           content: item.story?.content ?? "",

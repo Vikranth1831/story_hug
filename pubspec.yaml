@@ -76,8 +76,9 @@ dependencies:
   razorpay_flutter: ^1.4.0
   flutter_html: ^3.0.0
   flutter_local_notifications: ^19.5.0
-
+  just_audio: ^0.9.35
   flutter_sound: ^9.2.14
+  audio_session: ^0.1.18
   shared_preferences: ^2.0.15
 
   #flutter_local_notifications: ^19.5.0
