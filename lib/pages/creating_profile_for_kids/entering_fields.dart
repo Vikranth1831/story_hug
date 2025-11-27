@@ -10,6 +10,7 @@ import '../../components/text_field.dart';
 import '../../controller/createChildrenController.dart';
 import '../../data/remote_data_source.dart';
 import '../../models/get_all_children_model.dart';
+import '../../utils/back_button.dart';
 
 class EnteringFieldsForKid extends StatefulWidget {
   final Children? childData; // 🔥 comes only in Update mode
@@ -78,7 +79,9 @@ class _EnteringFieldsForKidState extends State<EnteringFieldsForKid> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: h * 0.05),
+              SizedBox(height: h * 0.08),
+              CustomBackButton(size: MediaQuery.of(context).size.width),
+
 
               Center(child: Image.asset('assets/images/Group 146.png')),
 

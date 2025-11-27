@@ -14,6 +14,7 @@ import '../controller/getAllChildrenController.dart';
 import '../data/remote_data_source.dart';
 import '../models/get_all_children_model.dart';
 import '../repositories/get_all_children_repository.dart';
+import '../utils/back_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -43,7 +44,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var h = SizeConfig.screenHeight;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF192346),
+
+
+        backgroundColor: const Color(0xFF192346),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: w * 0.05),
@@ -51,6 +54,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: h * 0.08),
+              CustomBackButton(size: MediaQuery.of(context).size.width),
+
 
               /// DO NOT CHANGE — SAME
               Center(
