@@ -114,31 +114,31 @@ class _FavoritesState extends State<Favorites> {
                       ),
                     );
                   } else {
-                    return SliverPadding(
-                      padding: EdgeInsets.symmetric(horizontal: w * 0.05),
-                      sliver: SliverMasonryGrid.count(
-                        crossAxisCount: isTablet ? 2 : 1,
-                        mainAxisSpacing: 20,
-                        crossAxisSpacing: 20,
-                        childCount: fav.length,
-                        itemBuilder: (context, index) {
-                          final item = fav[index];
-                          return SubSubCategoryCard(
-                            index: index,
-                            isTablet: isTablet,
-                            title:item.story?.title??"",
-                            imageUrl: item.story?.image??"",
-
-                            duration: 10,
-                            onPlayTap: () {
-                              Get.toNamed(
-                                Routes.PlayStory,
-                                arguments: {'id': item.id},
-                              );
-                            },
-                          );
-                        },
-                      ),
+                    return MasonryGridView.count(
+                      crossAxisCount: isTablet ? 2 : 1,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                      itemCount: fav.length,
+                      shrinkWrap:
+                          true, // 👈 important since we're inside SingleChildScrollView
+                      physics:
+                          const NeverScrollableScrollPhysics(), // 👈 avoid nested scroll conflict
+                      itemBuilder: (context, index) {
+                        final item = fav[index];
+                        return SubSubCategoryCard(
+                          index: index,
+                          isTablet: isTablet,
+                          title: item.story?.title ?? "",
+                          imageUrl: item.story?.image ?? "",
+                          duration: 10,
+                          onPlayTap: () {
+                            Get.toNamed(
+                              Routes.PlayStory,
+                              arguments: {'id': item.id},
+                            );
+                          },
+                        );
+                      },
                     );
                   }
                 }),
