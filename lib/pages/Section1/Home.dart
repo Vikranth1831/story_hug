@@ -8,6 +8,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_hug/CustomTopBar.dart';
 import 'package:story_hug/controller/CategoryController.dart';
+import 'package:story_hug/pages/all_Voices.dart';
 import 'package:story_hug/pages/profile.dart';
 import 'package:story_hug/repositories/CategoryRepo.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
@@ -290,7 +291,7 @@ class MenuPanel extends StatelessWidget {
         if (title == 'Profile') {
           Get.to(ProfileScreen());
         } else if (title == 'Voice') {
-          context.push('/recording_voice');
+          Get.to(AllVoices());
         } else if (title == 'My Favorites') {
           context.push('/favorites');
         } else if (title == 'Subscriptions') {

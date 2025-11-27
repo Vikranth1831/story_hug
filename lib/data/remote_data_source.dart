@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:story_hug/models/SaveAudioModel.dart';
 import 'package:story_hug/models/create_child_model.dart';
+import 'package:story_hug/models/default_voice_model.dart';
+import 'package:story_hug/models/gel_all_voices_model.dart';
 import 'package:story_hug/models/get_all_children_model.dart';
 import 'package:story_hug/models/register_model.dart';
 import 'package:story_hug/models/sample_text_model.dart';
@@ -26,6 +28,9 @@ abstract class RemoteDataSource {
 
   Future<SaveAudioModel?> saveaudio(FormData data);
 
+  Future<GetAllVoiceModel?> getAllVoice();
+
+  Future<DefaultVoiceModel?> setDefault(Map<String, dynamic> data);
 
 
 }
@@ -68,6 +73,34 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
 
+  @override
+  Future<GetAllVoiceModel?> getAllVoice() async {
+    try {
+      final res = await ApiClient.get(
+        "${APIEndpointUrls.getAllVoices}",
+
+      );
+      AppLogger.log('fetched  : ${res.data}');
+      return GetAllVoiceModel.fromJson(res.data);
+    } catch (e) {
+      // AppLogger.error('login : $e');
+      return null;
+    }
+  }
+  @override
+  Future<DefaultVoiceModel?> setDefault(Map<String, dynamic> data) async {
+    try {
+      final res = await ApiClient.post(
+        "${APIEndpointUrls.setDefault}",
+        data: data,
+      );
+      AppLogger.log('Default : ${res.data}');
+      return DefaultVoiceModel.fromJson(res.data);
+    } catch (e) {
+      // AppLogger.error('login : $e');
+      return null;
+    }
+  }
 
   @override
   Future<RegisterModel?> register(Map<String, dynamic> data) async {

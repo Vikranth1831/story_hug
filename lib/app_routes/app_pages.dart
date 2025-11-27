@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:story_hug/pages/Authentication/choose_profile.dart';
+import 'package:story_hug/pages/all_Voices.dart';
 import 'package:story_hug/pages/profile.dart';
 import '../pages/Authentication/choose_profile.dart';
 import '../pages/Authentication/otp-screen.dart';
@@ -46,6 +47,7 @@ class AppRoutes {
     GetPage(name: Routes.Passwordchange, page: () => Passwordchange()),
     GetPage(name: Routes.LetsBegin, page: () => LetsBegin()),
     GetPage(name: Routes.ChooseProfile, page: () => ChooseProfile()),
+    GetPage(name: Routes.AllVoices, page: () => AllVoices()),
 
   ];
 }
