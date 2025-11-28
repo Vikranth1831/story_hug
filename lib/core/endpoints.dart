@@ -5,6 +5,7 @@ class APIEndpointUrls {
   static const String AuthUrl = '${ApiUrl}parentauth/';
   static const String story = '${ApiUrl}story/';
   static const String children='${ApiUrl}children';
+  static const String storyNarrate='${ApiUrl}voice/storynarrate';
 
   /// Auth URls
   static const String login = '${AuthUrl}login';
@@ -18,7 +19,9 @@ class APIEndpointUrls {
   static const String getAllChildren='${children}/getallchildrensofaparent';
   static const String getSampleText='${ApiUrl}voice/fetchsampletext';
   static const String saveAudio='${ApiUrl}voice/clonevoice';
-  static const String storyNarrate='${ApiUrl}voice/storynarrate';
+  static const String getAllVoices='${ApiUrl}voice/fetchparentvoices';
+  static const String setDefault ='${ApiUrl}voice/setdefaultvoice';
+  static const String getParentDetails = '${AuthUrl}me';
 
   static const String createChildren='${children}/createchild';
   static const String sendotp='${AuthUrl}changepassword';
