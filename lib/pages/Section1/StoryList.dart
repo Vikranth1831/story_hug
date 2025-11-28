@@ -9,7 +9,9 @@ import 'package:story_hug/repositories/FetchStoryRepo.dart';
 import '../../CustomTopBar.dart';
 import '../../app_routes/app_routes.dart';
 import '../../components/CommonLoader.dart';
+import '../../controller/StoryNarrateController.dart';
 import '../../data/remote_data_source.dart';
+import '../../repositories/StoryNarrateRepo.dart';
 import '../../utils/constants.dart';
 import '../../utils/media_query_helper.dart';
 import '../Widgets/SubCategoryCard.dart';
@@ -30,6 +32,8 @@ class _StoryListState extends State<StoryList> {
       fetchStoryRepo: FetchStoryImpl(remoteDataSource: RemoteDataSourceImpl()),
     ),
   );
+
+
   late final String catName;
 
   @override
@@ -179,7 +183,8 @@ class _StoryListState extends State<StoryList> {
                         imageUrl: subCat.image,
                         title: capitalize(subCat.title ?? "Untitled"),
                         isTablet: isTablet,
-                        onTap: () {
+                        onTap: () async {
+
                           Get.toNamed(
                             Routes.PlayStory,
                             arguments: {

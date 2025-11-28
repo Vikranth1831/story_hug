@@ -199,6 +199,7 @@ class ApiClient {
         },
       ),
     );
+
     // _dio.interceptors.add(
     //   InterceptorsWrapper(
     //     onResponse: (response, handler) async {

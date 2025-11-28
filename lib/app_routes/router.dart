@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:story_hug/pages/Passwordchange/passwordchange.dart';
 import 'package:story_hug/pages/Reminder/reminders.dart';
 import 'package:story_hug/pages/SuccesspageClass/successpage.dart';
-import 'package:story_hug/pages/all_Voices.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/entering_fields.dart';
 import 'package:story_hug/pages/creating_profile_for_kids/manage_kids.dart';
 import 'package:story_hug/pages/Authentication/login_screen.dart';
@@ -122,13 +121,6 @@ final GoRouter appRouter = GoRouter(
       path: '/save_voice',
       pageBuilder: (context, state) {
         return buildSlideTransitionPage(SaveVoice(), state);
-
-      },
-    ),
-    GoRoute(
-      path: '/get-all-voices',
-      pageBuilder: (context, state) {
-        return buildSlideTransitionPage(AllVoices(), state);
 
       },
     ),

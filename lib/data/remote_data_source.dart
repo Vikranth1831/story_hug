@@ -1,10 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:story_hug/models/ParentNameModel.dart';
 import 'package:story_hug/models/SaveAudioModel.dart';
 import 'package:story_hug/models/SubScriptionModel.dart';
 import 'package:story_hug/models/create_child_model.dart';
-import 'package:story_hug/models/default_voice_model.dart';
-import 'package:story_hug/models/gel_all_voices_model.dart';
 import 'package:story_hug/models/get_all_children_model.dart';
 import 'package:story_hug/models/get_avators.dart';
 import 'package:story_hug/models/otp_sent_model.dart';
@@ -19,6 +16,7 @@ import '../models/CreatePaymentModel.dart';
 import '../models/FaveratesModel.dart';
 import '../models/FetchStorysModel.dart';
 import '../models/StoryDetailModel.dart';
+import '../models/StroyNarrateModel.dart';
 import '../models/SubCategoryModel.dart';
 import '../models/SubSubOfCategoryModel.dart';
 import '../models/VerifyPaymentModel.dart';
@@ -51,13 +49,8 @@ abstract class RemoteDataSource {
   Future<FetchStorysModel?> fetchStory(String storyId);
   Future<SampleTextModel?> getSampleText();
   Future<SaveAudioModel?> saveaudio(FormData data);
-
-  Future<GetAllVoiceModel?> getAllVoice();
-
-  Future<DefaultVoiceModel?> setDefault(Map<String, dynamic> data);
-
-  Future<GetParentDetailsModel?> getParentDetails();
   Future<StoryDetailModel?> fetchStoryDetails(String storyId);
+  Future<StroyNarrateModel?> storyNarrate(Map<String, dynamic> data);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -130,16 +123,17 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
 
   @override
-  Future<DefaultVoiceModel?> setDefault(Map<String, dynamic> data) async {
+  Future<StroyNarrateModel?> storyNarrate(Map<String, dynamic> data) async {
     try {
       final res = await ApiClient.post(
-        "${APIEndpointUrls.setDefault}",
+        "${APIEndpointUrls.storyNarrate}",
         data: data,
+
       );
-      AppLogger.log('Default : ${res.data}');
-      return DefaultVoiceModel.fromJson(res.data);
+      AppLogger.log('story Narrate : ${res.data}');
+      return StroyNarrateModel.fromJson(res.data);
     } catch (e) {
-      // AppLogger.error('login : $e');
+      print('save Narrate error : $e');
       return null;
     }
   }
@@ -232,22 +226,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<GetParentDetailsModel?> getParentDetails() async {
-    try {
-      final res = await ApiClient.get(
-        "${APIEndpointUrls.getParentDetails}",
-
-      );
-      AppLogger.log('fetched parents : ${res.data}');
-      return GetParentDetailsModel.fromJson(res.data);
-    } catch (e) {
-      // AppLogger.error('login : $e');
-      return null;
-    }
-  }
-
-
-  @override
   Future<CreatePaymentModel?> createPayment(Map<String, dynamic> data) async {
     try {
       Response response = await ApiClient.post(
@@ -293,11 +271,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<SampleTextModel?> getSampleText() async {
     try {
-      final res = await ApiClient.get(
-        "${APIEndpointUrls.getSampleText}",
-
-      );
-      AppLogger.log('Sample text : ${res.data}');
+      final res = await ApiClient.get("${APIEndpointUrls.getSampleText}");
+      AppLogger.log('Register : ${res.data}');
       return SampleTextModel.fromJson(res.data);
     } catch (e) {
       // AppLogger.error('login : $e');
@@ -344,6 +319,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return null;
     }
   }
+
   @override
   Future<StoryDetailModel?> fetchStoryDetails(String storyId) async {
     try {
@@ -399,7 +375,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<AddToFaverateModel?> addFaveraToteList(Map<String, dynamic> data) async {
+  Future<AddToFaverateModel?> addFaveraToteList(
+    Map<String, dynamic> data,
+  ) async {
     try {
       final res = await ApiClient.post(
         "${APIEndpointUrls.addfaverates}",
