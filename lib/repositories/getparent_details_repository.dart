@@ -21,6 +21,7 @@ class GetParentDetailsRepositoryImpl implements GetParentDetailsRepository{
 
   @override
   Future <GetParentDetailsModel?> getParentDetails() async {
+    print("Came in repo");
     return await remoteDataSource.getParentDetails();
   }
 }

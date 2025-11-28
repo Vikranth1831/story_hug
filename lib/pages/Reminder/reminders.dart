@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../utils/back_button.dart';
+
 class RemindersPage extends StatefulWidget {
   const RemindersPage({super.key});
 
@@ -35,6 +37,8 @@ class _RemindersPageState extends State<RemindersPage> {
           child: Column(
             children: [
               SizedBox(height: h * 0.07),
+              CustomBackButton(size: MediaQuery.of(context).size.width),
+
 
               Image.asset(
                 "assets/images/favoritesimage.png",

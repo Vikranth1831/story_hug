@@ -18,6 +18,7 @@ import '../data/remote_data_source.dart';
 import '../models/CreatePaymentModel.dart';
 import '../repositories/SubScriptionRepo.dart';
 import '../repositories/payment_repository.dart';
+import '../utils/back_button.dart';
 
 class SubScriptions extends StatefulWidget {
   const SubScriptions({super.key});
@@ -134,6 +135,11 @@ class _SubScriptionsState extends State<SubScriptions> {
               child: Column(
                 children: [
                   SizedBox(height: h * 0.08),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomBackButton(size: MediaQuery.of(context).size.width),
+                  ),
+
 
                   Image.asset(
                     "assets/images/favoritesimage.png",

@@ -21,6 +21,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:story_hug/components/create_now_button.dart';
 import 'package:story_hug/utils/media_query_helper.dart';
 
+import '../../utils/back_button.dart';
+
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
 
@@ -77,30 +79,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       child: Column(
                         children: [
                           /// BACK BUTTON
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: GestureDetector(
-                              onTap: () => Get.back(),
-                              child: Container(
-                                width: w * 0.14,
-                                height: w * 0.14,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white.withOpacity(0.18),
-                                    width: 1.5,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.chevron_left_outlined,
-                                    color: const Color(0xFFFFC84F),
-                                    size: w * 0.065,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          CustomBackButton(size: MediaQuery.of(context).size.width),
+
 
                           SizedBox(height: h * 0.02),
 
